@@ -25,9 +25,9 @@ func main() {
 	fmt.Printf("Format: %s có %d tuổi\n", "John", 30)
 
 	// 4. Variables - Khai báo biến
-	var name string = "John"   // Explicit type
-	var age = 30               // Type inferred
-	city := "Ho Chi Minh"      // Short declaration (most common)
+	var name string = "John" // Explicit type
+	var age = 30             // Type inferred
+	city := "Ho Chi Minh"    // Short declaration (most common)
 
 	fmt.Printf("Name: %s, Age: %d, City: %s\n", name, age, city)
 
@@ -56,22 +56,22 @@ func main() {
 
 	// 8. Type conversion - Phải explicit
 	var numInt int = 42
-	var numFloat float64 = float64(numInt)  // Phải convert thủ công
+	var numFloat float64 = float64(numInt) // Phải convert thủ công
 	var numStr string = fmt.Sprintf("%d", numInt)
 
 	fmt.Printf("int: %d, float: %f, string: %s\n", numInt, numFloat, numStr)
 
 	// 9. fmt verbs - Các cách format output
 	fmt.Println("\n--- Format Verbs ---")
-	fmt.Printf("%%v  = %v\n", name)    // Default format
+	fmt.Printf("%%v  = %v\n", name)                         // Default format
 	fmt.Printf("%%+v = %+v\n", struct{ Name string }{name}) // With field names
-	fmt.Printf("%%#v = %#v\n", name)   // Go syntax
-	fmt.Printf("%%T  = %T\n", name)    // Type
-	fmt.Printf("%%s  = %s\n", name)    // String
-	fmt.Printf("%%d  = %d\n", age)     // Integer
-	fmt.Printf("%%f  = %f\n", 3.14)    // Float
-	fmt.Printf("%%t  = %t\n", true)    // Boolean
-	fmt.Printf("%%p  = %p\n", &name)   // Pointer address
+	fmt.Printf("%%#v = %#v\n", name)                        // Go syntax
+	fmt.Printf("%%T  = %T\n", name)                         // Type
+	fmt.Printf("%%s  = %s\n", name)                         // String
+	fmt.Printf("%%d  = %d\n", age)                          // Integer
+	fmt.Printf("%%f  = %f\n", 3.14)                         // Float
+	fmt.Printf("%%t  = %t\n", true)                         // Boolean
+	fmt.Printf("%%p  = %p\n", &name)                        // Pointer address
 
 	fmt.Println("\n✅ Lesson 1 hoàn thành!")
 }
