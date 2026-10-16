@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Go Quick Reference Cheat Sheet — vtvcab-identity-api · nodejs-to-go</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: #666666; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: #666666; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.codehilite .hll { background-color: #ffffcc }
+.codehilite { background: #f0f0f0; }
+.codehilite .c { color: #60A0B0; font-style: italic } /* Comment */
+.codehilite .err { border: 1px solid #F00 } /* Error */
+.codehilite .k { color: #007020; font-weight: bold } /* Keyword */
+.codehilite .o { color: #666 } /* Operator */
+.codehilite .ch { color: #60A0B0; font-style: italic } /* Comment.Hashbang */
+.codehilite .cm { color: #60A0B0; font-style: italic } /* Comment.Multiline */
+.codehilite .cp { color: #007020 } /* Comment.Preproc */
+.codehilite .cpf { color: #60A0B0; font-style: italic } /* Comment.PreprocFile */
+.codehilite .c1 { color: #60A0B0; font-style: italic } /* Comment.Single */
+.codehilite .cs { color: #60A0B0; background-color: #FFF0F0 } /* Comment.Special */
+.codehilite .gd { color: #A00000 } /* Generic.Deleted */
+.codehilite .ge { font-style: italic } /* Generic.Emph */
+.codehilite .ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.codehilite .gr { color: #F00 } /* Generic.Error */
+.codehilite .gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.codehilite .gi { color: #00A000 } /* Generic.Inserted */
+.codehilite .go { color: #888 } /* Generic.Output */
+.codehilite .gp { color: #C65D09; font-weight: bold } /* Generic.Prompt */
+.codehilite .gs { font-weight: bold } /* Generic.Strong */
+.codehilite .gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.codehilite .gt { color: #04D } /* Generic.Traceback */
+.codehilite .kc { color: #007020; font-weight: bold } /* Keyword.Constant */
+.codehilite .kd { color: #007020; font-weight: bold } /* Keyword.Declaration */
+.codehilite .kn { color: #007020; font-weight: bold } /* Keyword.Namespace */
+.codehilite .kp { color: #007020 } /* Keyword.Pseudo */
+.codehilite .kr { color: #007020; font-weight: bold } /* Keyword.Reserved */
+.codehilite .kt { color: #902000 } /* Keyword.Type */
+.codehilite .m { color: #40A070 } /* Literal.Number */
+.codehilite .s { color: #4070A0 } /* Literal.String */
+.codehilite .na { color: #4070A0 } /* Name.Attribute */
+.codehilite .nb { color: #007020 } /* Name.Builtin */
+.codehilite .nc { color: #0E84B5; font-weight: bold } /* Name.Class */
+.codehilite .no { color: #60ADD5 } /* Name.Constant */
+.codehilite .nd { color: #555; font-weight: bold } /* Name.Decorator */
+.codehilite .ni { color: #D55537; font-weight: bold } /* Name.Entity */
+.codehilite .ne { color: #007020 } /* Name.Exception */
+.codehilite .nf { color: #06287E } /* Name.Function */
+.codehilite .nl { color: #002070; font-weight: bold } /* Name.Label */
+.codehilite .nn { color: #0E84B5; font-weight: bold } /* Name.Namespace */
+.codehilite .nt { color: #062873; font-weight: bold } /* Name.Tag */
+.codehilite .nv { color: #BB60D5 } /* Name.Variable */
+.codehilite .ow { color: #007020; font-weight: bold } /* Operator.Word */
+.codehilite .w { color: #BBB } /* Text.Whitespace */
+.codehilite .mb { color: #40A070 } /* Literal.Number.Bin */
+.codehilite .mf { color: #40A070 } /* Literal.Number.Float */
+.codehilite .mh { color: #40A070 } /* Literal.Number.Hex */
+.codehilite .mi { color: #40A070 } /* Literal.Number.Integer */
+.codehilite .mo { color: #40A070 } /* Literal.Number.Oct */
+.codehilite .sa { color: #4070A0 } /* Literal.String.Affix */
+.codehilite .sb { color: #4070A0 } /* Literal.String.Backtick */
+.codehilite .sc { color: #4070A0 } /* Literal.String.Char */
+.codehilite .dl { color: #4070A0 } /* Literal.String.Delimiter */
+.codehilite .sd { color: #4070A0; font-style: italic } /* Literal.String.Doc */
+.codehilite .s2 { color: #4070A0 } /* Literal.String.Double */
+.codehilite .se { color: #4070A0; font-weight: bold } /* Literal.String.Escape */
+.codehilite .sh { color: #4070A0 } /* Literal.String.Heredoc */
+.codehilite .si { color: #70A0D0; font-style: italic } /* Literal.String.Interpol */
+.codehilite .sx { color: #C65D09 } /* Literal.String.Other */
+.codehilite .sr { color: #235388 } /* Literal.String.Regex */
+.codehilite .s1 { color: #4070A0 } /* Literal.String.Single */
+.codehilite .ss { color: #517918 } /* Literal.String.Symbol */
+.codehilite .bp { color: #007020 } /* Name.Builtin.Pseudo */
+.codehilite .fm { color: #06287E } /* Name.Function.Magic */
+.codehilite .vc { color: #BB60D5 } /* Name.Variable.Class */
+.codehilite .vg { color: #BB60D5 } /* Name.Variable.Global */
+.codehilite .vi { color: #BB60D5 } /* Name.Variable.Instance */
+.codehilite .vm { color: #BB60D5 } /* Name.Variable.Magic */
+.codehilite .il { color: #40A070 } /* Literal.Number.Integer.Long */
+
+:root {
+  --bg1:#f7f9fd; --bg2:#eef3fb; --card:#ffffff;
+  --ink:#1e293b; --ink-strong:#0f172a; --muted:#64748b;
+  --accent:#2563eb; --accent-2:#4f46e5; --accent-soft:#eff6ff;
+  --border:#e2e8f0; --code-bg:#f6f8fa;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0; color: var(--ink); font-size: 16px; line-height: 1.75;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
+               Arial, "Noto Sans", "Noto Sans Vietnamese", sans-serif;
+  background: linear-gradient(160deg, var(--bg1) 0%, var(--bg2) 55%, #e9f0fa 100%) fixed;
+}
+#progress { position: fixed; top: 0; left: 0; height: 3px; width: 0; z-index: 70;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2), #7c3aed); }
+#backtop { position: fixed; right: 26px; bottom: 26px; width: 44px; height: 44px;
+  border-radius: 50%; border: 1px solid var(--border); background: #fff;
+  color: var(--accent); font-size: 1.15rem; cursor: pointer; opacity: 0;
+  pointer-events: none; transition: all .25s; box-shadow: 0 8px 20px rgba(15,23,42,.14); z-index: 60; }
+#backtop.show { opacity: 1; pointer-events: auto; }
+#backtop:hover { background: var(--accent); color: #fff; }
+.wrap { max-width: 1240px; margin: 0 auto; padding: 28px 24px 72px; }
+.crumb { max-width: 1240px; margin: 0 auto; padding: 18px 24px 0; font-size: .9rem; color: var(--muted); }
+.crumb a { color: var(--accent); text-decoration: none; font-weight: 600; }
+.crumb a:hover { text-decoration: underline; }
+.card {
+  background: var(--card); border: 1px solid var(--border); border-radius: 18px;
+  padding: 44px 52px 52px; box-shadow: 0 14px 40px rgba(15, 23, 42, .07);
+  margin-top: 14px;
+}
+@media (max-width: 640px) { .card { padding: 26px 18px 34px; } }
+h1, h2, h3, h4, h5, h6 { color: var(--ink-strong); line-height: 1.3; font-weight: 700; }
+h1 {
+  font-size: 2.1rem; margin: 0 0 .7em; padding-bottom: .45em;
+  border-bottom: 3px solid var(--accent-soft);
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+}
+h2 { font-size: 1.5rem; margin: 2em 0 .6em; padding-bottom: .3em; border-bottom: 2px solid #edf2f9; }
+h3 { font-size: 1.22rem; margin: 1.6em 0 .5em; }
+h3::before { content: "▍"; color: var(--accent); margin-right: 6px; font-weight: 400; }
+h4 { font-size: 1.05rem; margin: 1.4em 0 .4em; }
+p { margin: .8em 0; }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+a.wikilink { font-weight: 600; }
+ul, ol { padding-left: 1.6em; margin: .8em 0; }
+li { margin: .3em 0; }
+li.task { list-style: none; margin-left: -1.4em; }
+li.task input { margin-right: .5em; accent-color: var(--accent); }
+code {
+  font-family: "JetBrains Mono", "Fira Code", "SF Mono", Consolas, Menlo, monospace;
+  font-size: .88em; background: #eef2f8; color: #be185d;
+  padding: .14em .42em; border-radius: 6px; border: 1px solid #e2e8f0;
+}
+/* --- code blocks --- */
+.codeblock { margin: 1.5em 0; border-radius: 12px; border: 1px solid var(--border);
+  background: var(--code-bg); overflow: hidden; box-shadow: 0 2px 6px rgba(15,23,42,.05); }
+.codehead { display: flex; align-items: center; justify-content: space-between;
+  padding: 6px 14px 6px 16px; background: #edf1f7; border-bottom: 1px solid var(--border); }
+.lang-chip { font-size: .7rem; letter-spacing: .1em; text-transform: uppercase;
+  font-weight: 800; color: #94a3b8; }
+.copybtn { display: inline-flex; align-items: center; gap: 5px; border: 1px solid var(--border);
+  background: #fff; color: #64748b; font-size: .72rem; font-weight: 700; letter-spacing: .03em;
+  padding: 3px 11px; border-radius: 6px; cursor: pointer; transition: all .15s; font-family: inherit; }
+.copybtn:hover { color: var(--accent); border-color: var(--accent); }
+.copybtn.copied { color: #15803d; border-color: #86efac; background: #f0fdf4; }
+.codeblock .codehilite { border: none; border-radius: 0; margin: 0; box-shadow: none; }
+.codeblock .codehilite pre { margin: 0; }
+.codehilite {
+  background: var(--code-bg); border: 1px solid var(--border); border-radius: 12px;
+  padding: 16px 18px; margin: 1.2em 0; overflow-x: auto;
+}
+.codehilite pre { margin: 0; background: none; }
+.codehilite code, pre code { background: none; border: none; color: inherit; padding: 0;
+  font-size: .875rem; line-height: 1.65; }
+.callout .codeblock { box-shadow: none; }
+.callout .codeblock, .callout .codehilite, .callout code { background: #fff; }
+.callout .codehead { background: rgba(237,241,247,.6); }
+/* --- tables --- */
+.tablewrap { overflow-x: auto; margin: 1.2em 0; }
+table { border-collapse: collapse; width: 100%; font-size: .94em; margin: 0; }
+th, td { border: 1px solid var(--border); padding: 9px 13px; text-align: left; vertical-align: top; }
+th { background: #f1f5f9; color: var(--ink-strong); font-weight: 700; white-space: nowrap; }
+tbody tr:nth-child(even) { background: #f8fafc; }
+tbody tr:hover { background: var(--accent-soft); }
+.callout table { background: #fff; }
+/* --- callouts (blockquotes) --- */
+.callout { border-radius: 14px; border: 1px solid var(--border); padding: 16px 20px;
+  margin: 1.5em 0; background: #f8fafc; }
+.callout .callout-title { display: flex; align-items: center; gap: 10px; font-weight: 800;
+  margin: 0 0 .5em; font-size: .98rem; letter-spacing: .01em; }
+.callout .callout-icon { font-size: 1.1rem; line-height: 1; }
+.callout .callout-body > :first-child { margin-top: 0; }
+.callout .callout-body > :last-child { margin-bottom: 0; }
+.callout-info    { background: #eff6ff; border-color: #bfdbfe; }
+.callout-info    .callout-title { color: #1d4ed8; }
+.callout-tip     { background: #fefce8; border-color: #fde68a; }
+.callout-tip     .callout-title { color: #b45309; }
+.callout-warning { background: #fff7ed; border-color: #fed7aa; }
+.callout-warning .callout-title { color: #c2410c; }
+.callout-danger  { background: #fef2f2; border-color: #fecaca; }
+.callout-danger  .callout-title { color: #b91c1c; }
+.callout-success { background: #f0fdf4; border-color: #bbf7d0; }
+.callout-success .callout-title { color: #15803d; }
+.callout-compare { background: #eef2ff; border-color: #c7d2fe; }
+.callout-compare .callout-title { color: #4338ca; }
+.callout-note    { background: #f8fafc; border-color: var(--border); }
+.callout-note    .callout-title { color: #334155; }
+blockquote { margin: 1.2em 0; padding: .7em 1.3em; color: #334155;
+  border-left: 4px solid var(--accent); background: var(--accent-soft);
+  border-radius: 0 12px 12px 0; }
+blockquote p { margin: .3em 0; }
+hr { border: none; border-top: 1px solid var(--border); margin: 2.2em 0; }
+kbd { background: #fff; border: 1px solid #cbd5e1; border-bottom-width: 2px;
+  border-radius: 6px; padding: 1px 6px; font-size: .85em; font-family: inherit; }
+/* --- TOC --- */
+.toc { position: fixed; top: 84px; right: 26px; width: 250px; max-height: calc(100vh - 130px);
+  overflow-y: auto; font-size: .82rem; background: rgba(255,255,255,.92);
+  backdrop-filter: blur(8px); border: 1px solid var(--border); border-radius: 14px;
+  padding: 14px 12px; box-shadow: 0 10px 28px rgba(15,23,42,.07); display: none; z-index: 50; }
+.toc-title { font-weight: 800; font-size: .72rem; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--muted); margin: 0 0 8px 10px; }
+.toc a { display: block; color: #475569; padding: 3px 6px 3px 10px;
+  border-left: 2px solid transparent; line-height: 1.45; }
+.toc a.l3 { padding-left: 24px; font-size: .94em; }
+.toc a:hover { color: var(--accent); text-decoration: none; }
+.toc a.active { color: var(--accent); border-left-color: var(--accent); font-weight: 600; }
+@media (min-width: 1800px) { .toc { display: block; } }
+/* --- pager & footer --- */
+.pager { display: flex; justify-content: space-between; gap: 16px; margin-top: 26px; }
+.pager a {
+  flex: 1; background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+  padding: 12px 18px; color: var(--ink-strong); font-weight: 600;
+  box-shadow: 0 4px 12px rgba(15,23,42,.05); transition: all .2s;
+}
+.pager a:hover { border-color: var(--accent); text-decoration: none;
+  box-shadow: 0 6px 16px rgba(37,99,235,.14); transform: translateY(-1px); }
+.pager .next { text-align: right; }
+.pager .dir { display: block; font-size: .78rem; color: var(--muted); font-weight: 500; }
+footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top: 34px; }
+@media print { #progress, #backtop, .toc, .pager { display: none !important; }
+  body { background: #fff; } .card { box-shadow: none; border: none; } }
+
+.wrap.wide { max-width: 1340px; }
+.hero { text-align: center; padding: 64px 10px 26px; }
+.hero-emoji { font-size: 3.4rem; margin-bottom: 8px; }
+.hero h1 { font-size: 2.6rem; border: none; display: inline-block;
+  background: linear-gradient(90deg, #2563eb, #4f46e5, #7c3aed);
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+.hero .sub { color: var(--muted); font-size: 1.05rem; }
+.stats { display: flex; gap: 10px; justify-content: center; margin-top: 20px; flex-wrap: wrap; }
+.stat { background: #fff; border: 1px solid var(--border); border-radius: 999px;
+  padding: 6px 16px; font-size: .85rem; font-weight: 700; color: #475569;
+  box-shadow: 0 4px 12px rgba(15,23,42,.05); }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 22px; margin-top: 30px; }
+.series-card { background: var(--card); border: 1px solid var(--border); border-radius: 18px;
+  padding: 26px 28px; box-shadow: 0 12px 32px rgba(15,23,42,.06); }
+.series-card h2 { border: none; margin: 0; font-size: 1.28rem; display: flex;
+  align-items: center; gap: 10px; flex-wrap: wrap; }
+.series-icon { font-size: 1.5rem; }
+.badge { background: var(--accent-soft); color: var(--accent); font-size: .72rem;
+  padding: 3px 11px; border-radius: 999px; font-weight: 800; }
+.desc { color: var(--muted); font-size: .92rem; margin: 8px 0 12px; line-height: 1.6; }
+.filelist { list-style: none; padding: 0; margin: 0; }
+.filelist li { border-top: 1px dashed #eef2f7; margin: 0; }
+.filelist a { display: flex; justify-content: space-between; align-items: center;
+  gap: 12px; padding: 10px 4px; color: var(--ink); font-weight: 600; transition: all .15s; }
+.filelist a::after { content: "›"; color: var(--accent); font-weight: 800; font-size: 1.1rem; }
+.filelist a:hover { color: var(--accent); text-decoration: none; padding-left: 10px; }
+@media (max-width: 500px) { .grid { grid-template-columns: 1fr; } }
+
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<button id="backtop" aria-label="Lên đầu trang">↑</button>
+<aside class="toc"><div class="toc-title">📋 Nội dung</div><a class="l2" href="#1-essential-go-commands">1. Essential Go Commands</a><a class="l2" href="#2-project-specific-commands">2. Project-Specific Commands</a><a class="l3" href="#run-locally">Run Locally</a><a class="l3" href="#run-tests">Run Tests</a><a class="l3" href="#build-docker-image">Build Docker Image</a><a class="l2" href="#3-common-go-syntax-quick-reference">3. Common Go Syntax Quick Reference</a><a class="l3" href="#variable-declaration">Variable Declaration</a><a class="l3" href="#function-signatures">Function Signatures</a><a class="l3" href="#struct-definition">Struct Definition</a><a class="l3" href="#interface-definition">Interface Definition</a><a class="l3" href="#error-handling-pattern-this-projects-convention">Error Handling Pattern (this project's convention)</a><a class="l3" href="#goroutine-syntax">Goroutine Syntax</a><a class="l3" href="#channel-syntax">Channel Syntax</a><a class="l3" href="#slice-map-operations">Slice &amp; Map Operations</a><a class="l2" href="#4-http-status-codes-in-fiber">4. HTTP Status Codes in Fiber</a><a class="l2" href="#5-common-pattern-snippets">5. Common Pattern Snippets</a><a class="l3" href="#parse-json-request-body">Parse JSON Request Body</a><a class="l3" href="#validate-request-body">Validate Request Body</a><a class="l3" href="#return-json-response">Return JSON Response</a><a class="l3" href="#get-url-params">Get URL Params</a><a class="l3" href="#get-query-params">Get Query Params</a><a class="l3" href="#set-headers">Set Headers</a><a class="l3" href="#read-from-redis">Read from Redis</a><a class="l3" href="#write-to-postgres-gorm">Write to Postgres (GORM)</a><a class="l3" href="#mongodb-operations">MongoDB Operations</a><a class="l3" href="#extract-jwt-claims">Extract JWT Claims</a><a class="l3" href="#make-http-request-external-api">Make HTTP Request (external API)</a><a class="l2" href="#6-debugging-tips">6. Debugging Tips</a><a class="l3" href="#logging-with-logrus-this-projects-logger">Logging with Logrus (this project's logger)</a><a class="l3" href="#print-debugging">Print Debugging</a><a class="l3" href="#common-error-messages-solutions">Common Error Messages &amp; Solutions</a><a class="l3" href="#adding-sentry-error-tracking">Adding Sentry Error Tracking</a><a class="l2" href="#7-frequently-used-imports">7. Frequently Used Imports</a><a class="l2" href="#8-file-naming-conventions">8. File &amp; Naming Conventions</a><a class="l3" href="#project-directory-structure">Project Directory Structure</a><a class="l2" href="#9-key-gotchas-quick-reference">9. Key Gotchas Quick Reference</a></aside>
+<nav class="crumb"><a href="../index.html">📚 Docs</a> &nbsp;›&nbsp; nodejs-to-go</nav>
+<main class="wrap">
+<article class="card">
+<div class="codeblock"><div class="codehead"><span class="lang-chip">bash</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1"># Build &amp; Run</span>
+go<span class="w"> </span>build<span class="w"> </span>.<span class="w">                        </span><span class="c1"># Compile binary</span>
+go<span class="w"> </span>run<span class="w"> </span>.<span class="w">                          </span><span class="c1"># Run locally (needs .env + infra)</span>
+<span class="nv">STAGE_STATUS</span><span class="o">=</span>dev<span class="w"> </span>go<span class="w"> </span>run<span class="w"> </span>.<span class="w">         </span><span class="c1"># Run with specific environment (dev/staging/prod)</span>
+
+<span class="c1"># Dependencies</span>
+go<span class="w"> </span>mod<span class="w"> </span>tidy<span class="w">                       </span><span class="c1"># Remove unused deps, add missing ones</span>
+go<span class="w"> </span>mod<span class="w"> </span>download<span class="w">                   </span><span class="c1"># Download all deps to cache</span>
+go<span class="w"> </span>mod<span class="w"> </span>verify<span class="w">                     </span><span class="c1"># Check deps match go.sum</span>
+
+<span class="c1"># Static Analysis &amp; Testing</span>
+go<span class="w"> </span>vet<span class="w"> </span>./...<span class="w">                      </span><span class="c1"># Static analysis (only check configured in this repo)</span>
+go<span class="w"> </span><span class="nb">test</span><span class="w"> </span>./app/testing/<span class="w"> </span>-v<span class="w">         </span><span class="c1"># Run integration tests (requires live infra)</span>
+
+<span class="c1"># Useful one-offs</span>
+go<span class="w"> </span>list<span class="w"> </span>-m<span class="w"> </span>all<span class="w">                    </span><span class="c1"># List all dependencies</span>
+go<span class="w"> </span>doc<span class="w"> </span>fiber.Ctx<span class="w">                  </span><span class="c1"># View docs for a symbol</span>
+</pre></div>
+</div>
+<div class="codeblock"><div class="codehead"><span class="lang-chip">bash</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1"># Database</span>
+<span class="nv">POSTGRES_URL</span><span class="o">=</span>postgres://user:pass@host:5432/dbname
+<span class="nv">MONGODB_URL</span><span class="o">=</span>mongodb://user:pass@host/dbname
+<span class="nv">MSSQL_URL</span><span class="o">=</span>...<span class="w">                      </span><span class="c1"># (also connected but lightly used)</span>
+
+<span class="c1"># Redis (THREE separate instances!)</span>
+<span class="nv">REDIS_URL</span><span class="o">=</span>redis://...<span class="w">              </span><span class="c1"># Cache store</span>
+<span class="nv">REDIS_URL_TOKEN</span><span class="o">=</span>redis://...<span class="w">        </span><span class="c1"># JWT token store</span>
+<span class="nv">REDIS_URL_BAN_CHAT</span><span class="o">=</span>redis://...<span class="w">     </span><span class="c1"># Ban/chat store</span>
+
+<span class="c1"># Message Queue</span>
+<span class="nv">RABBIT_URL</span><span class="o">=</span>amqp://...
+<span class="nv">RABBIT_QUEUE_NAME</span><span class="o">=</span>task_queue
+
+<span class="c1"># Environment</span>
+<span class="nv">STAGE_STATUS</span><span class="o">=</span>dev<span class="w">                   </span><span class="c1"># dev | staging | prod (selects settings.{env}.toml)</span>
+</pre></div>
+</div>
+<div class="codeblock"><div class="codehead"><span class="lang-chip">bash</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1"># Run</span>
+<span class="nv">STAGE_STATUS</span><span class="o">=</span>dev<span class="w"> </span>go<span class="w"> </span>run<span class="w"> </span>.
+
+<span class="c1"># Or with explicit .env</span>
+cp<span class="w"> </span>.env.example<span class="w"> </span>.env
+<span class="c1"># Edit .env with local values</span>
+<span class="nv">STAGE_STATUS</span><span class="o">=</span>dev<span class="w"> </span>go<span class="w"> </span>run<span class="w"> </span>.
+</pre></div>
+</div>
+<div class="codeblock"><div class="codehead"><span class="lang-chip">bash</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1"># Tests require live Redis, MongoDB, Postgres — no mocks</span>
+<span class="nv">STAGE_STATUS</span><span class="o">=</span>dev<span class="w"> </span>go<span class="w"> </span><span class="nb">test</span><span class="w"> </span>./app/testing/<span class="w"> </span>-v
+</pre></div>
+</div>
+<div class="codeblock"><div class="codehead"><span class="lang-chip">bash</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span>docker<span class="w"> </span>build<span class="w"> </span>-t<span class="w"> </span>vtvcab-identity-api<span class="w"> </span>.
+docker<span class="w"> </span>run<span class="w"> </span>-p<span class="w"> </span><span class="m">5000</span>:5000<span class="w"> </span>--env-file<span class="w"> </span>.env<span class="w"> </span>vtvcab-identity-api
+</pre></div>
+</div>
+<div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Short declaration (inside functions)</span>
+<span class="nx">name</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="s">&quot;hello&quot;</span>
+<span class="nx">count</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="mi">42</span>
+
+<span class="c1">// Var declaration</span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">name</span><span class="w"> </span><span class="kt">string</span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">count</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">42</span>
+
+<span class="c1">// Multiple variables</span>
+<span class="kd">var</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="nx">host</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&quot;localhost&quot;</span>
+<span class="w">    </span><span class="nx">port</span><span class="w"> </span><span class="kt">int</span><span class="w">    </span><span class="p">=</span><span class="w"> </span><span class="mi">5000</span>
+<span class="p">)</span>
+
+<span class="c1">// Zero values: string=&quot;&quot;, int=0, bool=false, pointer/slice/map=nil</span>
+</pre></div>
+</div>
+<div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Basic function</span>
+<span class="kd">func</span><span class="w"> </span><span class="nx">DoSomething</span><span class="p">(</span><span class="nx">name</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="kt">error</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="kc">nil</span>
+<span class="p">}</span>
+
+<span class="c1">// Multiple return values</span>
+<span class="kd">func</span><span class="w"> </span><span class="nx">GetUser</span><span class="p">(</span><span class="nx">id</span><span class="w"> </span><span class="kt">uint</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="nx">UserAccount</span><span class="p">,</span><span class="w"> </span><span class="kt">error</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// ...</span>
+<span class="p">}</span>
+
+<span class="c1">// Variadic function</span>
+<span class="kd">func</span><span class="w"> </span><span class="nx">Sum</span><span class="p">(</span><span class="nx">nums</span><span class="w"> </span><span class="o">...</span><span class="kt">int</span><span class="p">)</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="cm">/* ... */</span><span class="w"> </span><span class="p">}</span>
+
+<span class="c1">// Function as parameter</span>
+<span class="kd">func</span><span class="w"> </span><span class="nx">Handler</span><span class="p">(</span><span class="nx">fn</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="o">*</span><span class="nx">fiber</span><span class="p">.</span><span class="nx">Ctx</span><span class="p">)</span><span class="w"> </span><span class="kt">error</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="cm">/* ... */</span><span class="w"> </span><span class="p">}</span>
+
+<span class="c1">// Method on struct</span>
+<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">u</span><span class="w"> </span><span class="o">*</span><span class="nx">UserAccount</span><span class="p">)</span><span class="w"> </span><span class="nx">HashPassword</span><span class="p">(</span><span class="nx">password</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="kt">error</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// ...</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kd">type</span><span class="w"> </span><span class="nx">UserAccount</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">Id</span><span class="w">           </span><span class="kt">uint</span><span class="w">      </span><span class="s">`gorm:&quot;primaryKey;autoIncrement:true;unique&quot; json:&quot;id&quot;`</span>
+<span class="w">    </span><span class="nx">Name</span><span class="w">         </span><span class="o">*</span><span class="kt">string</span><span class="w">   </span><span class="s">`gorm:&quot;index:idx_user_name,unique&quot; json:&quot;name&quot;`</span>
+<span class="w">    </span><span class="nx">Phone</span><span class="w">        </span><span class="o">*</span><span class="kt">string</span><span class="w">   </span><span class="s">`gorm:&quot;index:idx_user_phone,unique&quot; json:&quot;phone&quot;`</span>
+<span class="w">    </span><span class="nx">FullName</span><span class="w">     </span><span class="kt">string</span><span class="w">    </span><span class="s">`gorm:&quot;column:fullname&quot; json:&quot;fullname&quot;`</span>
+<span class="w">    </span><span class="nx">PasswordHash</span><span class="w"> </span><span class="kt">string</span><span class="w">    </span><span class="s">`gorm:&quot;column:password_hash&quot; json:&quot;password_hash&quot;`</span>
+<span class="w">    </span><span class="nx">CreatedAt</span><span class="w">    </span><span class="nx">time</span><span class="p">.</span><span class="nx">Time</span><span class="w"> </span><span class="s">`sql:&quot;DEFAULT:&#39;current_timestamp&#39;&quot; json:&quot;-&quot;`</span>
+<span class="p">}</span>
+
+<span class="c1">// Custom table name</span>
+<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">UserAccount</span><span class="p">)</span><span class="w"> </span><span class="nx">TableName</span><span class="p">()</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="s">&quot;users&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kd">type</span><span class="w"> </span><span class="nx">Repository</span><span class="w"> </span><span class="kd">interface</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">GetUser</span><span class="p">(</span><span class="nx">ctx</span><span class="w"> </span><span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span><span class="w"> </span><span class="nx">id</span><span class="w"> </span><span class="kt">uint</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="nx">UserAccount</span><span class="p">,</span><span class="w"> </span><span class="kt">error</span><span class="p">)</span>
+<span class="w">    </span><span class="nx">CreateUser</span><span class="p">(</span><span class="nx">ctx</span><span class="w"> </span><span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span><span class="w"> </span><span class="nx">user</span><span class="w"> </span><span class="o">*</span><span class="nx">UserAccount</span><span class="p">)</span><span class="w"> </span><span class="kt">error</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Standard pattern in this codebase</span>
+<span class="nx">result</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">someOperation</span><span class="p">()</span>
+<span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">log</span><span class="p">.</span><span class="nx">WithError</span><span class="p">(</span><span class="nx">err</span><span class="p">).</span><span class="nx">Error</span><span class="p">(</span><span class="s">&quot;Something went wrong&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">utils</span><span class="p">.</span><span class="nx">HTTPFailResponse</span><span class="p">(</span><span class="nx">c</span><span class="p">,</span><span class="w"> </span><span class="nx">fiber</span><span class="p">.</span><span class="nx">StatusBadRequest</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="k">go</span><span class="w"> </span><span class="kd">func</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// runs concurrently</span>
+<span class="w">    </span><span class="nx">worker</span><span class="p">.</span><span class="nx">DoWork</span><span class="p">()</span>
+<span class="p">}()</span>
+
+<span class="c1">// With channel communication</span>
+<span class="k">go</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">ch</span><span class="w"> </span><span class="kd">chan</span><span class="w"> </span><span class="nx">EventLog</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="nx">msg</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="k">range</span><span class="w"> </span><span class="nx">ch</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">process</span><span class="p">(</span><span class="nx">msg</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}(</span><span class="nx">chEVLog</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Create channel</span>
+<span class="nx">ch</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nb">make</span><span class="p">(</span><span class="kd">chan</span><span class="w"> </span><span class="nx">EventLog</span><span class="p">)</span><span class="w">        </span><span class="c1">// unbuffered</span>
+<span class="nx">ch</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nb">make</span><span class="p">(</span><span class="kd">chan</span><span class="w"> </span><span class="nx">EventLog</span><span class="p">,</span><span class="w"> </span><span class="mi">100</span><span class="p">)</span><span class="w">   </span><span class="c1">// buffered</span>
+
+<span class="c1">// Send</span>
+<span class="nx">ch</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nx">eventLog</span>
+
+<span class="c1">// Receive</span>
+<span class="nx">msg</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="o">&lt;-</span><span class="nx">ch</span>
+
+<span class="c1">// Range over channel</span>
+<span class="k">for</span><span class="w"> </span><span class="nx">msg</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="k">range</span><span class="w"> </span><span class="nx">ch</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">process</span><span class="p">(</span><span class="nx">msg</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Slice</span>
+<span class="nx">roles</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">&quot;admin&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;user&quot;</span><span class="p">}</span>
+<span class="nx">roles</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nb">append</span><span class="p">(</span><span class="nx">roles</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;moderator&quot;</span><span class="p">)</span>
+<span class="nx">first</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">roles</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="nx">sub</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">roles</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span><span class="w">          </span><span class="c1">// [1, 3)</span>
+
+<span class="c1">// Map</span>
+<span class="nx">data</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kd">interface</span><span class="p">{}{</span>
+<span class="w">    </span><span class="s">&quot;key&quot;</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;value&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+<span class="nx">val</span><span class="p">,</span><span class="w"> </span><span class="nx">ok</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">data</span><span class="p">[</span><span class="s">&quot;key&quot;</span><span class="p">]</span><span class="w">     </span><span class="c1">// ok = false if not found</span>
+<span class="nb">delete</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;key&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Success</span>
+<span class="nx">fiber</span><span class="p">.</span><span class="nx">StatusOK</span><span class="w">                  </span><span class="c1">// 200</span>
+<span class="nx">fiber</span><span class="p">.</span><span class="nx">StatusCreated</span><span class="w">             </span><span class="c1">// 201</span>
+<span class="nx">fiber</span><span class="p">.</span><span class="nx">StatusNoContent</span><span class="w">           </span><span class="c1">// 204</span>
+
+<span class="c1">// Client Error</span>
+<span class="nx">fiber</span><span class="p">.</span><span class="nx">StatusBadRequest</span><span class="w">          </span><span class="c1">// 400</span>
+<span class="nx">fiber</span><span class="p">.</span><span class="nx">StatusUnauthorized</span><span class="w">        </span><span class="c1">// 401</span>
+<span class="nx">fiber</span><span class="p">.</span><span class="nx">StatusForbidden</span><span class="w">           </span><span class="c1">// 403</span>
+<span class="nx">fiber</span><span class="p">.</span><span class="nx">StatusNotFound</span><span class="w">            </span><span class="c1">// 404</span>
+<span class="nx">fiber</span><span class="p">.</span><span class="nx">StatusConflict</span><span class="w">            </span><span class="c1">// 409</span>
+<span class="nx">fiber</span><span class="p">.</span><span class="nx">StatusUnprocessableEntity</span><span class="w"> </span><span class="c1">// 422</span>
+<span class="nx">fiber</span><span class="p">.</span><span class="nx">StatusTooManyRequests</span><span class="w">     </span><span class="c1">// 429</span>
+
+<span class="c1">// Server Error</span>
+<span class="nx">fiber</span><span class="p">.</span><span class="nx">StatusInternalServerError</span><span class="w">  </span><span class="c1">// 500</span>
+<span class="nx">fiber</span><span class="p">.</span><span class="nx">StatusServiceUnavailable</span><span class="w">  </span><span class="c1">// 503</span>
+</pre></div>
+</div>
+<div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kd">func</span><span class="w"> </span><span class="nx">Login</span><span class="p">(</span><span class="nx">c</span><span class="w"> </span><span class="o">*</span><span class="nx">fiber</span><span class="p">.</span><span class="nx">Ctx</span><span class="p">)</span><span class="w"> </span><span class="kt">error</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">body</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">models</span><span class="p">.</span><span class="nx">LoginBody</span><span class="p">{}</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">c</span><span class="p">.</span><span class="nx">BodyParser</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">body</span><span class="p">);</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">log</span><span class="p">.</span><span class="nx">WithError</span><span class="p">(</span><span class="nx">err</span><span class="p">).</span><span class="nx">Error</span><span class="p">(</span><span class="s">&quot;Something went wrong&quot;</span><span class="p">)</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nx">utils</span><span class="p">.</span><span class="nx">HTTPFailResponse</span><span class="p">(</span><span class="nx">c</span><span class="p">,</span><span class="w"> </span><span class="nx">fiber</span><span class="p">.</span><span class="nx">StatusBadRequest</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="c1">// use body...</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">utils</span><span class="p">.</span><span class="nx">ValidateStruct</span><span class="p">(</span><span class="nx">body</span><span class="p">);</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">utils</span><span class="p">.</span><span class="nx">HTTPFailResponse</span><span class="p">(</span><span class="nx">c</span><span class="p">,</span><span class="w"> </span><span class="nx">fiber</span><span class="p">.</span><span class="nx">StatusBadRequest</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Success response (standard pattern)</span>
+<span class="k">return</span><span class="w"> </span><span class="nx">utils</span><span class="p">.</span><span class="nx">HTTPSuccessResponse</span><span class="p">(</span><span class="nx">c</span><span class="p">,</span><span class="w"> </span><span class="nx">fiber</span><span class="p">.</span><span class="nx">StatusOK</span><span class="p">,</span><span class="w"> </span><span class="nx">data</span><span class="p">)</span>
+
+<span class="c1">// Error response</span>
+<span class="k">return</span><span class="w"> </span><span class="nx">utils</span><span class="p">.</span><span class="nx">HTTPFailResponse</span><span class="p">(</span><span class="nx">c</span><span class="p">,</span><span class="w"> </span><span class="nx">fiber</span><span class="p">.</span><span class="nx">StatusBadRequest</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">)</span>
+
+<span class="c1">// Custom response</span>
+<span class="k">return</span><span class="w"> </span><span class="nx">c</span><span class="p">.</span><span class="nx">Status</span><span class="p">(</span><span class="nx">fiber</span><span class="p">.</span><span class="nx">StatusOK</span><span class="p">).</span><span class="nx">JSON</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">fiber</span><span class="p">.</span><span class="nx">Map</span><span class="p">{</span>
+<span class="w">    </span><span class="s">&quot;success&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">    </span><span class="s">&quot;data&quot;</span><span class="p">:</span><span class="w">    </span><span class="nx">result</span><span class="p">,</span>
+<span class="p">})</span>
+</pre></div>
+</div>
+<div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Route: /api/user/:id</span>
+<span class="nx">id</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">c</span><span class="p">.</span><span class="nx">Params</span><span class="p">(</span><span class="s">&quot;id&quot;</span><span class="p">)</span>
+
+<span class="c1">// Route: /api/user/:id/action/:action</span>
+<span class="nx">id</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">c</span><span class="p">.</span><span class="nx">Params</span><span class="p">(</span><span class="s">&quot;id&quot;</span><span class="p">)</span>
+<span class="nx">action</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">c</span><span class="p">.</span><span class="nx">Params</span><span class="p">(</span><span class="s">&quot;action&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// URL: /api/users?search=john&amp;phone=090</span>
+<span class="nx">search</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">c</span><span class="p">.</span><span class="nx">Query</span><span class="p">(</span><span class="s">&quot;search&quot;</span><span class="p">)</span>
+<span class="nx">phone</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">c</span><span class="p">.</span><span class="nx">Query</span><span class="p">(</span><span class="s">&quot;phone&quot;</span><span class="p">)</span>
+<span class="nx">page</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">c</span><span class="p">.</span><span class="nx">Query</span><span class="p">(</span><span class="s">&quot;page&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="p">)</span><span class="w">    </span><span class="c1">// with default value</span>
+
+<span class="c1">// Bind query params to struct</span>
+<span class="nx">params</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">models</span><span class="p">.</span><span class="nx">SearchParams</span><span class="p">{}</span>
+<span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">c</span><span class="p">.</span><span class="nx">QueryParser</span><span class="p">(</span><span class="nx">params</span><span class="p">);</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">utils</span><span class="p">.</span><span class="nx">HTTPFailResponse</span><span class="p">(</span><span class="nx">c</span><span class="p">,</span><span class="w"> </span><span class="nx">fiber</span><span class="p">.</span><span class="nx">StatusBadRequest</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Read header</span>
+<span class="nx">auth</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">c</span><span class="p">.</span><span class="nx">Get</span><span class="p">(</span><span class="s">&quot;Authorization&quot;</span><span class="p">)</span>
+<span class="nx">contentType</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">c</span><span class="p">.</span><span class="nx">Get</span><span class="p">(</span><span class="s">&quot;Content-Type&quot;</span><span class="p">)</span>
+
+<span class="c1">// Set response header</span>
+<span class="nx">c</span><span class="p">.</span><span class="nx">Set</span><span class="p">(</span><span class="s">&quot;X-Custom-Header&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;value&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Get</span>
+<span class="nx">val</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">redisClient</span><span class="p">.</span><span class="nx">Get</span><span class="p">(</span><span class="nx">c</span><span class="p">.</span><span class="nx">Context</span><span class="p">(),</span><span class="w"> </span><span class="s">&quot;key&quot;</span><span class="p">).</span><span class="nx">Result</span><span class="p">()</span>
+<span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="nx">redis</span><span class="p">.</span><span class="nx">Nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// key does not exist</span>
+<span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// error</span>
+<span class="p">}</span>
+
+<span class="c1">// Set with TTL</span>
+<span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">redisClient</span><span class="p">.</span><span class="nx">Set</span><span class="p">(</span><span class="nx">c</span><span class="p">.</span><span class="nx">Context</span><span class="p">(),</span><span class="w"> </span><span class="s">&quot;key&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;value&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="o">*</span><span class="nx">time</span><span class="p">.</span><span class="nx">Minute</span><span class="p">).</span><span class="nx">Err</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Inject DB: sql *gorm.DB (passed through handler closure)</span>
+<span class="nx">connect</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">service</span><span class="p">.</span><span class="nx">PostgresQueries</span><span class="p">{</span><span class="nx">Conn</span><span class="p">:</span><span class="w"> </span><span class="nx">sql</span><span class="p">.</span><span class="nx">WithContext</span><span class="p">(</span><span class="nx">c</span><span class="p">.</span><span class="nx">Context</span><span class="p">())}</span>
+
+<span class="c1">// Query one record</span>
+<span class="nx">user</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">models</span><span class="p">.</span><span class="nx">UserAccount</span><span class="p">{}</span>
+<span class="nx">result</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">sql</span><span class="p">.</span><span class="nx">WithContext</span><span class="p">(</span><span class="nx">c</span><span class="p">.</span><span class="nx">Context</span><span class="p">()).</span><span class="nx">Where</span><span class="p">(</span><span class="s">&quot;phone = ?&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">phone</span><span class="p">).</span><span class="nx">First</span><span class="p">(</span><span class="nx">user</span><span class="p">)</span>
+<span class="k">if</span><span class="w"> </span><span class="nx">result</span><span class="p">.</span><span class="nx">Error</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// handle error</span>
+<span class="p">}</span>
+
+<span class="c1">// Create</span>
+<span class="nx">sql</span><span class="p">.</span><span class="nx">WithContext</span><span class="p">(</span><span class="nx">c</span><span class="p">.</span><span class="nx">Context</span><span class="p">()).</span><span class="nx">Create</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">user</span><span class="p">)</span>
+
+<span class="c1">// Update</span>
+<span class="nx">sql</span><span class="p">.</span><span class="nx">WithContext</span><span class="p">(</span><span class="nx">c</span><span class="p">.</span><span class="nx">Context</span><span class="p">()).</span><span class="nx">Model</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">user</span><span class="p">).</span><span class="nx">Update</span><span class="p">(</span><span class="s">&quot;name&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;new name&quot;</span><span class="p">)</span>
+
+<span class="c1">// Transaction</span>
+<span class="nx">tx</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">sql</span><span class="p">.</span><span class="nx">WithContext</span><span class="p">(</span><span class="nx">c</span><span class="p">.</span><span class="nx">Context</span><span class="p">()).</span><span class="nx">Begin</span><span class="p">()</span>
+<span class="k">defer</span><span class="w"> </span><span class="kd">func</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">r</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nb">recover</span><span class="p">();</span><span class="w"> </span><span class="nx">r</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">tx</span><span class="p">.</span><span class="nx">Rollback</span><span class="p">()</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}()</span>
+<span class="c1">// ... operations ...</span>
+<span class="nx">tx</span><span class="p">.</span><span class="nx">Commit</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Inject: mongo *mongo.Database (passed through handler)</span>
+
+<span class="c1">// Find one</span>
+<span class="nx">collection</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">mongo</span><span class="p">.</span><span class="nx">Collection</span><span class="p">(</span><span class="s">&quot;session_device&quot;</span><span class="p">)</span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">session</span><span class="w"> </span><span class="nx">models</span><span class="p">.</span><span class="nx">UserSession</span>
+<span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">collection</span><span class="p">.</span><span class="nx">FindOne</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="w"> </span><span class="nx">bson</span><span class="p">.</span><span class="nx">M</span><span class="p">{</span><span class="s">&quot;jti&quot;</span><span class="p">:</span><span class="w"> </span><span class="nx">jti</span><span class="p">}).</span><span class="nx">Decode</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">session</span><span class="p">)</span>
+
+<span class="c1">// Find many</span>
+<span class="nx">cursor</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">collection</span><span class="p">.</span><span class="nx">Find</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="w"> </span><span class="nx">bson</span><span class="p">.</span><span class="nx">M</span><span class="p">{</span><span class="s">&quot;user_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="nx">userID</span><span class="p">})</span>
+<span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="cm">/* handle */</span><span class="w"> </span><span class="p">}</span>
+<span class="k">defer</span><span class="w"> </span><span class="nx">cursor</span><span class="p">.</span><span class="nx">Close</span><span class="p">(</span><span class="nx">ctx</span><span class="p">)</span>
+
+<span class="kd">var</span><span class="w"> </span><span class="nx">sessions</span><span class="w"> </span><span class="p">[]</span><span class="nx">models</span><span class="p">.</span><span class="nx">UserSession</span>
+<span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">cursor</span><span class="p">.</span><span class="nx">All</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">sessions</span><span class="p">);</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="cm">/* handle */</span><span class="w"> </span><span class="p">}</span>
+
+<span class="c1">// Insert</span>
+<span class="nx">_</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">collection</span><span class="p">.</span><span class="nx">InsertOne</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="w"> </span><span class="nx">session</span><span class="p">)</span>
+
+<span class="c1">// Update</span>
+<span class="nx">_</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">collection</span><span class="p">.</span><span class="nx">UpdateOne</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span>
+<span class="w">    </span><span class="nx">bson</span><span class="p">.</span><span class="nx">M</span><span class="p">{</span><span class="s">&quot;jti&quot;</span><span class="p">:</span><span class="w"> </span><span class="nx">jti</span><span class="p">},</span>
+<span class="w">    </span><span class="nx">bson</span><span class="p">.</span><span class="nx">M</span><span class="p">{</span><span class="s">&quot;$set&quot;</span><span class="p">:</span><span class="w"> </span><span class="nx">bson</span><span class="p">.</span><span class="nx">M</span><span class="p">{</span><span class="s">&quot;revoked&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">}},</span>
+<span class="p">)</span>
+
+<span class="c1">// Delete</span>
+<span class="nx">_</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">collection</span><span class="p">.</span><span class="nx">DeleteOne</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="w"> </span><span class="nx">bson</span><span class="p">.</span><span class="nx">M</span><span class="p">{</span><span class="s">&quot;jti&quot;</span><span class="p">:</span><span class="w"> </span><span class="nx">jti</span><span class="p">})</span>
+</pre></div>
+</div>
+<div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="nx">userClaims</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">middleware</span><span class="p">.</span><span class="nx">ExtractTokenMetadata</span><span class="p">(</span><span class="nx">c</span><span class="p">)</span>
+<span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">utils</span><span class="p">.</span><span class="nx">HTTPFailResponse</span><span class="p">(</span><span class="nx">c</span><span class="p">,</span><span class="w"> </span><span class="nx">fiber</span><span class="p">.</span><span class="nx">StatusUnauthorized</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="nx">userID</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">userClaims</span><span class="p">.</span><span class="nx">Id</span>
+<span class="nx">userName</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">userClaims</span><span class="p">.</span><span class="nx">Name</span>
+<span class="nx">roles</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">userClaims</span><span class="p">.</span><span class="nx">Roles</span>
+</pre></div>
+</div>
+<div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="nx">client</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">http</span><span class="p">.</span><span class="nx">Client</span><span class="p">{}</span>
+<span class="nx">HTTPClient</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">apmhttp</span><span class="p">.</span><span class="nx">WrapClient</span><span class="p">(</span><span class="nx">client</span><span class="p">)</span><span class="w">  </span><span class="c1">// with APM tracing</span>
+<span class="nx">req</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">http</span><span class="p">.</span><span class="nx">NewRequest</span><span class="p">(</span><span class="s">&quot;GET&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">url</span><span class="p">,</span><span class="w"> </span><span class="kc">nil</span><span class="p">)</span>
+<span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="cm">/* handle */</span><span class="w"> </span><span class="p">}</span>
+<span class="nx">req</span><span class="p">.</span><span class="nx">Header</span><span class="p">.</span><span class="nx">Add</span><span class="p">(</span><span class="s">&quot;Authorization&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Sprintf</span><span class="p">(</span><span class="s">&quot;Bearer %s&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">token</span><span class="p">))</span>
+<span class="nx">res</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">HTTPClient</span><span class="p">.</span><span class="nx">Do</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">WithContext</span><span class="p">(</span><span class="nx">c</span><span class="p">.</span><span class="nx">Context</span><span class="p">()))</span>
+<span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="cm">/* handle */</span><span class="w"> </span><span class="p">}</span>
+<span class="k">defer</span><span class="w"> </span><span class="nx">res</span><span class="p">.</span><span class="nx">Body</span><span class="p">.</span><span class="nx">Close</span><span class="p">()</span>
+<span class="nx">body</span><span class="p">,</span><span class="w"> </span><span class="nx">_</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">ioutil</span><span class="p">.</span><span class="nx">ReadAll</span><span class="p">(</span><span class="nx">res</span><span class="p">.</span><span class="nx">Body</span><span class="p">)</span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">result</span><span class="w"> </span><span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kd">interface</span><span class="p">{}</span>
+<span class="nx">json</span><span class="p">.</span><span class="nx">Unmarshal</span><span class="p">(</span><span class="nx">body</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">result</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nx">log</span><span class="w"> </span><span class="s">&quot;github.com/sirupsen/logrus&quot;</span>
+
+<span class="c1">// Structured fields</span>
+<span class="nx">log</span><span class="p">.</span><span class="nx">WithFields</span><span class="p">(</span><span class="nx">log</span><span class="p">.</span><span class="nx">Fields</span><span class="p">{</span>
+<span class="w">    </span><span class="s">&quot;user_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="nx">id</span><span class="p">,</span>
+<span class="w">    </span><span class="s">&quot;action&quot;</span><span class="p">:</span><span class="w">  </span><span class="s">&quot;login&quot;</span><span class="p">,</span>
+<span class="p">}).</span><span class="nx">Info</span><span class="p">(</span><span class="s">&quot;User logged in&quot;</span><span class="p">)</span>
+
+<span class="c1">// With error</span>
+<span class="nx">log</span><span class="p">.</span><span class="nx">WithError</span><span class="p">(</span><span class="nx">err</span><span class="p">).</span><span class="nx">Error</span><span class="p">(</span><span class="s">&quot;Something went wrong&quot;</span><span class="p">)</span>
+
+<span class="c1">// Debug</span>
+<span class="nx">log</span><span class="p">.</span><span class="nx">WithFields</span><span class="p">(</span><span class="nx">log</span><span class="p">.</span><span class="nx">Fields</span><span class="p">{</span><span class="s">&quot;data&quot;</span><span class="p">:</span><span class="w"> </span><span class="nx">result</span><span class="p">}).</span><span class="nx">Debug</span><span class="p">(</span><span class="s">&quot;Processing complete&quot;</span><span class="p">)</span>
+
+<span class="c1">// Warning</span>
+<span class="nx">log</span><span class="p">.</span><span class="nx">Warn</span><span class="p">(</span><span class="s">&quot;Deprecated endpoint called&quot;</span><span class="p">)</span>
+
+<span class="c1">// Global logger (JSON format in production — set in main.go)</span>
+<span class="nx">log</span><span class="p">.</span><span class="nx">SetFormatter</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">log</span><span class="p">.</span><span class="nx">JSONFormatter</span><span class="p">{})</span>
+</pre></div>
+</div>
+<div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;DEBUG: %+v\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">myStruct</span><span class="p">)</span><span class="w">    </span><span class="c1">// print with field names</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;DEBUG: %#v\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">myStruct</span><span class="p">)</span><span class="w">    </span><span class="c1">// Go syntax representation</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&quot;DEBUG:&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">someVar</span><span class="p">)</span><span class="w">           </span><span class="c1">// simple print</span>
+</pre></div>
+</div>
+<div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Errors sent to Sentry automatically via utils.SendErrorApm()</span>
+<span class="c1">// Manual capture:</span>
+<span class="nx">sentry</span><span class="p">.</span><span class="nx">CaptureException</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Standard library</span>
+<span class="kn">import</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="s">&quot;context&quot;</span>
+<span class="w">    </span><span class="s">&quot;encoding/json&quot;</span>
+<span class="w">    </span><span class="s">&quot;errors&quot;</span>
+<span class="w">    </span><span class="s">&quot;fmt&quot;</span>
+<span class="w">    </span><span class="s">&quot;os&quot;</span>
+<span class="w">    </span><span class="s">&quot;time&quot;</span>
+<span class="p">)</span>
+
+<span class="c1">// Project internal (module: vtvcab-identity-api)</span>
+<span class="kn">import</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="s">&quot;vtvcab-identity-api/app/models&quot;</span>
+<span class="w">    </span><span class="s">&quot;vtvcab-identity-api/app/repository&quot;</span>
+<span class="w">    </span><span class="s">&quot;vtvcab-identity-api/app/service&quot;</span>
+<span class="w">    </span><span class="s">&quot;vtvcab-identity-api/app/worker&quot;</span>
+<span class="w">    </span><span class="s">&quot;vtvcab-identity-api/platform/cache&quot;</span>
+<span class="w">    </span><span class="s">&quot;vtvcab-identity-api/platform/database&quot;</span>
+<span class="w">    </span><span class="nx">configs</span><span class="w"> </span><span class="s">&quot;vtvcab-identity-api/settings/config&quot;</span>
+<span class="w">    </span><span class="s">&quot;vtvcab-identity-api/settings/middleware&quot;</span>
+<span class="w">    </span><span class="s">&quot;vtvcab-identity-api/settings/utils&quot;</span>
+<span class="p">)</span>
+
+<span class="c1">// Third-party (common in this project)</span>
+<span class="kn">import</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="s">&quot;github.com/go-redis/redis/v8&quot;</span><span class="w">           </span><span class="c1">// Redis client</span>
+<span class="w">    </span><span class="s">&quot;github.com/gofiber/fiber/v2&quot;</span><span class="w">             </span><span class="c1">// HTTP framework</span>
+<span class="w">    </span><span class="s">&quot;github.com/sirupsen/logrus&quot;</span><span class="w">              </span><span class="c1">// Structured logging</span>
+<span class="w">    </span><span class="s">&quot;go.mongodb.org/mongo-driver/bson&quot;</span><span class="w">        </span><span class="c1">// MongoDB BSON (use bson.M)</span>
+<span class="w">    </span><span class="s">&quot;go.mongodb.org/mongo-driver/mongo&quot;</span><span class="w">       </span><span class="c1">// MongoDB driver</span>
+<span class="w">    </span><span class="s">&quot;gorm.io/gorm&quot;</span><span class="w">                            </span><span class="c1">// ORM for Postgres/MSSQL</span>
+<span class="w">    </span><span class="s">&quot;github.com/go-playground/validator/v10&quot;</span><span class="w">  </span><span class="c1">// Struct validation</span>
+<span class="w">    </span><span class="s">&quot;github.com/golang-jwt/jwt/v4&quot;</span><span class="w">            </span><span class="c1">// JWT tokens</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<div class="codeblock"><div class="codehead"><span class="lang-chip"></span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span>app/
+  controllers/          → HTTP handlers (login.go, user.go)
+  repository/           → Data access (postgres queries, redis, sms, social)
+  service/              → Business logic (create_user, deactive_user, device_session)
+  models/               → Request/response structs, DB entities
+  helpers/              → OAuth helpers (Apple, Facebook, Google)
+  producer/             → RabbitMQ publisher
+  worker/               → RabbitMQ consumer (event logging)
+  testing/              → Integration tests
+platform/
+  database/             → DB connections (postgres.go, mongodb.go, mssql.go)
+  cache/                → Redis connection
+settings/
+  config/               → Viper config loader
+  router/versioned/     → Route registration (v1/api.go, v2/api.go)
+  middleware/           → JWT auth, device sessions, Sentry
+  utils/                → Response helpers, validators
+</pre></div>
+</div>
+<h1 id="go-quick-reference-cheat-sheet-vtvcab-identity-api">Go Quick Reference Cheat Sheet — vtvcab-identity-api</h1>
+<div class="callout callout-note"><div class="callout-body"><p><strong>Module:</strong> <code>vtvcab-identity-api</code> | <strong>Go version:</strong> 1.21 | <strong>Framework:</strong> Fiber v2</p></div></div>
+
+<hr />
+<h2 id="1-essential-go-commands">1. Essential Go Commands</h2>
+<hr />
+<h2 id="2-project-specific-commands">2. Project-Specific Commands</h2>
+<h3 id="run-locally">Run Locally</h3>
+<p>You need all infrastructure running + <code>.env</code> configured. Required env vars (see <code>.env.example</code>):</p>
+<h3 id="run-tests">Run Tests</h3>
+<h3 id="build-docker-image">Build Docker Image</h3>
+<div class="callout callout-note"><div class="callout-body"><p><strong>Note:</strong> Dockerfile uses <code>golang:1.19-buster</code> but <code>go.mod</code> says <code>go 1.21</code>. Config TOML files and PEM keys are copied into the image.</p></div></div>
+
+<hr />
+<h2 id="3-common-go-syntax-quick-reference">3. Common Go Syntax Quick Reference</h2>
+<h3 id="variable-declaration">Variable Declaration</h3>
+<h3 id="function-signatures">Function Signatures</h3>
+<h3 id="struct-definition">Struct Definition</h3>
+<h3 id="interface-definition">Interface Definition</h3>
+<h3 id="error-handling-pattern-this-projects-convention">Error Handling Pattern (this project's convention)</h3>
+<h3 id="goroutine-syntax">Goroutine Syntax</h3>
+<h3 id="channel-syntax">Channel Syntax</h3>
+<h3 id="slice-map-operations">Slice &amp; Map Operations</h3>
+<hr />
+<h2 id="4-http-status-codes-in-fiber">4. HTTP Status Codes in Fiber</h2>
+<hr />
+<h2 id="5-common-pattern-snippets">5. Common Pattern Snippets</h2>
+<h3 id="parse-json-request-body">Parse JSON Request Body</h3>
+<h3 id="validate-request-body">Validate Request Body</h3>
+<h3 id="return-json-response">Return JSON Response</h3>
+<h3 id="get-url-params">Get URL Params</h3>
+<h3 id="get-query-params">Get Query Params</h3>
+<h3 id="set-headers">Set Headers</h3>
+<h3 id="read-from-redis">Read from Redis</h3>
+<h3 id="write-to-postgres-gorm">Write to Postgres (GORM)</h3>
+<h3 id="mongodb-operations">MongoDB Operations</h3>
+<h3 id="extract-jwt-claims">Extract JWT Claims</h3>
+<h3 id="make-http-request-external-api">Make HTTP Request (external API)</h3>
+<hr />
+<h2 id="6-debugging-tips">6. Debugging Tips</h2>
+<h3 id="logging-with-logrus-this-projects-logger">Logging with Logrus (this project's logger)</h3>
+<h3 id="print-debugging">Print Debugging</h3>
+<h3 id="common-error-messages-solutions">Common Error Messages &amp; Solutions</h3>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th>Error</th>
+<th>Cause</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>dial tcp: connect: connection refused</code></td>
+<td>Infrastructure not running</td>
+<td>Start Postgres/Redis/MongoDB</td>
+</tr>
+<tr>
+<td><code>redis: nil</code></td>
+<td>Key not found in Redis</td>
+<td>Check key exists, verify correct Redis instance (cache vs token vs ban_chat)</td>
+</tr>
+<tr>
+<td><code>record not found</code></td>
+<td>GORM query returned no rows</td>
+<td>Add <code>.Error</code> check, handle <code>gorm.ErrRecordNotFound</code></td>
+</tr>
+<tr>
+<td><code>invalid token</code></td>
+<td>JWT validation failed</td>
+<td>Check token isn't expired, verify Redis token store is accessible</td>
+</tr>
+<tr>
+<td><code>EOF</code> from MongoDB</td>
+<td>MongoDB connection lost</td>
+<td>Check MongoDB is running, verify MONGODB_URL</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="adding-sentry-error-tracking">Adding Sentry Error Tracking</h3>
+<hr />
+<h2 id="7-frequently-used-imports">7. Frequently Used Imports</h2>
+<hr />
+<h2 id="8-file-naming-conventions">8. File &amp; Naming Conventions</h2>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th>Element</th>
+<th>Convention</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>File names</td>
+<td><code>snake_case.go</code></td>
+<td><code>user_entity.go</code>, <code>token_test.go</code></td>
+</tr>
+<tr>
+<td>Package names</td>
+<td>lowercase, single word</td>
+<td><code>models</code>, <code>controller</code>, <code>utils</code></td>
+</tr>
+<tr>
+<td>Exported names</td>
+<td><code>CamelCase</code></td>
+<td><code>UserAccount</code>, <code>HTTPSuccessResponse</code></td>
+</tr>
+<tr>
+<td>Unexported names</td>
+<td><code>camelCase</code></td>
+<td><code>signKey</code>, <code>defaultErrorHandler</code></td>
+</tr>
+<tr>
+<td>Constants</td>
+<td><code>CamelCase</code> or <code>SCREAMING_SNAKE</code></td>
+<td><code>Male</code>, <code>JWT_ACCESS_TOKEN_EXPIRES</code></td>
+</tr>
+<tr>
+<td>Interface names</td>
+<td><code>CamelCase</code> (often <code>-er</code> suffix)</td>
+<td><code>Repository</code></td>
+</tr>
+<tr>
+<td>Struct tags</td>
+<td><code>key:"value"</code> with spaces</td>
+<td><code>`gorm:"primaryKey" json:"id"`</code></td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="project-directory-structure">Project Directory Structure</h3>
+<hr />
+<h2 id="9-key-gotchas-quick-reference">9. Key Gotchas Quick Reference</h2>
+<ol>
+<li><strong>Three Redis instances</strong> — <code>REDIS_URL</code> (cache), <code>REDIS_URL_TOKEN</code> (JWT), <code>REDIS_URL_BAN_CHAT</code>. Don't mix them up!</li>
+<li><strong><code>.env</code> auto-loaded</strong> — via <code>godotenv/autoload</code> import in <code>main.go</code></li>
+<li><strong>Config files baked into Docker</strong> — <code>settings.{dev,staging,prod}.toml</code> + PEM keys are <code>COPY</code>'d in Dockerfile</li>
+<li><strong>JWT access/refresh ratio</strong> — refresh token TTL = 90× access token TTL</li>
+<li><strong>V1 vs V2 routes</strong> — V1: <code>/api/*</code>, V2: <code>/api/v2/*</code> (V2 sends events via RabbitMQ channel)</li>
+<li><strong><code>test.go</code> at root</strong> — scratch code, not part of main app</li>
+<li><strong>No linter</strong> — <code>go vet ./...</code> is the only static check</li>
+<li><strong>Elastic APM hooks</strong> — wired into Fiber, Redis, Mongo, Postgres. Don't remove without checking dependencies</li>
+<li><strong>Model table names</strong> — <code>UserAccount</code> → <code>"users"</code>, <code>UserSocialAccount</code> → <code>"user_social_account"</code>, <code>SmartTvCode</code> → <code>"smart_tv_code"</code></li>
+</ol>
+</article>
+<nav class="pager">
+<a href="04-Practical-Patterns-from-Project.html"><span class="dir">← Bài trước</span>Practical Patterns from vtvcab-identity-api</a>
+<a class="next" href="06-Fiber-Framework-Complete-Guide.html"><span class="dir">Bài sau →</span>🖼️ Fiber v2 Framework - Hiểu Sâu từ Gốc đến Ngọn</a>
+</nav>
+<footer>Generated from Markdown · <a href="../index.html">Về trang chủ docs</a></footer>
+</main>
+<script>
+
+(function(){
+  var bar=document.getElementById('progress');
+  var top=document.getElementById('backtop');
+  var links=[].slice.call(document.querySelectorAll('.toc a'));
+  function onScroll(){
+    var h=document.documentElement;
+    var max=h.scrollHeight-h.clientHeight||1;
+    bar.style.width=(h.scrollTop/max*100).toFixed(2)+'%';
+    top.classList.toggle('show', h.scrollTop>600);
+    if(links.length){
+      var cur=links[0].getAttribute('href').slice(1);
+      for(var i=0;i<links.length;i++){
+        var el=document.getElementById(links[i].getAttribute('href').slice(1));
+        if(el&&el.getBoundingClientRect().top<=110) cur=links[i].getAttribute('href').slice(1);
+      }
+      links.forEach(function(a){a.classList.toggle('active',a.getAttribute('href')==='#'+cur)});
+    }
+  }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  top.addEventListener('click', function(){window.scrollTo({top:0,behavior:'smooth'})});
+  onScroll();
+  // copy-code button (event delegation)
+  document.addEventListener('click', function(e){
+    var btn = e.target.closest ? e.target.closest('.copybtn') : null;
+    if(!btn) return;
+    var block = btn.closest('.codeblock');
+    var pre = block ? block.querySelector('pre') : null;
+    if(!pre) return;
+    var text = pre.innerText;
+    function done(ok){
+      btn.classList.add('copied');
+      btn.textContent = ok ? '✓ Copied!' : '✗ Error';
+      setTimeout(function(){ btn.classList.remove('copied'); btn.textContent = 'Copy'; }, 1600);
+    }
+    function fallback(){
+      var ta = document.createElement('textarea');
+      ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+      document.body.appendChild(ta); ta.select();
+      var ok = false;
+      try { ok = document.execCommand('copy'); } catch(err) {}
+      document.body.removeChild(ta);
+      done(ok);
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function(){ done(true); }, fallback);
+    } else { fallback(); }
+  });
+})();
+
+</script>
+</body>
+</html>

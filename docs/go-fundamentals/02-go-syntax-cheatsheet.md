@@ -2,7 +2,7 @@
 
 > **Mục tiêu:** So sánh chi tiết cú pháp Go với JavaScript/Node.js, giúp developer có 4 năm kinh nghiệm Node.js nắm vững Go một cách trực quan.
 >
-> **Yêu cầu đọc trước:** Đã đọc [[01-go-overview]] để hiểu tổng quan về Go.
+> **Yêu cầu đọc trước:** Đã đọc [[01-go-mental-model-for-nodejs-dev]] để hiểu tổng quan về Go.
 
 ---
 
@@ -1975,4 +1975,4 @@ func Print[T fmt.Stringer](s T) {
 
 ---
 
-**Next:** [[03-error-handling-patterns]] - Chi tiết về error handling trong Go
+**Next:** [[03-struct-interface-error-handling]] - Chi tiết về error handling trong Go

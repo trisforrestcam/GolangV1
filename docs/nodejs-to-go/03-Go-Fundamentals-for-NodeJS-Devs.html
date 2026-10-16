@@ -1,0 +1,1229 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>🎯 Go Fundamentals cho NodeJS Developers · nodejs-to-go</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: #666666; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: #666666; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.codehilite .hll { background-color: #ffffcc }
+.codehilite { background: #f0f0f0; }
+.codehilite .c { color: #60A0B0; font-style: italic } /* Comment */
+.codehilite .err { border: 1px solid #F00 } /* Error */
+.codehilite .k { color: #007020; font-weight: bold } /* Keyword */
+.codehilite .o { color: #666 } /* Operator */
+.codehilite .ch { color: #60A0B0; font-style: italic } /* Comment.Hashbang */
+.codehilite .cm { color: #60A0B0; font-style: italic } /* Comment.Multiline */
+.codehilite .cp { color: #007020 } /* Comment.Preproc */
+.codehilite .cpf { color: #60A0B0; font-style: italic } /* Comment.PreprocFile */
+.codehilite .c1 { color: #60A0B0; font-style: italic } /* Comment.Single */
+.codehilite .cs { color: #60A0B0; background-color: #FFF0F0 } /* Comment.Special */
+.codehilite .gd { color: #A00000 } /* Generic.Deleted */
+.codehilite .ge { font-style: italic } /* Generic.Emph */
+.codehilite .ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.codehilite .gr { color: #F00 } /* Generic.Error */
+.codehilite .gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.codehilite .gi { color: #00A000 } /* Generic.Inserted */
+.codehilite .go { color: #888 } /* Generic.Output */
+.codehilite .gp { color: #C65D09; font-weight: bold } /* Generic.Prompt */
+.codehilite .gs { font-weight: bold } /* Generic.Strong */
+.codehilite .gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.codehilite .gt { color: #04D } /* Generic.Traceback */
+.codehilite .kc { color: #007020; font-weight: bold } /* Keyword.Constant */
+.codehilite .kd { color: #007020; font-weight: bold } /* Keyword.Declaration */
+.codehilite .kn { color: #007020; font-weight: bold } /* Keyword.Namespace */
+.codehilite .kp { color: #007020 } /* Keyword.Pseudo */
+.codehilite .kr { color: #007020; font-weight: bold } /* Keyword.Reserved */
+.codehilite .kt { color: #902000 } /* Keyword.Type */
+.codehilite .m { color: #40A070 } /* Literal.Number */
+.codehilite .s { color: #4070A0 } /* Literal.String */
+.codehilite .na { color: #4070A0 } /* Name.Attribute */
+.codehilite .nb { color: #007020 } /* Name.Builtin */
+.codehilite .nc { color: #0E84B5; font-weight: bold } /* Name.Class */
+.codehilite .no { color: #60ADD5 } /* Name.Constant */
+.codehilite .nd { color: #555; font-weight: bold } /* Name.Decorator */
+.codehilite .ni { color: #D55537; font-weight: bold } /* Name.Entity */
+.codehilite .ne { color: #007020 } /* Name.Exception */
+.codehilite .nf { color: #06287E } /* Name.Function */
+.codehilite .nl { color: #002070; font-weight: bold } /* Name.Label */
+.codehilite .nn { color: #0E84B5; font-weight: bold } /* Name.Namespace */
+.codehilite .nt { color: #062873; font-weight: bold } /* Name.Tag */
+.codehilite .nv { color: #BB60D5 } /* Name.Variable */
+.codehilite .ow { color: #007020; font-weight: bold } /* Operator.Word */
+.codehilite .w { color: #BBB } /* Text.Whitespace */
+.codehilite .mb { color: #40A070 } /* Literal.Number.Bin */
+.codehilite .mf { color: #40A070 } /* Literal.Number.Float */
+.codehilite .mh { color: #40A070 } /* Literal.Number.Hex */
+.codehilite .mi { color: #40A070 } /* Literal.Number.Integer */
+.codehilite .mo { color: #40A070 } /* Literal.Number.Oct */
+.codehilite .sa { color: #4070A0 } /* Literal.String.Affix */
+.codehilite .sb { color: #4070A0 } /* Literal.String.Backtick */
+.codehilite .sc { color: #4070A0 } /* Literal.String.Char */
+.codehilite .dl { color: #4070A0 } /* Literal.String.Delimiter */
+.codehilite .sd { color: #4070A0; font-style: italic } /* Literal.String.Doc */
+.codehilite .s2 { color: #4070A0 } /* Literal.String.Double */
+.codehilite .se { color: #4070A0; font-weight: bold } /* Literal.String.Escape */
+.codehilite .sh { color: #4070A0 } /* Literal.String.Heredoc */
+.codehilite .si { color: #70A0D0; font-style: italic } /* Literal.String.Interpol */
+.codehilite .sx { color: #C65D09 } /* Literal.String.Other */
+.codehilite .sr { color: #235388 } /* Literal.String.Regex */
+.codehilite .s1 { color: #4070A0 } /* Literal.String.Single */
+.codehilite .ss { color: #517918 } /* Literal.String.Symbol */
+.codehilite .bp { color: #007020 } /* Name.Builtin.Pseudo */
+.codehilite .fm { color: #06287E } /* Name.Function.Magic */
+.codehilite .vc { color: #BB60D5 } /* Name.Variable.Class */
+.codehilite .vg { color: #BB60D5 } /* Name.Variable.Global */
+.codehilite .vi { color: #BB60D5 } /* Name.Variable.Instance */
+.codehilite .vm { color: #BB60D5 } /* Name.Variable.Magic */
+.codehilite .il { color: #40A070 } /* Literal.Number.Integer.Long */
+
+:root {
+  --bg1:#f7f9fd; --bg2:#eef3fb; --card:#ffffff;
+  --ink:#1e293b; --ink-strong:#0f172a; --muted:#64748b;
+  --accent:#2563eb; --accent-2:#4f46e5; --accent-soft:#eff6ff;
+  --border:#e2e8f0; --code-bg:#f6f8fa;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0; color: var(--ink); font-size: 16px; line-height: 1.75;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
+               Arial, "Noto Sans", "Noto Sans Vietnamese", sans-serif;
+  background: linear-gradient(160deg, var(--bg1) 0%, var(--bg2) 55%, #e9f0fa 100%) fixed;
+}
+#progress { position: fixed; top: 0; left: 0; height: 3px; width: 0; z-index: 70;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2), #7c3aed); }
+#backtop { position: fixed; right: 26px; bottom: 26px; width: 44px; height: 44px;
+  border-radius: 50%; border: 1px solid var(--border); background: #fff;
+  color: var(--accent); font-size: 1.15rem; cursor: pointer; opacity: 0;
+  pointer-events: none; transition: all .25s; box-shadow: 0 8px 20px rgba(15,23,42,.14); z-index: 60; }
+#backtop.show { opacity: 1; pointer-events: auto; }
+#backtop:hover { background: var(--accent); color: #fff; }
+.wrap { max-width: 1240px; margin: 0 auto; padding: 28px 24px 72px; }
+.crumb { max-width: 1240px; margin: 0 auto; padding: 18px 24px 0; font-size: .9rem; color: var(--muted); }
+.crumb a { color: var(--accent); text-decoration: none; font-weight: 600; }
+.crumb a:hover { text-decoration: underline; }
+.card {
+  background: var(--card); border: 1px solid var(--border); border-radius: 18px;
+  padding: 44px 52px 52px; box-shadow: 0 14px 40px rgba(15, 23, 42, .07);
+  margin-top: 14px;
+}
+@media (max-width: 640px) { .card { padding: 26px 18px 34px; } }
+h1, h2, h3, h4, h5, h6 { color: var(--ink-strong); line-height: 1.3; font-weight: 700; }
+h1 {
+  font-size: 2.1rem; margin: 0 0 .7em; padding-bottom: .45em;
+  border-bottom: 3px solid var(--accent-soft);
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+}
+h2 { font-size: 1.5rem; margin: 2em 0 .6em; padding-bottom: .3em; border-bottom: 2px solid #edf2f9; }
+h3 { font-size: 1.22rem; margin: 1.6em 0 .5em; }
+h3::before { content: "▍"; color: var(--accent); margin-right: 6px; font-weight: 400; }
+h4 { font-size: 1.05rem; margin: 1.4em 0 .4em; }
+p { margin: .8em 0; }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+a.wikilink { font-weight: 600; }
+ul, ol { padding-left: 1.6em; margin: .8em 0; }
+li { margin: .3em 0; }
+li.task { list-style: none; margin-left: -1.4em; }
+li.task input { margin-right: .5em; accent-color: var(--accent); }
+code {
+  font-family: "JetBrains Mono", "Fira Code", "SF Mono", Consolas, Menlo, monospace;
+  font-size: .88em; background: #eef2f8; color: #be185d;
+  padding: .14em .42em; border-radius: 6px; border: 1px solid #e2e8f0;
+}
+/* --- code blocks --- */
+.codeblock { margin: 1.5em 0; border-radius: 12px; border: 1px solid var(--border);
+  background: var(--code-bg); overflow: hidden; box-shadow: 0 2px 6px rgba(15,23,42,.05); }
+.codehead { display: flex; align-items: center; justify-content: space-between;
+  padding: 6px 14px 6px 16px; background: #edf1f7; border-bottom: 1px solid var(--border); }
+.lang-chip { font-size: .7rem; letter-spacing: .1em; text-transform: uppercase;
+  font-weight: 800; color: #94a3b8; }
+.copybtn { display: inline-flex; align-items: center; gap: 5px; border: 1px solid var(--border);
+  background: #fff; color: #64748b; font-size: .72rem; font-weight: 700; letter-spacing: .03em;
+  padding: 3px 11px; border-radius: 6px; cursor: pointer; transition: all .15s; font-family: inherit; }
+.copybtn:hover { color: var(--accent); border-color: var(--accent); }
+.copybtn.copied { color: #15803d; border-color: #86efac; background: #f0fdf4; }
+.codeblock .codehilite { border: none; border-radius: 0; margin: 0; box-shadow: none; }
+.codeblock .codehilite pre { margin: 0; }
+.codehilite {
+  background: var(--code-bg); border: 1px solid var(--border); border-radius: 12px;
+  padding: 16px 18px; margin: 1.2em 0; overflow-x: auto;
+}
+.codehilite pre { margin: 0; background: none; }
+.codehilite code, pre code { background: none; border: none; color: inherit; padding: 0;
+  font-size: .875rem; line-height: 1.65; }
+.callout .codeblock { box-shadow: none; }
+.callout .codeblock, .callout .codehilite, .callout code { background: #fff; }
+.callout .codehead { background: rgba(237,241,247,.6); }
+/* --- tables --- */
+.tablewrap { overflow-x: auto; margin: 1.2em 0; }
+table { border-collapse: collapse; width: 100%; font-size: .94em; margin: 0; }
+th, td { border: 1px solid var(--border); padding: 9px 13px; text-align: left; vertical-align: top; }
+th { background: #f1f5f9; color: var(--ink-strong); font-weight: 700; white-space: nowrap; }
+tbody tr:nth-child(even) { background: #f8fafc; }
+tbody tr:hover { background: var(--accent-soft); }
+.callout table { background: #fff; }
+/* --- callouts (blockquotes) --- */
+.callout { border-radius: 14px; border: 1px solid var(--border); padding: 16px 20px;
+  margin: 1.5em 0; background: #f8fafc; }
+.callout .callout-title { display: flex; align-items: center; gap: 10px; font-weight: 800;
+  margin: 0 0 .5em; font-size: .98rem; letter-spacing: .01em; }
+.callout .callout-icon { font-size: 1.1rem; line-height: 1; }
+.callout .callout-body > :first-child { margin-top: 0; }
+.callout .callout-body > :last-child { margin-bottom: 0; }
+.callout-info    { background: #eff6ff; border-color: #bfdbfe; }
+.callout-info    .callout-title { color: #1d4ed8; }
+.callout-tip     { background: #fefce8; border-color: #fde68a; }
+.callout-tip     .callout-title { color: #b45309; }
+.callout-warning { background: #fff7ed; border-color: #fed7aa; }
+.callout-warning .callout-title { color: #c2410c; }
+.callout-danger  { background: #fef2f2; border-color: #fecaca; }
+.callout-danger  .callout-title { color: #b91c1c; }
+.callout-success { background: #f0fdf4; border-color: #bbf7d0; }
+.callout-success .callout-title { color: #15803d; }
+.callout-compare { background: #eef2ff; border-color: #c7d2fe; }
+.callout-compare .callout-title { color: #4338ca; }
+.callout-note    { background: #f8fafc; border-color: var(--border); }
+.callout-note    .callout-title { color: #334155; }
+blockquote { margin: 1.2em 0; padding: .7em 1.3em; color: #334155;
+  border-left: 4px solid var(--accent); background: var(--accent-soft);
+  border-radius: 0 12px 12px 0; }
+blockquote p { margin: .3em 0; }
+hr { border: none; border-top: 1px solid var(--border); margin: 2.2em 0; }
+kbd { background: #fff; border: 1px solid #cbd5e1; border-bottom-width: 2px;
+  border-radius: 6px; padding: 1px 6px; font-size: .85em; font-family: inherit; }
+/* --- TOC --- */
+.toc { position: fixed; top: 84px; right: 26px; width: 250px; max-height: calc(100vh - 130px);
+  overflow-y: auto; font-size: .82rem; background: rgba(255,255,255,.92);
+  backdrop-filter: blur(8px); border: 1px solid var(--border); border-radius: 14px;
+  padding: 14px 12px; box-shadow: 0 10px 28px rgba(15,23,42,.07); display: none; z-index: 50; }
+.toc-title { font-weight: 800; font-size: .72rem; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--muted); margin: 0 0 8px 10px; }
+.toc a { display: block; color: #475569; padding: 3px 6px 3px 10px;
+  border-left: 2px solid transparent; line-height: 1.45; }
+.toc a.l3 { padding-left: 24px; font-size: .94em; }
+.toc a:hover { color: var(--accent); text-decoration: none; }
+.toc a.active { color: var(--accent); border-left-color: var(--accent); font-weight: 600; }
+@media (min-width: 1800px) { .toc { display: block; } }
+/* --- pager & footer --- */
+.pager { display: flex; justify-content: space-between; gap: 16px; margin-top: 26px; }
+.pager a {
+  flex: 1; background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+  padding: 12px 18px; color: var(--ink-strong); font-weight: 600;
+  box-shadow: 0 4px 12px rgba(15,23,42,.05); transition: all .2s;
+}
+.pager a:hover { border-color: var(--accent); text-decoration: none;
+  box-shadow: 0 6px 16px rgba(37,99,235,.14); transform: translateY(-1px); }
+.pager .next { text-align: right; }
+.pager .dir { display: block; font-size: .78rem; color: var(--muted); font-weight: 500; }
+footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top: 34px; }
+@media print { #progress, #backtop, .toc, .pager { display: none !important; }
+  body { background: #fff; } .card { box-shadow: none; border: none; } }
+
+.wrap.wide { max-width: 1340px; }
+.hero { text-align: center; padding: 64px 10px 26px; }
+.hero-emoji { font-size: 3.4rem; margin-bottom: 8px; }
+.hero h1 { font-size: 2.6rem; border: none; display: inline-block;
+  background: linear-gradient(90deg, #2563eb, #4f46e5, #7c3aed);
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+.hero .sub { color: var(--muted); font-size: 1.05rem; }
+.stats { display: flex; gap: 10px; justify-content: center; margin-top: 20px; flex-wrap: wrap; }
+.stat { background: #fff; border: 1px solid var(--border); border-radius: 999px;
+  padding: 6px 16px; font-size: .85rem; font-weight: 700; color: #475569;
+  box-shadow: 0 4px 12px rgba(15,23,42,.05); }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 22px; margin-top: 30px; }
+.series-card { background: var(--card); border: 1px solid var(--border); border-radius: 18px;
+  padding: 26px 28px; box-shadow: 0 12px 32px rgba(15,23,42,.06); }
+.series-card h2 { border: none; margin: 0; font-size: 1.28rem; display: flex;
+  align-items: center; gap: 10px; flex-wrap: wrap; }
+.series-icon { font-size: 1.5rem; }
+.badge { background: var(--accent-soft); color: var(--accent); font-size: .72rem;
+  padding: 3px 11px; border-radius: 999px; font-weight: 800; }
+.desc { color: var(--muted); font-size: .92rem; margin: 8px 0 12px; line-height: 1.6; }
+.filelist { list-style: none; padding: 0; margin: 0; }
+.filelist li { border-top: 1px dashed #eef2f7; margin: 0; }
+.filelist a { display: flex; justify-content: space-between; align-items: center;
+  gap: 12px; padding: 10px 4px; color: var(--ink); font-weight: 600; transition: all .15s; }
+.filelist a::after { content: "›"; color: var(--accent); font-weight: 800; font-size: 1.1rem; }
+.filelist a:hover { color: var(--accent); text-decoration: none; padding-left: 10px; }
+@media (max-width: 500px) { .grid { grid-template-columns: 1fr; } }
+
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<button id="backtop" aria-label="Lên đầu trang">↑</button>
+<aside class="toc"><div class="toc-title">📋 Nội dung</div><a class="l2" href="#1-go-type-system-crash-course">📊 1. Go Type System Crash Course</a><a class="l3" href="#basic-types">Basic Types</a><a class="l3" href="#composite-types">Composite Types</a><a class="l3" href="#custom-types-from-project">Custom Types (from project)</a><a class="l2" href="#2-functions-in-go">📝 2. Functions in Go</a><a class="l3" href="#basic-function">Basic Function</a><a class="l3" href="#multiple-return-values-very-common">Multiple Return Values (Very Common!)</a><a class="l3" href="#named-return-values">Named Return Values</a><a class="l3" href="#variadic-functions">Variadic Functions</a><a class="l3" href="#anonymous-functions-closures">Anonymous Functions / Closures</a><a class="l3" href="#function-as-types">Function as Types</a><a class="l3" href="#real-examples-from-project">Real Examples from Project</a><a class="l2" href="#3-structs-and-methods">🏗️ 3. Structs and Methods</a><a class="l3" href="#struct-definition">Struct Definition</a><a class="l3" href="#struct-tags">Struct Tags</a><a class="l3" href="#struct-initialization">Struct Initialization</a><a class="l3" href="#pointer-vs-value-receivers">Pointer vs Value Receivers</a><a class="l3" href="#custom-table-names">Custom Table Names</a><a class="l2" href="#4-interfaces">🔌 4. Interfaces</a><a class="l3" href="#implicit-interface-implementation">Implicit Interface Implementation</a><a class="l3" href="#common-interfaces-in-go">Common Interfaces in Go</a><a class="l3" href="#small-interfaces-go-idiom">Small Interfaces (Go Idiom)</a><a class="l3" href="#type-assertions">Type Assertions</a><a class="l2" href="#5-error-handling-deep-dive">❌ 5. Error Handling Deep Dive</a><a class="l3" href="#error-as-value-pattern">Error as Value Pattern</a><a class="l3" href="#custom-error-types">Custom Error Types</a><a class="l3" href="#error-wrapping-fmterrorf-with-w">Error Wrapping (fmt.Errorf with %w)</a><a class="l3" href="#panic-and-recover">Panic and Recover</a><a class="l3" href="#real-error-handling-patterns-from-project">Real Error Handling Patterns from Project</a><a class="l2" href="#6-working-with-json">📦 6. Working with JSON</a><a class="l3" href="#struct-tags_1">Struct Tags</a><a class="l3" href="#marshalunmarshal">Marshal/Unmarshal</a><a class="l3" href="#json-in-http-handlers">JSON in HTTP Handlers</a><a class="l3" href="#real-requestresponse-models">Real Request/Response Models</a><a class="l2" href="#7-context-package">🔄 7. Context Package</a><a class="l3" href="#what-is-contextcontext">What is context.Context?</a><a class="l3" href="#why-it-matters-for-http-handlers">Why It Matters for HTTP Handlers</a><a class="l3" href="#cancellation-and-timeouts">Cancellation and Timeouts</a><a class="l3" href="#real-usage-in-project">Real Usage in Project</a><a class="l3" href="#context-best-practices">Context Best Practices</a><a class="l2" href="#quick-reference-go-concepts-cho-nodejs-dev">🎯 Quick Reference: Go Concepts cho NodeJS Dev</a><a class="l2" href="#tiep-theo">📚 Tiếp theo</a></aside>
+<nav class="crumb"><a href="../index.html">📚 Docs</a> &nbsp;›&nbsp; nodejs-to-go</nav>
+<main class="wrap">
+<article class="card">
+<div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// String</span>
+<span class="nx">name</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="s">&quot;John&quot;</span><span class="w">                    </span><span class="c1">// string (type inferred)</span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">name</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&quot;John&quot;</span><span class="w">          </span><span class="c1">// explicit type</span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">empty</span><span class="w"> </span><span class="kt">string</span><span class="w">                  </span><span class="c1">// zero value: &quot;&quot;</span>
+
+<span class="c1">// Numbers</span>
+<span class="nx">age</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="mi">30</span><span class="w">                         </span><span class="c1">// int</span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">count</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">42</span><span class="w">                </span><span class="c1">// explicit int</span>
+<span class="nx">price</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="mf">99.99</span><span class="w">                    </span><span class="c1">// float64</span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">ratio</span><span class="w"> </span><span class="kt">float32</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mf">0.5</span><span class="w">           </span><span class="c1">// explicit float32</span>
+
+<span class="c1">// Boolean</span>
+<span class="nx">isActive</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="kc">true</span><span class="w">                  </span><span class="c1">// bool</span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">verified</span><span class="w"> </span><span class="kt">bool</span><span class="w">                 </span><span class="c1">// zero value: false</span>
+
+<span class="c1">// Byte (alias for uint8)</span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">b</span><span class="w"> </span><span class="kt">byte</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="sc">&#39;A&#39;</span>
+</pre></div>
+</div>
+<div class="codeblock"><div class="codehead"><span class="lang-chip">javascript</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// JavaScript has only number (float64)</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">age</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">30</span><span class="p">;</span><span class="w">          </span><span class="c1">// number</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">price</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">99.99</span><span class="p">;</span><span class="w">     </span><span class="c1">// number (same type!)</span>
+
+<span class="c1">// Go distinguishes int, int32, int64, float32, float64</span>
+</pre></div>
+</div>
+<div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Fixed size array</span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">arr</span><span class="w"> </span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="kt">int</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">}</span>
+<span class="nx">arr</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">}</span>
+<span class="nx">arr</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="p">[</span><span class="o">...</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">}</span><span class="w">  </span><span class="c1">// Size inferred</span>
+
+<span class="c1">// Access</span>
+<span class="nx">first</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">arr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w">  </span><span class="c1">// 1</span>
+<span class="nx">length</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="nx">arr</span><span class="p">)</span><span class="w">  </span><span class="c1">// 3</span>
+</pre></div>
+</div>
+<div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Create slice</span>
+<span class="nx">nums</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">}</span>
+<span class="nx">nums</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">)</span><span class="w">         </span><span class="c1">// [0, 0, 0, 0, 0]</span>
+<span class="nx">nums</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">)</span><span class="w">    </span><span class="c1">// Empty, capacity 10</span>
+
+<span class="c1">// Operations</span>
+<span class="nx">nums</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nb">append</span><span class="p">(</span><span class="nx">nums</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">)</span><span class="w">         </span><span class="c1">// Add element</span>
+<span class="nx">nums</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nb">append</span><span class="p">(</span><span class="nx">nums</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w"> </span><span class="mi">7</span><span class="p">)</span><span class="w">  </span><span class="c1">// Add multiple</span>
+<span class="nx">nums</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nb">append</span><span class="p">(</span><span class="nx">nums</span><span class="p">[:</span><span class="mi">1</span><span class="p">],</span><span class="w"> </span><span class="nx">nums</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span><span class="o">...</span><span class="p">)</span><span class="w">  </span><span class="c1">// Remove at index 1</span>
+
+<span class="c1">// Sub-slice (shares memory!)</span>
+<span class="nx">sub</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">nums</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span><span class="w">               </span><span class="c1">// Elements at index 1, 2</span>
+
+<span class="c1">// Length and capacity</span>
+<span class="nb">len</span><span class="p">(</span><span class="nx">nums</span><span class="p">)</span><span class="w">  </span><span class="c1">// Number of elements</span>
+<span class="nb">cap</span><span class="p">(</span><span class="nx">nums</span><span class="p">)</span><span class="w">  </span><span class="c1">// Total capacity</span>
+</pre></div>
+</div>
+<div class="codeblock"><div class="codehead"><span class="lang-chip">javascript</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kd">const</span><span class="w"> </span><span class="nx">arr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="mf">1</span><span class="p">,</span><span class="w"> </span><span class="mf">2</span><span class="p">,</span><span class="w"> </span><span class="mf">3</span><span class="p">];</span>
+<span class="nx">arr</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="mf">4</span><span class="p">);</span><span class="w">                   </span><span class="c1">// Add</span>
+<span class="nx">arr</span><span class="p">.</span><span class="nx">splice</span><span class="p">(</span><span class="mf">1</span><span class="p">,</span><span class="w"> </span><span class="mf">1</span><span class="p">);</span><span class="w">             </span><span class="c1">// Remove at index</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">sub</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">arr</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mf">1</span><span class="p">,</span><span class="w"> </span><span class="mf">3</span><span class="p">);</span><span class="w">  </span><span class="c1">// Sub-array (copy)</span>
+
+<span class="c1">// Go slices share memory, JS slice creates copy</span>
+</pre></div>
+</div>
+<div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Create map</span>
+<span class="nx">users</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span>
+<span class="w">    </span><span class="s">&quot;john&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">30</span><span class="p">,</span>
+<span class="w">    </span><span class="s">&quot;jane&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">25</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="c1">// Or using make</span>
+<span class="nx">users</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nb">make</span><span class="p">(</span><span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">int</span><span class="p">)</span>
+<span class="nx">users</span><span class="p">[</span><span class="s">&quot;john&quot;</span><span class="p">]</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">30</span>
+
+<span class="c1">// Operations</span>
+<span class="nx">age</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">users</span><span class="p">[</span><span class="s">&quot;john&quot;</span><span class="p">]</span><span class="w">         </span><span class="c1">// Get value</span>
+<span class="nx">age</span><span class="p">,</span><span class="w"> </span><span class="nx">ok</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">users</span><span class="p">[</span><span class="s">&quot;john&quot;</span><span class="p">]</span><span class="w">     </span><span class="c1">// Check existence (ok = false if not found)</span>
+<span class="nx">users</span><span class="p">[</span><span class="s">&quot;bob&quot;</span><span class="p">]</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">35</span><span class="w">            </span><span class="c1">// Set value</span>
+<span class="nb">delete</span><span class="p">(</span><span class="nx">users</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;john&quot;</span><span class="p">)</span><span class="w">        </span><span class="c1">// Delete key</span>
+
+<span class="c1">// Iterate</span>
+<span class="k">for</span><span class="w"> </span><span class="nx">name</span><span class="p">,</span><span class="w"> </span><span class="nx">age</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="k">range</span><span class="w"> </span><span class="nx">users</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span><span class="w"> </span><span class="nx">age</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="codeblock"><div class="codehead"><span class="lang-chip">javascript</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kd">const</span><span class="w"> </span><span class="nx">users</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">john</span><span class="o">:</span><span class="w"> </span><span class="mf">30</span><span class="p">,</span><span class="w"> </span><span class="nx">jane</span><span class="o">:</span><span class="w"> </span><span class="mf">25</span><span class="w"> </span><span class="p">};</span>
+<span class="nx">users</span><span class="p">.</span><span class="nx">bob</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">35</span><span class="p">;</span><span class="w">              </span><span class="c1">// Set</span>
+<span class="ow">delete</span><span class="w"> </span><span class="nx">users</span><span class="p">.</span><span class="nx">john</span><span class="p">;</span><span class="w">           </span><span class="c1">// Delete</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">age</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">users</span><span class="p">.</span><span class="nx">john</span><span class="p">;</span><span class="w">      </span><span class="c1">// Get (undefined if not found)</span>
+
+<span class="c1">// Go map returns zero value if key not found</span>
+<span class="c1">// JavaScript returns undefined</span>
+</pre></div>
+</div>
+<div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Type alias</span>
+<span class="kd">type</span><span class="w"> </span><span class="nx">UserGender</span><span class="w"> </span><span class="kt">string</span>
+
+<span class="kd">const</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="nx">Male</span><span class="w">   </span><span class="nx">UserGender</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&quot;MALE&quot;</span>
+<span class="w">    </span><span class="nx">Female</span><span class="w"> </span><span class="nx">UserGender</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&quot;FEMALE&quot;</span>
+<span class="w">    </span><span class="nx">Other</span><span class="w">  </span><span class="nx">UserGender</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&quot;OTHER&quot;</span>
+<span class="p">)</span>
+
+<span class="c1">// Constructor function</span>
+<span class="kd">func</span><span class="w"> </span><span class="nx">NewUserGender</span><span class="p">(</span><span class="nx">key</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="nx">UserGender</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">key</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">&quot;male&quot;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nx">Male</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">key</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">&quot;female&quot;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nx">Female</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">Other</span>
+<span class="p">}</span>
+
+<span class="c1">// Usage</span>
+<span class="nx">gender</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">NewUserGender</span><span class="p">(</span><span class="s">&quot;male&quot;</span><span class="p">)</span><span class="w">  </span><span class="c1">// UserGender(&quot;MALE&quot;)</span>
+</pre></div>
+</div>
+<div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Simple function</span>
+<span class="kd">func</span><span class="w"> </span><span class="nx">greet</span><span class="p">(</span><span class="nx">name</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Sprintf</span><span class="p">(</span><span class="s">&quot;Hello, %s!&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="c1">// With multiple parameters</span>
+<span class="kd">func</span><span class="w"> </span><span class="nx">add</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span><span class="w"> </span><span class="nx">b</span><span class="w"> </span><span class="kt">int</span><span class="p">)</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">a</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">b</span>
+<span class="p">}</span>
+
+<span class="c1">// Different types</span>
+<span class="kd">func</span><span class="w"> </span><span class="nx">createUser</span><span class="p">(</span><span class="nx">name</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="nx">age</span><span class="w"> </span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="nx">active</span><span class="w"> </span><span class="kt">bool</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// ...</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Return value + error (standard Go pattern)</span>
+<span class="kd">func</span><span class="w"> </span><span class="nx">GetUser</span><span class="p">(</span><span class="nx">id</span><span class="w"> </span><span class="kt">uint</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="nx">UserAccount</span><span class="p">,</span><span class="w"> </span><span class="kt">error</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">user</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">UserAccount</span><span class="p">{}</span>
+<span class="w">    </span><span class="nx">result</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">db</span><span class="p">.</span><span class="nx">Where</span><span class="p">(</span><span class="s">&quot;id = ?&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">id</span><span class="p">).</span><span class="nx">First</span><span class="p">(</span><span class="nx">user</span><span class="p">)</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">result</span><span class="p">.</span><span class="nx">Error</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="kc">nil</span><span class="p">,</span><span class="w"> </span><span class="nx">result</span><span class="p">.</span><span class="nx">Error</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">user</span><span class="p">,</span><span class="w"> </span><span class="kc">nil</span>
+<span class="p">}</span>
+
+<span class="c1">// Usage</span>
+<span class="nx">user</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">GetUser</span><span class="p">(</span><span class="mi">123</span><span class="p">)</span>
+<span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">log</span><span class="p">.</span><span class="nx">Error</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+<span class="w">    </span><span class="k">return</span>
+<span class="p">}</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">user</span><span class="p">.</span><span class="nx">Name</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="codeblock"><div class="codehead"><span class="lang-chip">javascript</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// JavaScript typically uses try/catch or callbacks</span>
+<span class="k">async</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="nx">getUser</span><span class="p">(</span><span class="nx">id</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">user</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">db</span><span class="p">.</span><span class="nx">findById</span><span class="p">(</span><span class="nx">id</span><span class="p">);</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="nx">user</span><span class="p">)</span><span class="w"> </span><span class="k">throw</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="ne">Error</span><span class="p">(</span><span class="s1">&#39;Not found&#39;</span><span class="p">);</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">user</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">// Go returns error as second value</span>
+<span class="c1">// JavaScript throws exceptions</span>
+</pre></div>
+</div>
+<div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Named returns (documenting what&#39;s returned)</span>
+<span class="kd">func</span><span class="w"> </span><span class="nx">divide</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span><span class="w"> </span><span class="nx">b</span><span class="w"> </span><span class="kt">float64</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="nx">result</span><span class="w"> </span><span class="kt">float64</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="kt">error</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">b</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">err</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">errors</span><span class="p">.</span><span class="nx">New</span><span class="p">(</span><span class="s">&quot;division by zero&quot;</span><span class="p">)</span>
+<span class="w">        </span><span class="k">return</span><span class="w">  </span><span class="c1">// Returns zero values: result=0, err=error</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="nx">result</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">a</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nx">b</span>
+<span class="w">    </span><span class="k">return</span><span class="w">  </span><span class="c1">// Returns result and nil error</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Accept variable number of arguments</span>
+<span class="kd">func</span><span class="w"> </span><span class="nx">sum</span><span class="p">(</span><span class="nx">nums</span><span class="w"> </span><span class="o">...</span><span class="kt">int</span><span class="p">)</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">total</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="mi">0</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="nx">_</span><span class="p">,</span><span class="w"> </span><span class="nx">n</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="k">range</span><span class="w"> </span><span class="nx">nums</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">total</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="nx">n</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">total</span>
+<span class="p">}</span>
+
+<span class="c1">// Usage</span>
+<span class="nx">sum</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">)</span><span class="w">        </span><span class="c1">// 6</span>
+<span class="nx">sum</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">)</span><span class="w">  </span><span class="c1">// 15</span>
+
+<span class="c1">// Pass slice to variadic</span>
+<span class="nx">nums</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">}</span>
+<span class="nx">sum</span><span class="p">(</span><span class="nx">nums</span><span class="o">...</span><span class="p">)</span><span class="w">         </span><span class="c1">// Unpack slice</span>
+</pre></div>
+</div>
+<div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Anonymous function</span>
+<span class="nx">greet</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">name</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Sprintf</span><span class="p">(</span><span class="s">&quot;Hello, %s!&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">greet</span><span class="p">(</span><span class="s">&quot;John&quot;</span><span class="p">))</span>
+
+<span class="c1">// Immediately invoked</span>
+<span class="nx">result</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">x</span><span class="w"> </span><span class="kt">int</span><span class="p">)</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">x</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nx">x</span>
+<span class="p">}(</span><span class="mi">5</span><span class="p">)</span><span class="w">  </span><span class="c1">// 25</span>
+
+<span class="c1">// Closure (captures variables)</span>
+<span class="nx">counter</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="mi">0</span>
+<span class="nx">increment</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="kd">func</span><span class="p">()</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">counter</span><span class="o">++</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">counter</span>
+<span class="p">}</span>
+<span class="nx">increment</span><span class="p">()</span><span class="w">  </span><span class="c1">// 1</span>
+<span class="nx">increment</span><span class="p">()</span><span class="w">  </span><span class="c1">// 2</span>
+</pre></div>
+</div>
+<div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Define function type</span>
+<span class="kd">type</span><span class="w"> </span><span class="nx">HandlerFunc</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="o">*</span><span class="nx">fiber</span><span class="p">.</span><span class="nx">Ctx</span><span class="p">)</span><span class="w"> </span><span class="kt">error</span>
+
+<span class="c1">// Function that accepts function</span>
+<span class="kd">func</span><span class="w"> </span><span class="nx">applyMiddleware</span><span class="p">(</span><span class="nx">handler</span><span class="w"> </span><span class="nx">HandlerFunc</span><span class="p">,</span><span class="w"> </span><span class="nx">middlewares</span><span class="w"> </span><span class="o">...</span><span class="nx">HandlerFunc</span><span class="p">)</span><span class="w"> </span><span class="nx">HandlerFunc</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="nx">_</span><span class="p">,</span><span class="w"> </span><span class="nx">mw</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="k">range</span><span class="w"> </span><span class="nx">middlewares</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">handler</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">mw</span><span class="p">(</span><span class="nx">handler</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">handler</span>
+<span class="p">}</span>
+
+<span class="c1">// Usage in project (Fiber pattern)</span>
+<span class="kd">func</span><span class="w"> </span><span class="nx">Login</span><span class="p">(</span><span class="nx">sql</span><span class="w"> </span><span class="o">*</span><span class="nx">gorm</span><span class="p">.</span><span class="nx">DB</span><span class="p">)</span><span class="w"> </span><span class="nx">fiber</span><span class="p">.</span><span class="nx">Handler</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">c</span><span class="w"> </span><span class="o">*</span><span class="nx">fiber</span><span class="p">.</span><span class="nx">Ctx</span><span class="p">)</span><span class="w"> </span><span class="kt">error</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// Handler logic</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// From app/controllers/login.go</span>
+<span class="c1">// Controller returns fiber.Handler (function type)</span>
+<span class="kd">func</span><span class="w"> </span><span class="nx">Login</span><span class="p">(</span><span class="nx">sql</span><span class="w"> </span><span class="o">*</span><span class="nx">gorm</span><span class="p">.</span><span class="nx">DB</span><span class="p">,</span><span class="w"> </span><span class="nx">redisToken</span><span class="w"> </span><span class="o">*</span><span class="nx">redis</span><span class="p">.</span><span class="nx">Client</span><span class="p">,</span><span class="w"> </span><span class="nx">mongo</span><span class="w"> </span><span class="o">*</span><span class="nx">mongo</span><span class="p">.</span><span class="nx">Database</span><span class="p">)</span><span class="w"> </span><span class="nx">fiber</span><span class="p">.</span><span class="nx">Handler</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">c</span><span class="w"> </span><span class="o">*</span><span class="nx">fiber</span><span class="p">.</span><span class="nx">Ctx</span><span class="p">)</span><span class="w"> </span><span class="kt">error</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// Parse request</span>
+<span class="w">        </span><span class="nx">body</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">models</span><span class="p">.</span><span class="nx">LoginBody</span><span class="p">{}</span>
+<span class="w">        </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">c</span><span class="p">.</span><span class="nx">BodyParser</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">body</span><span class="p">)</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="nx">utils</span><span class="p">.</span><span class="nx">HTTPFailResponse</span><span class="p">(</span><span class="nx">c</span><span class="p">,</span><span class="w"> </span><span class="nx">fiber</span><span class="p">.</span><span class="nx">StatusBadRequest</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">)</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span>
+<span class="w">        </span><span class="c1">// Call repository</span>
+<span class="w">        </span><span class="nx">connect</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">service</span><span class="p">.</span><span class="nx">PostgresQueries</span><span class="p">{</span><span class="nx">Conn</span><span class="p">:</span><span class="w"> </span><span class="nx">sql</span><span class="p">.</span><span class="nx">WithContext</span><span class="p">(</span><span class="nx">c</span><span class="p">.</span><span class="nx">Context</span><span class="p">())}</span>
+<span class="w">        </span><span class="nx">userEntity</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">connect</span><span class="p">.</span><span class="nx">LoginAccountDb</span><span class="p">(</span><span class="nx">c</span><span class="p">.</span><span class="nx">Context</span><span class="p">(),</span><span class="w"> </span><span class="nx">body</span><span class="p">)</span>
+<span class="w">        </span>
+<span class="w">        </span><span class="c1">// Return response</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nx">utils</span><span class="p">.</span><span class="nx">HTTPSuccessResponse</span><span class="p">(</span><span class="nx">c</span><span class="p">,</span><span class="w"> </span><span class="nx">fiber</span><span class="p">.</span><span class="nx">StatusOK</span><span class="p">,</span><span class="w"> </span><span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kd">interface</span><span class="p">{}{</span>
+<span class="w">            </span><span class="s">&quot;access_token&quot;</span><span class="p">:</span><span class="w"> </span><span class="nx">token</span><span class="p">,</span>
+<span class="w">        </span><span class="p">})</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Basic struct (like TypeScript interface + class)</span>
+<span class="kd">type</span><span class="w"> </span><span class="nx">UserAccount</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">Id</span><span class="w">           </span><span class="kt">uint</span><span class="w">      </span><span class="s">`gorm:&quot;primaryKey;autoIncrement:true;unique&quot; json:&quot;id&quot;`</span>
+<span class="w">    </span><span class="nx">Name</span><span class="w">         </span><span class="o">*</span><span class="kt">string</span><span class="w">   </span><span class="s">`gorm:&quot;index:idx_user_name,unique&quot; json:&quot;name&quot;`</span>
+<span class="w">    </span><span class="nx">Phone</span><span class="w">        </span><span class="o">*</span><span class="kt">string</span><span class="w">   </span><span class="s">`gorm:&quot;index:idx_user_phone,unique&quot; json:&quot;phone&quot;`</span>
+<span class="w">    </span><span class="nx">Uuid</span><span class="w">         </span><span class="kt">string</span><span class="w">    </span><span class="s">`gorm:&quot;column:uuid&quot; json:&quot;uuid&quot;`</span>
+<span class="w">    </span><span class="nx">FullName</span><span class="w">     </span><span class="kt">string</span><span class="w">    </span><span class="s">`gorm:&quot;column:fullname&quot; json:&quot;fullname&quot;`</span>
+<span class="w">    </span><span class="nx">PasswordHash</span><span class="w"> </span><span class="kt">string</span><span class="w">    </span><span class="s">`gorm:&quot;column:password_hash&quot; json:&quot;password_hash&quot;`</span>
+<span class="w">    </span><span class="nx">Email</span><span class="w">        </span><span class="kt">string</span><span class="w">    </span><span class="s">`gorm:&quot;type:varchar(100)&quot; json:&quot;email&quot;`</span>
+<span class="w">    </span><span class="nx">Address</span><span class="w">      </span><span class="kt">string</span><span class="w">    </span><span class="s">`gorm:&quot;size:1000&quot; json:&quot;address&quot;`</span>
+<span class="w">    </span><span class="nx">Dob</span><span class="w">          </span><span class="kt">string</span><span class="w">    </span><span class="s">`json:&quot;dob&quot;`</span>
+<span class="w">    </span><span class="nx">Gender</span><span class="w">       </span><span class="nx">UserGender</span><span class="w"> </span><span class="s">`sql:&quot;DEFAULT:MALE&quot; json:&quot;gender&quot;`</span>
+<span class="w">    </span><span class="nx">CreatedAt</span><span class="w">    </span><span class="nx">time</span><span class="p">.</span><span class="nx">Time</span><span class="w">  </span><span class="s">`sql:&quot;DEFAULT:&#39;current_timestamp&#39;&quot; json:&quot;-&quot;`</span>
+<span class="w">    </span><span class="nx">UpdatedAt</span><span class="w">    </span><span class="nx">time</span><span class="p">.</span><span class="nx">Time</span><span class="w">  </span><span class="s">`sql:&quot;DEFAULT:&#39;current_timestamp&#39;&quot; json:&quot;-&quot;`</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="codeblock"><div class="codehead"><span class="lang-chip">javascript</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// TypeScript interface</span>
+<span class="kr">interface</span><span class="w"> </span><span class="nx">UserAccount</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">id</span><span class="o">:</span><span class="w"> </span><span class="nx">number</span><span class="p">;</span>
+<span class="w">    </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="nx">string</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="kc">null</span><span class="p">;</span>
+<span class="w">    </span><span class="nx">phone</span><span class="o">:</span><span class="w"> </span><span class="nx">string</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="kc">null</span><span class="p">;</span>
+<span class="w">    </span><span class="nx">uuid</span><span class="o">:</span><span class="w"> </span><span class="nx">string</span><span class="p">;</span>
+<span class="w">    </span><span class="nx">fullname</span><span class="o">:</span><span class="w"> </span><span class="nx">string</span><span class="p">;</span>
+<span class="w">    </span><span class="nx">password_hash</span><span class="o">:</span><span class="w"> </span><span class="nx">string</span><span class="p">;</span>
+<span class="w">    </span><span class="nx">email</span><span class="o">:</span><span class="w"> </span><span class="nx">string</span><span class="p">;</span>
+<span class="w">    </span><span class="c1">// ...</span>
+<span class="p">}</span>
+
+<span class="c1">// Go struct is both interface AND class</span>
+<span class="c1">// Go struct tags map to JSON keys and DB columns</span>
+</pre></div>
+</div>
+<div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Tags define metadata for serialization and DB mapping</span>
+<span class="kd">type</span><span class="w"> </span><span class="nx">User</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">Name</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="s">`json:&quot;name&quot; gorm:&quot;column:fullname&quot; validate:&quot;required&quot;`</span>
+<span class="w">    </span><span class="c1">//              ↓           ↓                      ↓</span>
+<span class="w">    </span><span class="c1">//          JSON key    DB column name        Validation rule</span>
+<span class="p">}</span>
+
+<span class="c1">// Common tag keys:</span>
+<span class="c1">// json:&quot;field_name&quot;      - JSON serialization</span>
+<span class="c1">// gorm:&quot;column:name&quot;     - Database column mapping</span>
+<span class="c1">// validate:&quot;required&quot;    - Validation rules</span>
+<span class="c1">// bson:&quot;field_name&quot;      - MongoDB BSON</span>
+</pre></div>
+</div>
+<div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Named fields (preferred)</span>
+<span class="nx">user</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">UserAccount</span><span class="p">{</span>
+<span class="w">    </span><span class="nx">Name</span><span class="p">:</span><span class="w">  </span><span class="nx">stringPtr</span><span class="p">(</span><span class="s">&quot;John&quot;</span><span class="p">),</span>
+<span class="w">    </span><span class="nx">Phone</span><span class="p">:</span><span class="w"> </span><span class="nx">stringPtr</span><span class="p">(</span><span class="s">&quot;1234567890&quot;</span><span class="p">),</span>
+<span class="w">    </span><span class="nx">Email</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;john@example.com&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="c1">// Positional (order matters, not recommended)</span>
+<span class="nx">user</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">UserAccount</span><span class="p">{</span><span class="s">&quot;John&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;1234567890&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;john@example.com&quot;</span><span class="p">}</span>
+
+<span class="c1">// Zero value</span>
+<span class="nx">user</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">UserAccount</span><span class="p">{}</span><span class="w">  </span><span class="c1">// All fields at zero values</span>
+
+<span class="c1">// Pointer to struct</span>
+<span class="nx">user</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">UserAccount</span><span class="p">{</span><span class="nx">Name</span><span class="p">:</span><span class="w"> </span><span class="nx">stringPtr</span><span class="p">(</span><span class="s">&quot;John&quot;</span><span class="p">)}</span>
+
+<span class="c1">// Helper for pointer values</span>
+<span class="kd">func</span><span class="w"> </span><span class="nx">stringPtr</span><span class="p">(</span><span class="nx">s</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="kt">string</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">s</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Value receiver - works on copy</span>
+<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">u</span><span class="w"> </span><span class="nx">UserAccount</span><span class="p">)</span><span class="w"> </span><span class="nx">GetName</span><span class="p">()</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">u</span><span class="p">.</span><span class="nx">FullName</span><span class="w">  </span><span class="c1">// Returns copy&#39;s field</span>
+<span class="p">}</span>
+
+<span class="c1">// Pointer receiver - modifies original</span>
+<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">u</span><span class="w"> </span><span class="o">*</span><span class="nx">UserAccount</span><span class="p">)</span><span class="w"> </span><span class="nx">SetName</span><span class="p">(</span><span class="nx">name</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">u</span><span class="p">.</span><span class="nx">FullName</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">name</span><span class="w">  </span><span class="c1">// Modifies original struct</span>
+<span class="p">}</span>
+
+<span class="c1">// When to use which:</span>
+<span class="c1">// - Use pointer receiver when you need to modify the struct</span>
+<span class="c1">// - Use pointer receiver for large structs (avoid copying)</span>
+<span class="c1">// - Use value receiver for small, immutable operations</span>
+</pre></div>
+</div>
+<div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// From app/models/user_entity.go</span>
+
+<span class="c1">// Value receiver - just reads data</span>
+<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">user</span><span class="w"> </span><span class="o">*</span><span class="nx">UserAccount</span><span class="p">)</span><span class="w"> </span><span class="nx">MappingUserAccount</span><span class="p">()</span><span class="w"> </span><span class="o">*</span><span class="nx">UserAccountMap</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">userMap</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">UserAccountMap</span><span class="p">{}</span>
+<span class="w">    </span><span class="nx">userMap</span><span class="p">.</span><span class="nx">Id</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">user</span><span class="p">.</span><span class="nx">Id</span>
+<span class="w">    </span><span class="nx">userMap</span><span class="p">.</span><span class="nx">Name</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">user</span><span class="p">.</span><span class="nx">Name</span>
+<span class="w">    </span><span class="c1">// ... copy fields</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">userMap</span>
+<span class="p">}</span>
+
+<span class="c1">// Pointer receiver - modifies user</span>
+<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">user</span><span class="w"> </span><span class="o">*</span><span class="nx">UserAccount</span><span class="p">)</span><span class="w"> </span><span class="nx">HashPassword</span><span class="p">(</span><span class="nx">password</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="kt">error</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="nx">crypter</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">pbkdf2</span><span class="p">.</span><span class="nx">SHA256Crypter</span>
+<span class="w">    </span><span class="nx">pass</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">crypter</span><span class="p">.</span><span class="nx">Hash</span><span class="p">(</span><span class="nx">password</span><span class="p">)</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nx">err</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="nx">user</span><span class="p">.</span><span class="nx">PasswordHash</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">pass</span><span class="w">  </span><span class="c1">// Modifies original</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="kc">nil</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// GORM uses struct name as table name by default</span>
+<span class="c1">// Override with TableName method</span>
+
+<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">UserAccount</span><span class="p">)</span><span class="w"> </span><span class="nx">TableName</span><span class="p">()</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="s">&quot;users&quot;</span>
+<span class="p">}</span>
+
+<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">UserSocialAccount</span><span class="p">)</span><span class="w"> </span><span class="nx">TableName</span><span class="p">()</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="s">&quot;user_social_account&quot;</span>
+<span class="p">}</span>
+
+<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">SmartTvCode</span><span class="p">)</span><span class="w"> </span><span class="nx">TableName</span><span class="p">()</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="s">&quot;smart_tv_code&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Define interface</span>
+<span class="kd">type</span><span class="w"> </span><span class="nx">Speaker</span><span class="w"> </span><span class="kd">interface</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">Speak</span><span class="p">()</span><span class="w"> </span><span class="kt">string</span>
+<span class="p">}</span>
+
+<span class="c1">// Any type with Speak() method satisfies Speaker</span>
+<span class="kd">type</span><span class="w"> </span><span class="nx">Dog</span><span class="w"> </span><span class="kd">struct</span><span class="p">{}</span>
+<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">d</span><span class="w"> </span><span class="nx">Dog</span><span class="p">)</span><span class="w"> </span><span class="nx">Speak</span><span class="p">()</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="s">&quot;Woof!&quot;</span><span class="w"> </span><span class="p">}</span>
+
+<span class="kd">type</span><span class="w"> </span><span class="nx">Cat</span><span class="w"> </span><span class="kd">struct</span><span class="p">{}</span>
+<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">c</span><span class="w"> </span><span class="nx">Cat</span><span class="p">)</span><span class="w"> </span><span class="nx">Speak</span><span class="p">()</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="s">&quot;Meow!&quot;</span><span class="w"> </span><span class="p">}</span>
+
+<span class="c1">// Both Dog and Cat satisfy Speaker implicitly</span>
+<span class="kd">func</span><span class="w"> </span><span class="nx">makeSound</span><span class="p">(</span><span class="nx">s</span><span class="w"> </span><span class="nx">Speaker</span><span class="p">)</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">s</span><span class="p">.</span><span class="nx">Speak</span><span class="p">()</span>
+<span class="p">}</span>
+
+<span class="c1">// Usage</span>
+<span class="nx">makeSound</span><span class="p">(</span><span class="nx">Dog</span><span class="p">{})</span><span class="w">  </span><span class="c1">// &quot;Woof!&quot;</span>
+<span class="nx">makeSound</span><span class="p">(</span><span class="nx">Cat</span><span class="p">{})</span><span class="w">  </span><span class="c1">// &quot;Meow!&quot;</span>
+</pre></div>
+</div>
+<div class="codeblock"><div class="codehead"><span class="lang-chip">javascript</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// TypeScript requires explicit implements</span>
+<span class="kd">class</span><span class="w"> </span><span class="nx">Dog</span><span class="w"> </span><span class="kr">implements</span><span class="w"> </span><span class="nx">Speaker</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">speak</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="s2">&quot;Woof!&quot;</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// Go doesn&#39;t need implements keyword</span>
+<span class="c1">// If it has the methods, it satisfies the interface</span>
+</pre></div>
+</div>
+<div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// error interface (built-in)</span>
+<span class="kd">type</span><span class="w"> </span><span class="kt">error</span><span class="w"> </span><span class="kd">interface</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">Error</span><span class="p">()</span><span class="w"> </span><span class="kt">string</span>
+<span class="p">}</span>
+
+<span class="c1">// Any type with Error() method is an error</span>
+<span class="kd">type</span><span class="w"> </span><span class="nx">ValidationError</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">Field</span><span class="w">   </span><span class="kt">string</span>
+<span class="w">    </span><span class="nx">Message</span><span class="w"> </span><span class="kt">string</span>
+<span class="p">}</span>
+
+<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">e</span><span class="w"> </span><span class="o">*</span><span class="nx">ValidationError</span><span class="p">)</span><span class="w"> </span><span class="nx">Error</span><span class="p">()</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Sprintf</span><span class="p">(</span><span class="s">&quot;%s: %s&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">e</span><span class="p">.</span><span class="nx">Field</span><span class="p">,</span><span class="w"> </span><span class="nx">e</span><span class="p">.</span><span class="nx">Message</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="c1">// io.Reader</span>
+<span class="kd">type</span><span class="w"> </span><span class="nx">Reader</span><span class="w"> </span><span class="kd">interface</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">Read</span><span class="p">(</span><span class="nx">p</span><span class="w"> </span><span class="p">[]</span><span class="kt">byte</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="nx">n</span><span class="w"> </span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="kt">error</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="c1">// io.Writer</span>
+<span class="kd">type</span><span class="w"> </span><span class="nx">Writer</span><span class="w"> </span><span class="kd">interface</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">Write</span><span class="p">(</span><span class="nx">p</span><span class="w"> </span><span class="p">[]</span><span class="kt">byte</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="nx">n</span><span class="w"> </span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="kt">error</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Go prefers small interfaces (1-3 methods)</span>
+<span class="kd">type</span><span class="w"> </span><span class="nx">UserRepository</span><span class="w"> </span><span class="kd">interface</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">GetUser</span><span class="p">(</span><span class="nx">ctx</span><span class="w"> </span><span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span><span class="w"> </span><span class="nx">id</span><span class="w"> </span><span class="kt">uint</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="nx">UserAccount</span><span class="p">,</span><span class="w"> </span><span class="kt">error</span><span class="p">)</span>
+<span class="w">    </span><span class="nx">CreateUser</span><span class="p">(</span><span class="nx">ctx</span><span class="w"> </span><span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span><span class="w"> </span><span class="nx">user</span><span class="w"> </span><span class="o">*</span><span class="nx">UserAccount</span><span class="p">)</span><span class="w"> </span><span class="kt">error</span>
+<span class="p">}</span>
+
+<span class="c1">// Not like Java/C# with huge interfaces</span>
+<span class="c1">// Go proverb: &quot;The bigger the interface, the weaker the abstraction&quot;</span>
+</pre></div>
+</div>
+<div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Check underlying type</span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">s</span><span class="w"> </span><span class="nx">Speaker</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">Dog</span><span class="p">{}</span>
+
+<span class="nx">dog</span><span class="p">,</span><span class="w"> </span><span class="nx">ok</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">s</span><span class="p">.(</span><span class="nx">Dog</span><span class="p">)</span>
+<span class="k">if</span><span class="w"> </span><span class="nx">ok</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&quot;It&#39;s a dog!&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">dog</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="c1">// Type switch</span>
+<span class="k">switch</span><span class="w"> </span><span class="nx">v</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">s</span><span class="p">.(</span><span class="kd">type</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="k">case</span><span class="w"> </span><span class="nx">Dog</span><span class="p">:</span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&quot;Dog:&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">v</span><span class="p">)</span>
+<span class="k">case</span><span class="w"> </span><span class="nx">Cat</span><span class="p">:</span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&quot;Cat:&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">v</span><span class="p">)</span>
+<span class="k">default</span><span class="p">:</span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&quot;Unknown&quot;</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Errors are values, not exceptions</span>
+<span class="kd">func</span><span class="w"> </span><span class="nx">divide</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span><span class="w"> </span><span class="nx">b</span><span class="w"> </span><span class="kt">float64</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="kt">float64</span><span class="p">,</span><span class="w"> </span><span class="kt">error</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">b</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nx">errors</span><span class="p">.</span><span class="nx">New</span><span class="p">(</span><span class="s">&quot;division by zero&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">a</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nx">b</span><span class="p">,</span><span class="w"> </span><span class="kc">nil</span>
+<span class="p">}</span>
+
+<span class="c1">// Check immediately</span>
+<span class="nx">result</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">divide</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span>
+<span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&quot;Error:&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">)</span>
+<span class="w">    </span><span class="k">return</span>
+<span class="p">}</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&quot;Result:&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">result</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="codeblock"><div class="codehead"><span class="lang-chip">javascript</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// JavaScript throws exceptions</span>
+<span class="kd">function</span><span class="w"> </span><span class="nx">divide</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span><span class="w"> </span><span class="nx">b</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">b</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="mf">0</span><span class="p">)</span><span class="w"> </span><span class="k">throw</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="ne">Error</span><span class="p">(</span><span class="s2">&quot;division by zero&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">a</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nx">b</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">try</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">divide</span><span class="p">(</span><span class="mf">10</span><span class="p">,</span><span class="w"> </span><span class="mf">0</span><span class="p">);</span>
+<span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="nx">err</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Error:&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Define custom error</span>
+<span class="kd">type</span><span class="w"> </span><span class="nx">AppError</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">Code</span><span class="w">    </span><span class="kt">int</span>
+<span class="w">    </span><span class="nx">Message</span><span class="w"> </span><span class="kt">string</span>
+<span class="w">    </span><span class="nx">Err</span><span class="w">     </span><span class="kt">error</span><span class="w">  </span><span class="c1">// Wrapped error</span>
+<span class="p">}</span>
+
+<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">e</span><span class="w"> </span><span class="o">*</span><span class="nx">AppError</span><span class="p">)</span><span class="w"> </span><span class="nx">Error</span><span class="p">()</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">e</span><span class="p">.</span><span class="nx">Message</span>
+<span class="p">}</span>
+
+<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">e</span><span class="w"> </span><span class="o">*</span><span class="nx">AppError</span><span class="p">)</span><span class="w"> </span><span class="nx">Unwrap</span><span class="p">()</span><span class="w"> </span><span class="kt">error</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">e</span><span class="p">.</span><span class="nx">Err</span>
+<span class="p">}</span>
+
+<span class="c1">// Constructor</span>
+<span class="kd">func</span><span class="w"> </span><span class="nx">NewAppError</span><span class="p">(</span><span class="nx">code</span><span class="w"> </span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="nx">message</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="kt">error</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="nx">AppError</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">AppError</span><span class="p">{</span>
+<span class="w">        </span><span class="nx">Code</span><span class="p">:</span><span class="w">    </span><span class="nx">code</span><span class="p">,</span>
+<span class="w">        </span><span class="nx">Message</span><span class="p">:</span><span class="w"> </span><span class="nx">message</span><span class="p">,</span>
+<span class="w">        </span><span class="nx">Err</span><span class="p">:</span><span class="w">     </span><span class="nx">err</span><span class="p">,</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// Usage</span>
+<span class="k">return</span><span class="w"> </span><span class="nx">NewAppError</span><span class="p">(</span><span class="mi">404</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;user not found&quot;</span><span class="p">,</span><span class="w"> </span><span class="kc">nil</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Wrap errors to preserve chain</span>
+<span class="kd">func</span><span class="w"> </span><span class="nx">GetUser</span><span class="p">(</span><span class="nx">id</span><span class="w"> </span><span class="kt">uint</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="nx">UserAccount</span><span class="p">,</span><span class="w"> </span><span class="kt">error</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">user</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">db</span><span class="p">.</span><span class="nx">FindById</span><span class="p">(</span><span class="nx">id</span><span class="p">)</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="kc">nil</span><span class="p">,</span><span class="w"> </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Errorf</span><span class="p">(</span><span class="s">&quot;failed to get user %d: %w&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">id</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">user</span><span class="p">,</span><span class="w"> </span><span class="kc">nil</span>
+<span class="p">}</span>
+
+<span class="c1">// Check wrapped errors</span>
+<span class="nx">user</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">GetUser</span><span class="p">(</span><span class="mi">123</span><span class="p">)</span>
+<span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="nx">notFound</span><span class="w"> </span><span class="o">*</span><span class="nx">NotFoundError</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">errors</span><span class="p">.</span><span class="nx">As</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">notFound</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// Handle not found</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Panic (like throw in JS, but for unrecoverable errors)</span>
+<span class="kd">func</span><span class="w"> </span><span class="nx">riskyOperation</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nb">panic</span><span class="p">(</span><span class="s">&quot;something went terribly wrong&quot;</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="c1">// Recover (like catch, but only in deferred functions)</span>
+<span class="kd">func</span><span class="w"> </span><span class="nx">safeOperation</span><span class="p">()</span><span class="w"> </span><span class="p">(</span><span class="nx">err</span><span class="w"> </span><span class="kt">error</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">defer</span><span class="w"> </span><span class="kd">func</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="nx">r</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nb">recover</span><span class="p">();</span><span class="w"> </span><span class="nx">r</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nx">err</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Errorf</span><span class="p">(</span><span class="s">&quot;recovered from panic: %v&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">r</span><span class="p">)</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}()</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="nx">riskyOperation</span><span class="p">()</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="kc">nil</span>
+<span class="p">}</span>
+
+<span class="c1">// Don&#39;t use panic for normal error handling!</span>
+<span class="c1">// Use error returns instead</span>
+</pre></div>
+</div>
+<div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// From app/controllers/login.go</span>
+<span class="kd">func</span><span class="w"> </span><span class="nx">Login</span><span class="p">(</span><span class="nx">sql</span><span class="w"> </span><span class="o">*</span><span class="nx">gorm</span><span class="p">.</span><span class="nx">DB</span><span class="p">,</span><span class="w"> </span><span class="nx">redisToken</span><span class="w"> </span><span class="o">*</span><span class="nx">redis</span><span class="p">.</span><span class="nx">Client</span><span class="p">,</span><span class="w"> </span><span class="nx">mongo</span><span class="w"> </span><span class="o">*</span><span class="nx">mongo</span><span class="p">.</span><span class="nx">Database</span><span class="p">)</span><span class="w"> </span><span class="nx">fiber</span><span class="p">.</span><span class="nx">Handler</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">c</span><span class="w"> </span><span class="o">*</span><span class="nx">fiber</span><span class="p">.</span><span class="nx">Ctx</span><span class="p">)</span><span class="w"> </span><span class="kt">error</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// Parse body - check error immediately</span>
+<span class="w">        </span><span class="nx">body</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">models</span><span class="p">.</span><span class="nx">LoginBody</span><span class="p">{}</span>
+<span class="w">        </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">c</span><span class="p">.</span><span class="nx">BodyParser</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">body</span><span class="p">)</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nx">log</span><span class="p">.</span><span class="nx">WithError</span><span class="p">(</span><span class="nx">err</span><span class="p">).</span><span class="nx">Error</span><span class="p">(</span><span class="s">&quot;Something went wrong&quot;</span><span class="p">)</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="nx">utils</span><span class="p">.</span><span class="nx">HTTPFailResponse</span><span class="p">(</span><span class="nx">c</span><span class="p">,</span><span class="w"> </span><span class="nx">fiber</span><span class="p">.</span><span class="nx">StatusBadRequest</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">)</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span>
+<span class="w">        </span><span class="c1">// Query database - check error</span>
+<span class="w">        </span><span class="nx">connect</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">service</span><span class="p">.</span><span class="nx">PostgresQueries</span><span class="p">{</span><span class="nx">Conn</span><span class="p">:</span><span class="w"> </span><span class="nx">sql</span><span class="p">.</span><span class="nx">WithContext</span><span class="p">(</span><span class="nx">c</span><span class="p">.</span><span class="nx">Context</span><span class="p">())}</span>
+<span class="w">        </span><span class="nx">userEntity</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">connect</span><span class="p">.</span><span class="nx">LoginAccountDb</span><span class="p">(</span><span class="nx">c</span><span class="p">.</span><span class="nx">Context</span><span class="p">(),</span><span class="w"> </span><span class="nx">body</span><span class="p">)</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nx">log</span><span class="p">.</span><span class="nx">WithError</span><span class="p">(</span><span class="nx">err</span><span class="p">).</span><span class="nx">Error</span><span class="p">(</span><span class="s">&quot;Something went wrong&quot;</span><span class="p">)</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="nx">utils</span><span class="p">.</span><span class="nx">HTTPFailResponse</span><span class="p">(</span><span class="nx">c</span><span class="p">,</span><span class="w"> </span><span class="nx">fiber</span><span class="p">.</span><span class="nx">StatusBadRequest</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">)</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span>
+<span class="w">        </span><span class="c1">// Check nil (user not found)</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="nx">userEntity</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nx">log</span><span class="p">.</span><span class="nx">WithError</span><span class="p">(</span><span class="nx">errors</span><span class="p">.</span><span class="nx">New</span><span class="p">(</span><span class="nx">utils</span><span class="p">.</span><span class="nx">USER_NOT_FOUND</span><span class="p">)).</span><span class="nx">Error</span><span class="p">(</span><span class="s">&quot;Something went wrong&quot;</span><span class="p">)</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="nx">utils</span><span class="p">.</span><span class="nx">HTTPFailResponse</span><span class="p">(</span><span class="nx">c</span><span class="p">,</span><span class="w"> </span><span class="nx">fiber</span><span class="p">.</span><span class="nx">StatusBadRequest</span><span class="p">,</span><span class="w"> </span><span class="nx">errors</span><span class="p">.</span><span class="nx">New</span><span class="p">(</span><span class="nx">utils</span><span class="p">.</span><span class="nx">USER_NOT_FOUND</span><span class="p">))</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span>
+<span class="w">        </span><span class="c1">// Success</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nx">utils</span><span class="p">.</span><span class="nx">HTTPSuccessResponse</span><span class="p">(</span><span class="nx">c</span><span class="p">,</span><span class="w"> </span><span class="nx">fiber</span><span class="p">.</span><span class="nx">StatusOK</span><span class="p">,</span><span class="w"> </span><span class="nx">data</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kd">type</span><span class="w"> </span><span class="nx">LoginBody</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">MetaData</span><span class="w"> </span><span class="o">*</span><span class="nx">MetaData</span><span class="w"> </span><span class="s">`json:&quot;metadata&quot; validate:&quot;required&quot;`</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="nx">ProviderName</span><span class="w">        </span><span class="kt">string</span><span class="w"> </span><span class="s">`json:&quot;provider_name&quot;`</span>
+<span class="w">    </span><span class="nx">ProviderAccessToken</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="s">`json:&quot;provider_access_token&quot;`</span>
+<span class="w">    </span><span class="nx">ProviderTokenType</span><span class="w">   </span><span class="kt">string</span><span class="w"> </span><span class="s">`json:&quot;provider_token_type&quot;`</span>
+<span class="w">    </span><span class="nx">ClientId</span><span class="w">            </span><span class="kt">string</span><span class="w"> </span><span class="s">`json:&quot;client_id&quot;`</span>
+<span class="w">    </span><span class="nx">UserName</span><span class="w">            </span><span class="kt">string</span><span class="w"> </span><span class="s">`json:&quot;name&quot;`</span>
+<span class="w">    </span><span class="nx">Password</span><span class="w">            </span><span class="kt">string</span><span class="w"> </span><span class="s">`json:&quot;password&quot;`</span>
+<span class="p">}</span>
+
+<span class="c1">// Tag options:</span>
+<span class="c1">// json:&quot;name&quot;           - JSON field name</span>
+<span class="c1">// json:&quot;-&quot;              - Skip field</span>
+<span class="c1">// json:&quot;name,omitempty&quot; - Skip if empty</span>
+<span class="c1">// validate:&quot;required&quot;   - Validation rule</span>
+</pre></div>
+</div>
+<div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Struct to JSON</span>
+<span class="nx">user</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">UserAccount</span><span class="p">{</span><span class="nx">Name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;John&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">Age</span><span class="p">:</span><span class="w"> </span><span class="mi">30</span><span class="p">}</span>
+<span class="nx">jsonBytes</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">json</span><span class="p">.</span><span class="nx">Marshal</span><span class="p">(</span><span class="nx">user</span><span class="p">)</span>
+<span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">log</span><span class="p">.</span><span class="nx">Error</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nb">string</span><span class="p">(</span><span class="nx">jsonBytes</span><span class="p">))</span><span class="w">  </span><span class="c1">// {&quot;name&quot;:&quot;John&quot;,&quot;age&quot;:30}</span>
+
+<span class="c1">// JSON to Struct</span>
+<span class="nx">jsonStr</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="s">`{&quot;name&quot;:&quot;John&quot;,&quot;age&quot;:30}`</span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">user</span><span class="w"> </span><span class="nx">UserAccount</span>
+<span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">json</span><span class="p">.</span><span class="nx">Unmarshal</span><span class="p">([]</span><span class="nb">byte</span><span class="p">(</span><span class="nx">jsonStr</span><span class="p">),</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">user</span><span class="p">)</span>
+<span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">log</span><span class="p">.</span><span class="nx">Error</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">user</span><span class="p">.</span><span class="nx">Name</span><span class="p">)</span><span class="w">  </span><span class="c1">// &quot;John&quot;</span>
+</pre></div>
+</div>
+<div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Parse JSON request body (Fiber)</span>
+<span class="kd">func</span><span class="w"> </span><span class="nx">Login</span><span class="p">(</span><span class="nx">c</span><span class="w"> </span><span class="o">*</span><span class="nx">fiber</span><span class="p">.</span><span class="nx">Ctx</span><span class="p">)</span><span class="w"> </span><span class="kt">error</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">body</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">models</span><span class="p">.</span><span class="nx">LoginBody</span><span class="p">{}</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">c</span><span class="p">.</span><span class="nx">BodyParser</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">body</span><span class="p">);</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nx">c</span><span class="p">.</span><span class="nx">Status</span><span class="p">(</span><span class="mi">400</span><span class="p">).</span><span class="nx">JSON</span><span class="p">(</span><span class="nx">fiber</span><span class="p">.</span><span class="nx">Map</span><span class="p">{</span>
+<span class="w">            </span><span class="s">&quot;error&quot;</span><span class="p">:</span><span class="w"> </span><span class="nx">err</span><span class="p">.</span><span class="nx">Error</span><span class="p">(),</span>
+<span class="w">        </span><span class="p">})</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="c1">// Use body...</span>
+<span class="p">}</span>
+
+<span class="c1">// Return JSON response</span>
+<span class="k">return</span><span class="w"> </span><span class="nx">c</span><span class="p">.</span><span class="nx">Status</span><span class="p">(</span><span class="mi">200</span><span class="p">).</span><span class="nx">JSON</span><span class="p">(</span><span class="nx">fiber</span><span class="p">.</span><span class="nx">Map</span><span class="p">{</span>
+<span class="w">    </span><span class="s">&quot;success&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">    </span><span class="s">&quot;data&quot;</span><span class="p">:</span><span class="w">    </span><span class="nx">user</span><span class="p">,</span>
+<span class="p">})</span>
+
+<span class="c1">// Using project&#39;s response helpers</span>
+<span class="k">return</span><span class="w"> </span><span class="nx">utils</span><span class="p">.</span><span class="nx">HTTPSuccessResponse</span><span class="p">(</span><span class="nx">c</span><span class="p">,</span><span class="w"> </span><span class="nx">fiber</span><span class="p">.</span><span class="nx">StatusOK</span><span class="p">,</span><span class="w"> </span><span class="nx">user</span><span class="p">)</span>
+<span class="k">return</span><span class="w"> </span><span class="nx">utils</span><span class="p">.</span><span class="nx">HTTPFailResponse</span><span class="p">(</span><span class="nx">c</span><span class="p">,</span><span class="w"> </span><span class="nx">fiber</span><span class="p">.</span><span class="nx">StatusBadRequest</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Request model</span>
+<span class="kd">type</span><span class="w"> </span><span class="nx">LoginBody</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">MetaData</span><span class="w"> </span><span class="o">*</span><span class="nx">MetaData</span><span class="w"> </span><span class="s">`json:&quot;metadata&quot; validate:&quot;required&quot;`</span>
+<span class="w">    </span><span class="nx">UserName</span><span class="w"> </span><span class="kt">string</span><span class="w">    </span><span class="s">`json:&quot;name&quot;`</span>
+<span class="w">    </span><span class="nx">Password</span><span class="w"> </span><span class="kt">string</span><span class="w">    </span><span class="s">`json:&quot;password&quot;`</span>
+<span class="p">}</span>
+
+<span class="kd">type</span><span class="w"> </span><span class="nx">MetaData</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">DeviceId</span><span class="w">   </span><span class="kt">string</span><span class="w"> </span><span class="s">`json:&quot;device_id&quot; validate:&quot;required&quot;`</span>
+<span class="w">    </span><span class="nx">DeviceOS</span><span class="w">   </span><span class="kt">string</span><span class="w"> </span><span class="s">`json:&quot;device_os&quot; validate:&quot;required&quot;`</span>
+<span class="w">    </span><span class="nx">DeviceName</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="s">`json:&quot;device_name&quot;`</span>
+<span class="w">    </span><span class="nx">OSVersion</span><span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="s">`json:&quot;os_version&quot;`</span>
+<span class="w">    </span><span class="nx">AppVersion</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="s">`json:&quot;app_version&quot;`</span>
+<span class="p">}</span>
+
+<span class="c1">// Response model</span>
+<span class="kd">type</span><span class="w"> </span><span class="nx">Response</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">Success</span><span class="w"> </span><span class="kt">bool</span><span class="w">        </span><span class="s">`json:&quot;success&quot;`</span>
+<span class="w">    </span><span class="nx">Error</span><span class="w">   </span><span class="kt">int</span><span class="w">         </span><span class="s">`json:&quot;error_code&quot;`</span>
+<span class="w">    </span><span class="nx">Message</span><span class="w"> </span><span class="p">[]</span><span class="kt">string</span><span class="w">    </span><span class="s">`json:&quot;error_message&quot;`</span>
+<span class="w">    </span><span class="nx">Data</span><span class="w">    </span><span class="kd">interface</span><span class="p">{}</span><span class="w"> </span><span class="s">`json:&quot;data&quot;`</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Context carries deadlines, cancellation signals, and request-scoped values</span>
+<span class="kd">type</span><span class="w"> </span><span class="nx">Context</span><span class="w"> </span><span class="kd">interface</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">Deadline</span><span class="p">()</span><span class="w"> </span><span class="p">(</span><span class="nx">deadline</span><span class="w"> </span><span class="nx">time</span><span class="p">.</span><span class="nx">Time</span><span class="p">,</span><span class="w"> </span><span class="nx">ok</span><span class="w"> </span><span class="kt">bool</span><span class="p">)</span>
+<span class="w">    </span><span class="nx">Done</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;-</span><span class="kd">chan</span><span class="w"> </span><span class="kd">struct</span><span class="p">{}</span>
+<span class="w">    </span><span class="nx">Err</span><span class="p">()</span><span class="w"> </span><span class="kt">error</span>
+<span class="w">    </span><span class="nx">Value</span><span class="p">(</span><span class="nx">key</span><span class="w"> </span><span class="kd">interface</span><span class="p">{})</span><span class="w"> </span><span class="kd">interface</span><span class="p">{}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Context ties request lifecycle to operations</span>
+<span class="kd">func</span><span class="w"> </span><span class="nx">GetUser</span><span class="p">(</span><span class="nx">c</span><span class="w"> </span><span class="o">*</span><span class="nx">fiber</span><span class="p">.</span><span class="nx">Ctx</span><span class="p">)</span><span class="w"> </span><span class="kt">error</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// Get context from request</span>
+<span class="w">    </span><span class="nx">ctx</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">c</span><span class="p">.</span><span class="nx">Context</span><span class="p">()</span><span class="w">  </span><span class="c1">// Returns fasthttp.RequestCtx</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="c1">// Pass to database operations</span>
+<span class="w">    </span><span class="nx">user</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">db</span><span class="p">.</span><span class="nx">WithContext</span><span class="p">(</span><span class="nx">ctx</span><span class="p">).</span><span class="nx">FindById</span><span class="p">(</span><span class="nx">id</span><span class="p">)</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="c1">// If client disconnects, ctx is cancelled</span>
+<span class="w">    </span><span class="c1">// Database query will be interrupted</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Timeout for database queries</span>
+<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">query</span><span class="w"> </span><span class="o">*</span><span class="nx">PostgresQueries</span><span class="p">)</span><span class="w"> </span><span class="nx">LoginAccountDb</span><span class="p">(</span><span class="nx">ctx</span><span class="w"> </span><span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span><span class="w"> </span><span class="nx">req</span><span class="w"> </span><span class="o">*</span><span class="nx">models</span><span class="p">.</span><span class="nx">LoginBody</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="nx">models</span><span class="p">.</span><span class="nx">UserAccount</span><span class="p">,</span><span class="w"> </span><span class="kt">error</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">user</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">models</span><span class="p">.</span><span class="nx">UserAccount</span><span class="p">{}</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="c1">// Create context with 2-second timeout</span>
+<span class="w">    </span><span class="nx">ctx</span><span class="p">,</span><span class="w"> </span><span class="nx">cancel</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">context</span><span class="p">.</span><span class="nx">WithTimeout</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="o">*</span><span class="nx">time</span><span class="p">.</span><span class="nx">Second</span><span class="p">)</span>
+<span class="w">    </span><span class="k">defer</span><span class="w"> </span><span class="nx">cancel</span><span class="p">()</span><span class="w">  </span><span class="c1">// Always call cancel to release resources</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="c1">// Query will fail if takes &gt; 2 seconds</span>
+<span class="w">    </span><span class="nx">result</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">query</span><span class="p">.</span><span class="nx">Conn</span><span class="p">.</span><span class="nx">WithContext</span><span class="p">(</span><span class="nx">ctx</span><span class="p">).</span><span class="nx">First</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">user</span><span class="p">)</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">user</span><span class="p">,</span><span class="w"> </span><span class="nx">result</span><span class="p">.</span><span class="nx">Error</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// From app/repository/postgres_repo.go</span>
+<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">query</span><span class="w"> </span><span class="o">*</span><span class="nx">PostgresQueries</span><span class="p">)</span><span class="w"> </span><span class="nx">GetDeactivateUser</span><span class="p">(</span><span class="nx">ctx</span><span class="w"> </span><span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span><span class="w"> </span><span class="nx">id</span><span class="w"> </span><span class="kt">uint</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="nx">models</span><span class="p">.</span><span class="nx">UserBlockStatus</span><span class="p">,</span><span class="w"> </span><span class="kt">error</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">user</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">models</span><span class="p">.</span><span class="nx">UserBlockStatus</span><span class="p">{}</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="c1">// Context with timeout</span>
+<span class="w">    </span><span class="nx">ctx</span><span class="p">,</span><span class="w"> </span><span class="nx">cancel</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">context</span><span class="p">.</span><span class="nx">WithTimeout</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="o">*</span><span class="nx">time</span><span class="p">.</span><span class="nx">Second</span><span class="p">)</span>
+<span class="w">    </span><span class="k">defer</span><span class="w"> </span><span class="nx">cancel</span><span class="p">()</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="c1">// Prepared statement for performance</span>
+<span class="w">    </span><span class="nx">session</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">query</span><span class="p">.</span><span class="nx">Conn</span><span class="p">.</span><span class="nx">Session</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">gorm</span><span class="p">.</span><span class="nx">Session</span><span class="p">{</span><span class="nx">PrepareStmt</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">})</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="c1">// Query with context</span>
+<span class="w">    </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">session</span><span class="p">.</span><span class="nx">Where</span><span class="p">(</span><span class="nx">models</span><span class="p">.</span><span class="nx">UserBlockStatus</span><span class="p">{</span><span class="nx">UserID</span><span class="p">:</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">id</span><span class="p">}).</span><span class="nx">WithContext</span><span class="p">(</span><span class="nx">ctx</span><span class="p">).</span><span class="nx">First</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">user</span><span class="p">)</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="p">.</span><span class="nx">Error</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="nx">errors</span><span class="p">.</span><span class="nx">Is</span><span class="p">(</span><span class="nx">err</span><span class="p">.</span><span class="nx">Error</span><span class="p">,</span><span class="w"> </span><span class="nx">gorm</span><span class="p">.</span><span class="nx">ErrRecordNotFound</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="kc">nil</span><span class="p">,</span><span class="w"> </span><span class="kc">nil</span><span class="w">  </span><span class="c1">// Not found, no error</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="kc">nil</span><span class="p">,</span><span class="w"> </span><span class="nx">errors</span><span class="p">.</span><span class="nx">New</span><span class="p">(</span><span class="nx">utils</span><span class="p">.</span><span class="nx">COMMON_ERR</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">user</span><span class="p">,</span><span class="w"> </span><span class="kc">nil</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// 1. Always pass context as first parameter</span>
+<span class="kd">func</span><span class="w"> </span><span class="nx">ProcessRequest</span><span class="p">(</span><span class="nx">ctx</span><span class="w"> </span><span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span><span class="w"> </span><span class="nx">data</span><span class="w"> </span><span class="o">*</span><span class="nx">Data</span><span class="p">)</span><span class="w"> </span><span class="kt">error</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// ...</span>
+<span class="p">}</span>
+
+<span class="c1">// 2. Use context for cancellation</span>
+<span class="nx">ctx</span><span class="p">,</span><span class="w"> </span><span class="nx">cancel</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">context</span><span class="p">.</span><span class="nx">WithCancel</span><span class="p">(</span><span class="nx">context</span><span class="p">.</span><span class="nx">Background</span><span class="p">())</span>
+<span class="k">defer</span><span class="w"> </span><span class="nx">cancel</span><span class="p">()</span>
+
+<span class="k">go</span><span class="w"> </span><span class="kd">func</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// This will stop when ctx is cancelled</span>
+<span class="w">    </span><span class="k">select</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="o">&lt;-</span><span class="nx">ctx</span><span class="p">.</span><span class="nx">Done</span><span class="p">():</span>
+<span class="w">        </span><span class="k">return</span>
+<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="nx">data</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="o">&lt;-</span><span class="nx">dataCh</span><span class="p">:</span>
+<span class="w">        </span><span class="nx">process</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}()</span>
+
+<span class="c1">// 3. Don&#39;t store context in struct</span>
+<span class="c1">// ❌ Bad</span>
+<span class="kd">type</span><span class="w"> </span><span class="nx">Service</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">ctx</span><span class="w"> </span><span class="nx">context</span><span class="p">.</span><span class="nx">Context</span>
+<span class="p">}</span>
+
+<span class="c1">// ✅ Good</span>
+<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">s</span><span class="w"> </span><span class="o">*</span><span class="nx">Service</span><span class="p">)</span><span class="w"> </span><span class="nx">DoSomething</span><span class="p">(</span><span class="nx">ctx</span><span class="w"> </span><span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span><span class="w"> </span><span class="kt">error</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// ...</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<h1 id="go-fundamentals-cho-nodejs-developers">🎯 Go Fundamentals cho NodeJS Developers</h1>
+<div class="callout callout-note"><div class="callout-body"><p><strong>Dành cho:</strong> NodeJS dev 4 năm kinh nghiệm muốn nắm vững Go basics
+<strong>Mục tiêu:</strong> Hiểu Go types, functions, structs, interfaces qua ví dụ thực tế từ project</p></div></div>
+
+<hr />
+<h2 id="1-go-type-system-crash-course">📊 1. Go Type System Crash Course</h2>
+<h3 id="basic-types">Basic Types</h3>
+<p><strong>NodeJS Comparison:</strong></p>
+<hr />
+<h3 id="composite-types">Composite Types</h3>
+<h4 id="arrays-fixed-size-rarely-used">Arrays (Fixed size - rarely used)</h4>
+<h4 id="slices-dynamic-arrays-most-common">Slices (Dynamic arrays - most common)</h4>
+<p><strong>NodeJS Comparison:</strong></p>
+<h4 id="maps-key-value-pairs">Maps (Key-value pairs)</h4>
+<p><strong>NodeJS Comparison:</strong></p>
+<hr />
+<h3 id="custom-types-from-project">Custom Types (from project)</h3>
+<hr />
+<h2 id="2-functions-in-go">📝 2. Functions in Go</h2>
+<h3 id="basic-function">Basic Function</h3>
+<h3 id="multiple-return-values-very-common">Multiple Return Values (Very Common!)</h3>
+<p><strong>NodeJS Comparison:</strong></p>
+<h3 id="named-return-values">Named Return Values</h3>
+<h3 id="variadic-functions">Variadic Functions</h3>
+<h3 id="anonymous-functions-closures">Anonymous Functions / Closures</h3>
+<h3 id="function-as-types">Function as Types</h3>
+<h3 id="real-examples-from-project">Real Examples from Project</h3>
+<hr />
+<h2 id="3-structs-and-methods">🏗️ 3. Structs and Methods</h2>
+<h3 id="struct-definition">Struct Definition</h3>
+<p><strong>NodeJS Comparison:</strong></p>
+<h3 id="struct-tags">Struct Tags</h3>
+<h3 id="struct-initialization">Struct Initialization</h3>
+<h3 id="pointer-vs-value-receivers">Pointer vs Value Receivers</h3>
+<p><strong>Real Example from Project:</strong></p>
+<h3 id="custom-table-names">Custom Table Names</h3>
+<hr />
+<h2 id="4-interfaces">🔌 4. Interfaces</h2>
+<h3 id="implicit-interface-implementation">Implicit Interface Implementation</h3>
+<p><strong>NodeJS Comparison:</strong></p>
+<h3 id="common-interfaces-in-go">Common Interfaces in Go</h3>
+<h3 id="small-interfaces-go-idiom">Small Interfaces (Go Idiom)</h3>
+<h3 id="type-assertions">Type Assertions</h3>
+<hr />
+<h2 id="5-error-handling-deep-dive">❌ 5. Error Handling Deep Dive</h2>
+<h3 id="error-as-value-pattern">Error as Value Pattern</h3>
+<p><strong>NodeJS Comparison:</strong></p>
+<h3 id="custom-error-types">Custom Error Types</h3>
+<h3 id="error-wrapping-fmterrorf-with-w">Error Wrapping (fmt.Errorf with %w)</h3>
+<h3 id="panic-and-recover">Panic and Recover</h3>
+<h3 id="real-error-handling-patterns-from-project">Real Error Handling Patterns from Project</h3>
+<hr />
+<h2 id="6-working-with-json">📦 6. Working with JSON</h2>
+<h3 id="struct-tags_1">Struct Tags</h3>
+<h3 id="marshalunmarshal">Marshal/Unmarshal</h3>
+<h3 id="json-in-http-handlers">JSON in HTTP Handlers</h3>
+<h3 id="real-requestresponse-models">Real Request/Response Models</h3>
+<hr />
+<h2 id="7-context-package">🔄 7. Context Package</h2>
+<h3 id="what-is-contextcontext">What is context.Context?</h3>
+<h3 id="why-it-matters-for-http-handlers">Why It Matters for HTTP Handlers</h3>
+<h3 id="cancellation-and-timeouts">Cancellation and Timeouts</h3>
+<h3 id="real-usage-in-project">Real Usage in Project</h3>
+<h3 id="context-best-practices">Context Best Practices</h3>
+<hr />
+<h2 id="quick-reference-go-concepts-cho-nodejs-dev">🎯 Quick Reference: Go Concepts cho NodeJS Dev</h2>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th>Go Concept</th>
+<th>NodeJS Equivalent</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>var x int</code></td>
+<td><code>let x: number</code></td>
+</tr>
+<tr>
+<td><code>x := 10</code></td>
+<td><code>const x = 10</code></td>
+</tr>
+<tr>
+<td><code>func add(a, b int) int</code></td>
+<td><code>function add(a: number, b: number): number</code></td>
+</tr>
+<tr>
+<td><code>func f() (int, error)</code></td>
+<td><code>function f(): [number, Error]</code></td>
+</tr>
+<tr>
+<td><code>type User struct { ... }</code></td>
+<td><code>interface User { ... }</code> + <code>class UserImpl</code></td>
+</tr>
+<tr>
+<td><code>func (u *User) Save()</code></td>
+<td><code>class User { save() { ... } }</code></td>
+</tr>
+<tr>
+<td><code>interface { Read() }</code></td>
+<td><code>interface Readable { read(): void }</code></td>
+</tr>
+<tr>
+<td><code>if err != nil { return err }</code></td>
+<td><code>try { ... } catch (e) { throw e }</code></td>
+</tr>
+<tr>
+<td><code>go func() { ... }()</code></td>
+<td><code>setTimeout(() =&gt; { ... }, 0)</code></td>
+</tr>
+<tr>
+<td><code>ch := make(chan int)</code></td>
+<td><code>new EventEmitter()</code></td>
+</tr>
+<tr>
+<td><code>ctx.Done()</code></td>
+<td><code>AbortController.signal</code></td>
+</tr>
+<tr>
+<td><code>json.Marshal(v)</code></td>
+<td><code>JSON.stringify(v)</code></td>
+</tr>
+<tr>
+<td><code>json.Unmarshal(data, &amp;v)</code></td>
+<td><code>JSON.parse(data)</code></td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="tiep-theo">📚 Tiếp theo</h2>
+<ul>
+<li><a class="wikilink" href="01-Project-Structure-Analysis.html">01-Project-Structure-Analysis</a> - Phân tích project structure</li>
+<li><a class="wikilink" href="02-Go-vs-NodeJS-Comparison.html">02-Go-vs-NodeJS-Comparison</a> - So sánh chi tiết Go vs NodeJS</li>
+<li><a class="wikilink" href="04-Practical-Patterns-from-Project.html">04-Practical-Patterns-from-Project</a> - Patterns thực tế trong project</li>
+<li><a class="wikilink" href="05-Quick-Reference-CheatSheet.html">05-Quick-Reference-CheatSheet</a> - Cheat sheet tra cứu nhanh</li>
+</ul>
+</article>
+<nav class="pager">
+<a href="02-Go-vs-NodeJS-Comparison.html"><span class="dir">← Bài trước</span>🔄 Go vs NodeJS - So sánh Toàn diện cho Dev 4 năm</a>
+<a class="next" href="04-Practical-Patterns-from-Project.html"><span class="dir">Bài sau →</span>Practical Patterns from vtvcab-identity-api</a>
+</nav>
+<footer>Generated from Markdown · <a href="../index.html">Về trang chủ docs</a></footer>
+</main>
+<script>
+
+(function(){
+  var bar=document.getElementById('progress');
+  var top=document.getElementById('backtop');
+  var links=[].slice.call(document.querySelectorAll('.toc a'));
+  function onScroll(){
+    var h=document.documentElement;
+    var max=h.scrollHeight-h.clientHeight||1;
+    bar.style.width=(h.scrollTop/max*100).toFixed(2)+'%';
+    top.classList.toggle('show', h.scrollTop>600);
+    if(links.length){
+      var cur=links[0].getAttribute('href').slice(1);
+      for(var i=0;i<links.length;i++){
+        var el=document.getElementById(links[i].getAttribute('href').slice(1));
+        if(el&&el.getBoundingClientRect().top<=110) cur=links[i].getAttribute('href').slice(1);
+      }
+      links.forEach(function(a){a.classList.toggle('active',a.getAttribute('href')==='#'+cur)});
+    }
+  }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  top.addEventListener('click', function(){window.scrollTo({top:0,behavior:'smooth'})});
+  onScroll();
+  // copy-code button (event delegation)
+  document.addEventListener('click', function(e){
+    var btn = e.target.closest ? e.target.closest('.copybtn') : null;
+    if(!btn) return;
+    var block = btn.closest('.codeblock');
+    var pre = block ? block.querySelector('pre') : null;
+    if(!pre) return;
+    var text = pre.innerText;
+    function done(ok){
+      btn.classList.add('copied');
+      btn.textContent = ok ? '✓ Copied!' : '✗ Error';
+      setTimeout(function(){ btn.classList.remove('copied'); btn.textContent = 'Copy'; }, 1600);
+    }
+    function fallback(){
+      var ta = document.createElement('textarea');
+      ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+      document.body.appendChild(ta); ta.select();
+      var ok = false;
+      try { ok = document.execCommand('copy'); } catch(err) {}
+      document.body.removeChild(ta);
+      done(ok);
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function(){ done(true); }, fallback);
+    } else { fallback(); }
+  });
+})();
+
+</script>
+</body>
+</html>
