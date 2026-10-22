@@ -414,6 +414,108 @@ build-all:
 	GOOS=windows GOARCH=amd64 go build $(LDFLAGS) -o bin/myapp.exe ./cmd/api
 ```
 
+### 1.9 Quản lý Nhiều Phiên bản Go (nvm ↔ goenv / GOTOOLCHAIN)
+
+Trong Node.js bạn quen với `nvm install 20 && nvm use 20`. Go **không có nvm chính chủ**, nhưng có 4 cách — trong đó từ **Go 1.21+ cách chuẩn là `GOTOOLCHAIN`**: lệnh `go` tự tải và tự switch đúng version theo `go.mod`, không cần cài tool gì thêm.
+
+#### Cách 1: GOTOOLCHAIN — cơ chế chính chủ từ Go 1.21 (khuyến nghị)
+
+Khai báo version ngay trong `go.mod`, giống `engines` trong `package.json` nhưng **tự động**:
+
+```go
+// go.mod
+module myapp
+
+go 1.22.0          // version tối thiểu của project (như "engines": {"node": ">=20"})
+toolchain go1.22.5 // toolchain cụ thể muốn dùng
+```
+
+```bash
+go env GOTOOLCHAIN    # mặc định: auto
+
+# auto: project cần Go mới hơn -> lệnh go TỰ download & dùng, không cần làm gì
+go version            # go version go1.22.5 ...
+
+# Ép dùng đúng một version cho 1 lần chạy (như nvm exec)
+GOTOOLCHAIN=go1.21.3 go build ./...
+
+# Chỉ dùng toolchain đã cài, không bao giờ tự tải (hay dùng cho CI, offline)
+GOTOOLCHAIN=local go test ./...
+
+# Set vĩnh viễn (như nvm alias default)
+go env -w GOTOOLCHAIN=auto
+```
+
+> 📦 **Node.js → Go mapping:**
+> - `.nvmrc` ↔ dòng `go 1.22` trong `go.mod` (khi `GOTOOLCHAIN=auto`)
+> - `nvm use` ↔ tự động khi `cd` vào project, không cần gõ lệnh nào
+> - `nvm exec 18 ...` ↔ `GOTOOLCHAIN=go1.21.3 go build ./...`
+> - `nvm alias default` ↔ `go env -w GOTOOLCHAIN=auto`
+
+> 💡 Thực tế: chỉ cần `cd` vào project có `go 1.23` trong `go.mod` là mọi lệnh `go ...` đã chạy bằng toolchain 1.23. Người Go lâu năm hầu như không cài thêm gì nữa.
+
+#### Cách 2: goenv — giống nvm nhất (shim-based)
+
+Đúng như bạn đoán, Go có [goenv](https://github.com/goenv/goenv) — viết theo mô-típ pyenv/nvm, quản lý version qua **shims** (`~/.goenv/shims/go` chặn lệnh `go` và route tới version đã chọn):
+
+```bash
+# Cài goenv (Linux/WSL/macOS)
+git clone https://github.com/goenv/goenv.git ~/.goenv
+export GOENV_ROOT="$HOME/.goenv"
+export PATH="$GOENV_ROOT/bin:$PATH"
+eval "$(goenv init -)"    # thêm 3 dòng này vào .bashrc/.zshrc
+
+# Lệnh 1-1 với nvm
+goenv install --list      # nvm ls-remote
+goenv install 1.22.1      # nvm install 20
+goenv global 1.22.1       # nvm alias default 20
+goenv local 1.21.5        # nvm use (ghi vào file .go-version của thư mục)
+goenv versions            # nvm ls
+```
+
+#### Cách 3: g — nhẹ hơn goenv, phổ biến trong cộng đồng Go
+
+[g (voidint/g)](https://github.com/voidint/g) dùng **symlink `$GOROOT`** thay vì shims nên chuyển version nhanh hơn:
+
+```bash
+g ls-remote        # nvm ls-remote
+g install 1.22.1   # nvm install
+g use 1.22.1       # nvm use
+g ls               # nvm ls
+```
+
+#### Cách 4: asdf / mise — nếu bạn đã dùng chúng cho Node
+
+```bash
+# mise (kế thừa asdf, quản lý nhiều runtime: node + go + python)
+mise use --global node@20
+mise use --global go@1.22.1
+
+# asdf
+asdf plugin add golang https://github.com/asdf-community/asdf-golang.git
+asdf install golang 1.22.1
+asdf global golang 1.22.1
+```
+
+#### So sánh nhanh — chọn cái nào?
+
+| Cách | Cơ chế | Giống nvm nhất ở điểm | Khi nào dùng |
+|------|--------|----------------------|--------------|
+| **GOTOOLCHAIN** (Go 1.21+) | `go` tự tải theo `go.mod` | `nvm use` tự động theo project | ✅ Mặc định — không cài gì thêm |
+| **goenv** | Shims | `install/global/local` 1-1 | Quen nvm/pyenv, muốn pin version theo thư mục |
+| **g** | Symlink `$GOROOT` | `install/use/ls` | Muốn nhẹ, chuyển version nhanh |
+| **asdf / mise** | Shim/symlink multi-runtime | Quản lý cả node + go | Đã dùng cho nhiều ngôn ngữ rồi |
+
+Ngoài ra Go còn có cách chính chủ để **cài song song nhiều version** (wrapper binary, không phải switch):
+
+```bash
+go install golang.org/dl/go1.21.5@latest
+go1.21.5 download
+go1.21.5 version    # gọi tường minh version này khi cần
+```
+
+> ✅ **Khuyến nghị cho dev Node chuyển sang Go:** đừng vội cài goenv. Để mặc định `GOTOOLCHAIN=auto` + ghi `go 1.x` trong `go.mod` — mỗi project tự dùng đúng version, teammate clone về là có ngay môi trường chuẩn. Chỉ cài goenv/g/mise khi bạn cần chạy nhiều version **ngoài** project (build thử bản cũ, debug toolchain...).
+
 ---
 
 ## 2. Testing - Exhaustive
@@ -1718,6 +1820,7 @@ staticcheck ./...
 ```
 
 Staticcheck tìm:
+
 - Bugs
 - Performance issues
 - Style issues

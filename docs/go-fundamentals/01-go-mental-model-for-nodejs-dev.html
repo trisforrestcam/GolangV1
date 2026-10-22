@@ -97,7 +97,7 @@ body {
 }
 #progress { position: fixed; top: 0; left: 0; height: 3px; width: 0; z-index: 70;
   background: linear-gradient(90deg, var(--accent), var(--accent-2), #7c3aed); }
-#backtop { position: fixed; right: 26px; bottom: 26px; width: 44px; height: 44px;
+#backtop { position: fixed; right: 26px; bottom: 88px; width: 44px; height: 44px;
   border-radius: 50%; border: 1px solid var(--border); background: #fff;
   color: var(--accent); font-size: 1.15rem; cursor: pointer; opacity: 0;
   pointer-events: none; transition: all .25s; box-shadow: 0 8px 20px rgba(15,23,42,.14); z-index: 60; }
@@ -161,6 +161,17 @@ code {
 .callout .codeblock { box-shadow: none; }
 .callout .codeblock, .callout .codehilite, .callout code { background: #fff; }
 .callout .codehead { background: rgba(237,241,247,.6); }
+/* --- mermaid diagrams --- */
+.mermaidwrap { margin: 1.5em 0; border: 1px solid var(--border); border-radius: 12px;
+  background: #fff; overflow: hidden; box-shadow: 0 2px 6px rgba(15,23,42,.05); }
+.mermaidwrap .codehead { background: #edf1f7; }
+.mermaid-hint { font-size: .72rem; color: #94a3b8; font-weight: 600; }
+.mermaid { display: flex; justify-content: center; padding: 20px 16px; overflow-x: auto; }
+.mermaid svg { max-width: 100%; height: auto; }
+/* khi mermaid.js chưa/chưa kịp load (offline) — vẫn đọc được source dễ chịu */
+.mermaid:not([data-processed]) { font-family: "JetBrains Mono", Consolas, Menlo, monospace;
+  font-size: .8rem; color: #475569; white-space: pre; text-align: left; justify-content: flex-start; }
+.callout .mermaidwrap { box-shadow: none; }
 /* --- tables --- */
 .tablewrap { overflow-x: auto; margin: 1.2em 0; }
 table { border-collapse: collapse; width: 100%; font-size: .94em; margin: 0; }
@@ -223,7 +234,46 @@ kbd { background: #fff; border: 1px solid #cbd5e1; border-bottom-width: 2px;
 .pager .next { text-align: right; }
 .pager .dir { display: block; font-size: .78rem; color: var(--muted); font-weight: 500; }
 footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top: 34px; }
-@media print { #progress, #backtop, .toc, .pager { display: none !important; }
+/* --- floating progress button + modal --- */
+.progress-fab { position: fixed; right: 26px; bottom: 26px; z-index: 70;
+  display: inline-flex; align-items: center; gap: 9px; padding: 11px 19px;
+  border: none; border-radius: 999px; cursor: pointer; font: inherit;
+  font-size: .88rem; font-weight: 700; color: #fff;
+  background: linear-gradient(120deg, var(--accent), var(--accent-2));
+  box-shadow: 0 14px 34px -12px rgba(79,70,229,.55);
+  transition: transform .15s, box-shadow .15s; }
+.progress-fab:hover { transform: translateY(-2px); box-shadow: 0 18px 40px -12px rgba(79,70,229,.62); }
+.fab-count { background: rgba(255,255,255,.24); padding: 1px 10px; border-radius: 999px; font-size: .86em; }
+.progress-modal { position: fixed; inset: 0; z-index: 100; padding: 24px;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(51,65,85,.45); backdrop-filter: blur(3px); }
+.progress-modal[hidden] { display: none; }
+.progress-dialog { background: #fff; border-radius: 18px; width: min(780px, 100%);
+  max-height: 82vh; display: flex; flex-direction: column;
+  box-shadow: 0 40px 90px -20px rgba(51,65,85,.5); overflow: hidden; }
+.progress-head { display: flex; align-items: center; justify-content: space-between;
+  gap: 14px; padding: 20px 28px 14px; }
+.progress-head h2 { margin: 0; padding: 0; border: none; font-size: 1.2rem; }
+.progress-count { color: var(--accent); font-size: .72em; margin-left: .5em; }
+.progress-close { flex-shrink: 0; width: 34px; height: 34px; border-radius: 10px;
+  border: 1px solid var(--border); background: #fff; color: var(--muted);
+  font-size: 1rem; cursor: pointer; transition: all .15s; }
+.progress-close:hover { color: var(--accent); border-color: var(--accent); background: var(--accent-soft); }
+.progress-bar { height: 6px; background: #e2e8f0; margin: 0 28px; border-radius: 99px; overflow: hidden; }
+.progress-bar i { display: block; height: 100%; width: 0; border-radius: 99px;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2)); transition: width .25s; }
+.progress-body { padding: 8px 28px 26px; overflow-y: auto; }
+.progress-body h3 { margin-top: 1.1em; }
+/* --- trang nguồn: checklist inline thay bằng nút mở popup --- */
+.progress-hint { display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+  background: var(--accent-soft); border: 1px dashed #c7d2fe; border-radius: 14px;
+  padding: 16px 20px; color: var(--muted); font-size: .95rem; }
+.progress-open { flex-shrink: 0; border: none; border-radius: 10px; padding: 11px 20px;
+  font: inherit; font-size: .92rem; font-weight: 700; color: #fff; cursor: pointer;
+  background: linear-gradient(120deg, var(--accent), var(--accent-2));
+  box-shadow: 0 8px 18px -8px rgba(79,70,229,.5); transition: transform .15s; }
+.progress-open:hover { transform: translateY(-1px); }
+@media print { #progress, #backtop, .toc, .pager, .progress-fab, .progress-modal { display: none !important; }
   body { background: #fff; } .card { box-shadow: none; border: none; } }
 
 .wrap.wide { max-width: 1340px; }
@@ -264,6 +314,13 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <nav class="crumb"><a href="../index.html">📚 Docs</a> &nbsp;›&nbsp; go-fundamentals</nav>
 <main class="wrap">
 <article class="card">
+<h1 id="go-mental-model-cho-senior-nodejs-developer">Go Mental Model Cho Senior Node.js Developer</h1>
+<div class="callout callout-note"><div class="callout-body"><p>Dành cho developer có 4 năm kinh nghiệm Node.js muốn hiểu Go một cách sâu sắc, không phải tutorial surface-level.</p></div></div>
+
+<hr />
+<h2 id="1-deep-mental-model-mapping">1. Deep Mental Model Mapping</h2>
+<p>Mỗi concept lớn trong Go map sang Node.js tương đương, nhưng mapping nào cũng có "mismatch" — phần mismatch mới là thứ quan trọng cần hiểu.</p>
+<h3 id="11-package-main-func-main-vs-indexjs-entrypoint">1.1 <code>package main</code> + <code>func main()</code> vs <code>index.js</code> Entrypoint</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// main.go</span>
 <span class="kn">package</span><span class="w"> </span><span class="nx">main</span>
 
@@ -278,6 +335,11 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Hello from Node&quot;</span><span class="p">);</span>
 </pre></div>
 </div>
+<p><strong>Giống nhau:</strong> Cả hai đều là entrypoint của chương trình.</p>
+<p><strong>Khác biệt sâu:</strong>
+- Trong Node, <code>index.js</code> chỉ là file JS bình thường. <code>node index.js</code> chạy nó, nhưng bạn cũng có thể <code>require('./index')</code> từ file khác.
+- Trong Go, <code>package main</code> là <strong>duy nhất</strong> đánh dấu executable entrypoint. Compiler tìm <code>func main()</code> trong <code>package main</code> để build binary. Bạn <strong>không thể</strong> import <code>package main</code> từ package khác.
+- Go có thể có nhiều file trong <code>package main</code>, tất cả share cùng namespace. Node mỗi file là module riêng với scope riêng.</p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// File: main.go và helper.go cùng package main</span>
 <span class="c1">// main.go</span>
 <span class="kn">package</span><span class="w"> </span><span class="nx">main</span>
@@ -296,6 +358,8 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="p">}</span>
 </pre></div>
 </div>
+<p><strong>Mental model:</strong> <code>package main</code> = "đây là entrypoint executable, không phải reusable library". Nếu bạn đang viết library, tạo <code>package mylib</code> riêng.</p>
+<h3 id="12-gomod-vs-packagejson-modules-vs-npm">1.2 <code>go.mod</code> vs <code>package.json</code> (Modules vs npm)</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// go.mod</span>
 <span class="nx">module</span><span class="w"> </span><span class="nx">github</span><span class="p">.</span><span class="nx">com</span><span class="o">/</span><span class="nx">yourname</span><span class="o">/</span><span class="nx">yourproject</span>
 
@@ -318,6 +382,13 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="p">}</span>
 </pre></div>
 </div>
+<p><strong>Khác biệt cốt lõi:</strong>
+- <code>go.mod</code> <strong>không có version của project bạn</strong>. Module path là identifier, không phải versioned package. Go modules chỉ version dependencies, không version chính nó theo cách npm làm.
+- <code>go.sum</code> = checksum file, tương tự <code>package-lock.json</code> nhưng chỉ chứa cryptographic hashes cho integrity verification.
+- Go <strong>không có registry central</strong> như npm. Dependencies được fetch trực tiếp từ source (GitHub, GitLab, etc.) và cache local.
+- <strong>Không có <code>node_modules</code></strong>. Dependencies được download vào <code>$GOPATH/pkg/mod</code>. Binary compile xong chứa tất cả code cần thiết.
+- <code>go mod tidy</code> tự động thêm dependencies thiếu và xóa dependencies không dùng. Không có equivalent npm script nào tiện bằng.
+- <strong>Version runtime:</strong> Node cần <code>nvm</code> + <code>.nvmrc</code>; từ Go 1.21 bạn chỉ cần ghi <code>go 1.22</code> trong <code>go.mod</code> là mọi lệnh <code>go</code> <strong>tự tải và switch đúng toolchain</strong> (<code>GOTOOLCHAIN=auto</code>). Chi tiết 4 cách (goenv, g, asdf/mise): <a class="wikilink" href="06-tooling-testing.html">06-tooling-testing</a> mục 1.9.</p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">bash</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1"># Node equivalent workflow</span>
 npm<span class="w"> </span>init<span class="w"> </span>→<span class="w"> </span>npm<span class="w"> </span>install<span class="w"> </span>express<span class="w"> </span>→<span class="w"> </span>npm<span class="w"> </span>install<span class="w"> </span>-D<span class="w"> </span>typescript
 
@@ -325,6 +396,8 @@ npm<span class="w"> </span>init<span class="w"> </span>→<span class="w"> </spa
 go<span class="w"> </span>mod<span class="w"> </span>init<span class="w"> </span>github.com/you/project<span class="w"> </span>→<span class="w"> </span>go<span class="w"> </span>get<span class="w"> </span>github.com/gin-gonic/gin<span class="w"> </span>→<span class="w"> </span>go<span class="w"> </span>mod<span class="w"> </span>tidy
 </pre></div>
 </div>
+<p><strong>Mental model:</strong> Go modules nhẹ hơn npm rất nhiều. Không có <code>node_modules</code> hell, không có phantom dependencies, không có hoisting issues.</p>
+<h3 id="13-import-compile-time-vs-requireimport-runtime">1.3 <code>import</code> Compile-Time vs <code>require/import</code> Runtime</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Go: compile-time resolution</span>
 <span class="kn">import</span><span class="w"> </span><span class="p">(</span>
 <span class="w">    </span><span class="s">&quot;fmt&quot;</span>
@@ -338,6 +411,9 @@ go<span class="w"> </span>mod<span class="w"> </span>init<span class="w"> </span
 <span class="k">import</span><span class="w"> </span><span class="nx">express</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;express&#39;</span><span class="p">;</span><span class="w">            </span><span class="c1">// ESM</span>
 </pre></div>
 </div>
+<p><strong>Đây là khác biệt ARCHITECTURAL quan trọng:</strong>
+- Go import xảy ra <strong>khi compile</strong>. Compiler resolve tất cả dependencies, check types, link code. Nếu thiếu import → compile error. Nếu import mà không dùng → <strong>compile error</strong>.
+- Node require/import xảy ra <strong>khi runtime</strong>. Module được resolve và execute khi dòng code đó chạy lần đầu. Circular dependencies tạo partial objects.</p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Go: Unused import = compile error. Phải explicit.</span>
 <span class="kn">import</span><span class="w"> </span><span class="p">(</span>
 <span class="w">    </span><span class="s">&quot;fmt&quot;</span>
@@ -353,6 +429,12 @@ go<span class="w"> </span>mod<span class="w"> </span>init<span class="w"> </span
 <span class="kd">const</span><span class="w"> </span><span class="nx">fs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;fs&#39;</span><span class="p">);</span><span class="w">  </span><span class="c1">// Không dùng? Không sao. Silent.</span>
 </pre></div>
 </div>
+<p><strong>Tại sao Go làm vậy:</strong>
+- Compile-time resolution cho phép dead code elimination (binary nhỏ hơn)
+- Không có dynamic import tricks → binary có thể optimize hoàn toàn
+- Force developer clean code: không import bừa bãi</p>
+<p><strong>Mental model:</strong> Go import = "khai báo dependency cho compiler". Node import = "lazy load module ở runtime".</p>
+<h3 id="14-struct-vs-classobject-literal">1.4 <code>struct</code> vs Class/Object Literal</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Go: struct</span>
 <span class="kd">type</span><span class="w"> </span><span class="nx">User</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nx">ID</span><span class="w">    </span><span class="kt">int</span>
@@ -400,6 +482,11 @@ go<span class="w"> </span>mod<span class="w"> </span>init<span class="w"> </span
 <span class="p">};</span>
 </pre></div>
 </div>
+<p><strong>Khác biệt sâu:</strong>
+- Go <code>struct</code> <strong>chỉ chứa data</strong>. Methods được define riêng với receiver.
+- <strong>Không có inheritance</strong>. Go dùng composition (embedding).
+- <code>struct</code> có zero value tự động: <code>var u User</code> → tất cả fields đều zero value, không phải <code>undefined</code> hay <code>null</code>.
+- <code>struct</code> là <strong>value type</strong>. Copy <code>u1 = u2</code> tạo bản sao hoàn toàn, không share reference.</p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Composition thay vì inheritance</span>
 <span class="kd">type</span><span class="w"> </span><span class="nx">BaseUser</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nx">ID</span><span class="w">    </span><span class="kt">int</span>
@@ -434,6 +521,8 @@ go<span class="w"> </span>mod<span class="w"> </span>init<span class="w"> </span
 <span class="p">}</span>
 </pre></div>
 </div>
+<p><strong>Mental model:</strong> <code>struct</code> = "plain data container, không có behavior attached". Behavior nằm ở methods. Composition &gt; Inheritance, luôn luôn.</p>
+<h3 id="15-interface-vs-typescript-interface-implicit-vs-explicit">1.5 Interface vs TypeScript Interface (Implicit vs Explicit)</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Go: implicit interface satisfaction</span>
 <span class="kd">type</span><span class="w"> </span><span class="nx">Reader</span><span class="w"> </span><span class="kd">interface</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nx">Read</span><span class="p">(</span><span class="nx">p</span><span class="w"> </span><span class="p">[]</span><span class="kt">byte</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="nx">n</span><span class="w"> </span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="kt">error</span><span class="p">)</span>
@@ -465,6 +554,10 @@ go<span class="w"> </span>mod<span class="w"> </span>init<span class="w"> </span
 <span class="p">}</span>
 </pre></div>
 </div>
+<p><strong>Đây là khác biệt DESIGN PHILOSOPHY lớn:</strong>
+- Go interface = <strong>implicit contract</strong>. Consumer define interface, không phải producer. Bạn không cần biết type <code>X</code> implement interface <code>Y</code> — chỉ cần nó có đúng method signatures.
+- TypeScript interface = <strong>explicit declaration</strong>. Producer phải biết và declare implements.
+- Go interface thường <strong>rất nhỏ</strong> (1-3 methods). <code>io.Reader</code> chỉ có 1 method. <code>fmt.Stringer</code> chỉ có <code>String() string</code>.</p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Interface nhỏ, composition lớn</span>
 <span class="kd">type</span><span class="w"> </span><span class="nx">Stringer</span><span class="w"> </span><span class="kd">interface</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nx">String</span><span class="p">()</span><span class="w"> </span><span class="kt">string</span>
@@ -489,6 +582,8 @@ go<span class="w"> </span>mod<span class="w"> </span>init<span class="w"> </span
 <span class="p">}</span>
 </pre></div>
 </div>
+<p><strong>Mental model:</strong> Go interface = "capability declaration ở consumer side". Bạn define interface khi bạn cần abstraction, không phải khi bạn tạo type. Đây gọi là <strong>"Accept interfaces, return structs"</strong>.</p>
+<h3 id="16-goroutine-vs-promiseasync-await-fundamentally-different">1.6 Goroutine vs Promise/async-await (FUNDAMENTALLY DIFFERENT!)</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Go: goroutine = lightweight OS thread multiplexed onto real threads</span>
 <span class="k">go</span><span class="w"> </span><span class="kd">func</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&quot;Running concurrently&quot;</span><span class="p">)</span>
@@ -508,6 +603,53 @@ go<span class="w"> </span>mod<span class="w"> </span>init<span class="w"> </span
 <span class="p">}</span>
 </pre></div>
 </div>
+<p><strong>Đây là khác biệt LỚN NHẤT. Đừng bỏ qua phần này.</strong></p>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th>Aspect</th>
+<th>Goroutine</th>
+<th>Promise/async-await</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Mô hình</td>
+<td>Real concurrent execution (multi-core)</td>
+<td>Cooperative concurrency (single thread)</td>
+</tr>
+<tr>
+<td>Parallelism</td>
+<td><strong>Có</strong> — nhiều goroutines chạy đồng thời trên nhiều CPU cores</td>
+<td><strong>Không</strong> — chỉ có 1 thread, event loop multiplexing</td>
+</tr>
+<tr>
+<td>Blocking</td>
+<td>Goroutine có thể block mà không ảnh hưởng others</td>
+<td>Blocking 1 operation = block toàn bộ event loop</td>
+</tr>
+<tr>
+<td>Memory</td>
+<td>~2KB stack ban đầu, grow tự động</td>
+<td>~microtask allocation, nhưng overhead từ closure chains</td>
+</tr>
+<tr>
+<td>Lifecycle</td>
+<td>Explicit lifecycle management qua channels/context</td>
+<td>Automatic cleanup khi Promise settle</td>
+</tr>
+<tr>
+<td>Creation cost</td>
+<td>Rất rẻ (nanoseconds)</td>
+<td>Rất rẻ</td>
+</tr>
+<tr>
+<td>Scaling</td>
+<td>Scale tới hàng triệu goroutines</td>
+<td>Scale tới hàng trăm nghìn pending promises</td>
+</tr>
+</tbody>
+</table></div>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Goroutine chạy TRULY PARALLEL</span>
 <span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="c1">// Cả 4 goroutines này có thể chạy đồng thời trên 4 CPU cores</span>
@@ -542,6 +684,8 @@ go<span class="w"> </span>mod<span class="w"> </span>init<span class="w"> </span
 <span class="p">}</span>
 </pre></div>
 </div>
+<p><strong>Mental model:</strong> Goroutine = "cheap thread bạn tạo thoải mái". Promise = "callback trong event loop". Goroutine cho bạn <strong>true parallelism</strong>. Promise chỉ cho bạn <strong>concurrency</strong> (chuyển đổi context, không chạy đồng thời).</p>
+<h3 id="17-channel-vs-eventemittermessageport">1.7 Channel vs EventEmitter/MessagePort</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Go: channel = typed, synchronous/asynchronous message pipe</span>
 <span class="nx">ch</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nb">make</span><span class="p">(</span><span class="kd">chan</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w">    </span><span class="c1">// unbuffered, synchronous</span>
 <span class="nx">ch</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nb">make</span><span class="p">(</span><span class="kd">chan</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">)</span><span class="w"> </span><span class="c1">// buffered, async up to 5 messages</span>
@@ -570,6 +714,11 @@ go<span class="w"> </span>mod<span class="w"> </span>init<span class="w"> </span
 <span class="nx">port2</span><span class="p">.</span><span class="nx">postMessage</span><span class="p">(</span><span class="s1">&#39;hello&#39;</span><span class="p">);</span>
 </pre></div>
 </div>
+<p><strong>Khác biệt cốt lõi:</strong>
+- Channel là <strong>typed</strong> và <strong>directional</strong> (<code>chan&lt;-</code> send-only, <code>&lt;-chan</code> receive-only).
+- Channel có thể <strong>block</strong>: unbuffered channel block sender cho đến khi có receiver. Đây là synchronization mechanism, không chỉ message passing.
+- Channel là <strong>first-class value</strong> trong Go. Truyền channel vào function, return từ function, lưu trong struct.
+- <strong>Không có event name</strong> — channel itself là identifier. Không có string-based event dispatch.</p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Pattern: Fan-out, Fan-in</span>
 <span class="kd">func</span><span class="w"> </span><span class="nx">fanOut</span><span class="p">(</span><span class="nx">input</span><span class="w"> </span><span class="o">&lt;-</span><span class="kd">chan</span><span class="w"> </span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="nx">workers</span><span class="w"> </span><span class="kt">int</span><span class="p">)</span><span class="w"> </span><span class="p">[]</span><span class="o">&lt;-</span><span class="kd">chan</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nx">channels</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nb">make</span><span class="p">([]</span><span class="o">&lt;-</span><span class="kd">chan</span><span class="w"> </span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="nx">workers</span><span class="p">)</span>
@@ -599,6 +748,8 @@ go<span class="w"> </span>mod<span class="w"> </span>init<span class="w"> </span
 <span class="p">}</span>
 </pre></div>
 </div>
+<p><strong>Mental model:</strong> Channel = "typed message pipe với built-in synchronization". EventEmitter = "string-keyed observer pattern". Channel mạnh hơn vì nó enforce types, directionality, và synchronization.</p>
+<h3 id="18-contextcontext-vs-abortcontroller">1.8 <code>context.Context</code> vs <code>AbortController</code></h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Go: context cho cancellation, timeout, và value propagation</span>
 <span class="nx">ctx</span><span class="p">,</span><span class="w"> </span><span class="nx">cancel</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">context</span><span class="p">.</span><span class="nx">WithTimeout</span><span class="p">(</span><span class="nx">context</span><span class="p">.</span><span class="nx">Background</span><span class="p">(),</span><span class="w"> </span><span class="mi">5</span><span class="o">*</span><span class="nx">time</span><span class="p">.</span><span class="nx">Second</span><span class="p">)</span>
 <span class="k">defer</span><span class="w"> </span><span class="nx">cancel</span><span class="p">()</span>
@@ -626,6 +777,11 @@ go<span class="w"> </span>mod<span class="w"> </span>init<span class="w"> </span
 <span class="p">}</span>
 </pre></div>
 </div>
+<p><strong>Go context mạnh hơn AbortController rất nhiều:</strong>
+- Context có thể <strong>carry values</strong> qua call chain (request ID, auth token, etc.)
+- Context có thể <strong>tree hierarchy</strong> — parent cancel → tất cả children cancel.
+- Context là <strong>idiomatic first parameter</strong> trong Go: <code>func DoWork(ctx context.Context, ...) error</code>
+- <strong>Không có try-catch</strong> để cleanup — context + defer là pattern thay thế.</p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Context propagation trong real-world API handler</span>
 <span class="kd">func</span><span class="w"> </span><span class="nx">HandleRequest</span><span class="p">(</span><span class="nx">w</span><span class="w"> </span><span class="nx">http</span><span class="p">.</span><span class="nx">ResponseWriter</span><span class="p">,</span><span class="w"> </span><span class="nx">r</span><span class="w"> </span><span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Request</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nx">ctx</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">r</span><span class="p">.</span><span class="nx">Context</span><span class="p">()</span><span class="w"> </span><span class="c1">// context từ HTTP request</span>
@@ -646,6 +802,8 @@ go<span class="w"> </span>mod<span class="w"> </span>init<span class="w"> </span
 <span class="p">}</span>
 </pre></div>
 </div>
+<p><strong>Mental model:</strong> Context = "cancellation + timeout + value propagation qua call chain". AbortController chỉ là cancellation. Context là backbone của Go request lifecycle.</p>
+<h3 id="19-error-as-value-vs-throwtry-catch">1.9 Error as Value vs throw/try-catch</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Go: error là giá trị bình thường, return từ function</span>
 <span class="nx">result</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">doSomething</span><span class="p">()</span>
 <span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
@@ -661,6 +819,7 @@ go<span class="w"> </span>mod<span class="w"> </span>init<span class="w"> </span
 <span class="p">}</span>
 </pre></div>
 </div>
+<p><strong>Đây là khác biệt có ảnh hưởng lớn nhất đến code style:</strong></p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Go: mỗi error point phải explicit check</span>
 <span class="kd">func</span><span class="w"> </span><span class="nx">ProcessOrder</span><span class="p">(</span><span class="nx">ctx</span><span class="w"> </span><span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span><span class="w"> </span><span class="nx">orderID</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="kt">error</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nx">order</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">repo</span><span class="p">.</span><span class="nx">FindOrder</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="w"> </span><span class="nx">orderID</span><span class="p">)</span><span class="w">  </span><span class="c1">// check 1</span>
@@ -701,6 +860,12 @@ go<span class="w"> </span>mod<span class="w"> </span>init<span class="w"> </span
 <span class="p">}</span>
 </pre></div>
 </div>
+<p><strong>Go error handling xem như verbose, nhưng thực tế cho bạn control rõ ràng hơn:</strong>
+- Bạn <strong>thấy chính xác</strong> error xảy ra ở đâu (không cần stack trace cho simple errors).
+- Bạn <strong>quyết định</strong> error nào propagate, error nào wrap, error nào swallow.
+- Error wrapping (<code>%w</code>) cho phép unwrap chain: <code>errors.Is(err, context.DeadlineExceeded)</code> traverse qua toàn bộ chain.
+- <strong>Không có unchecked exception</strong> — không bao giờ surprise error từ tầng nào đó.</p>
+<h3 id="110-defer-vs-try-finally">1.10 <code>defer</code> vs <code>try-finally</code></h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kd">func</span><span class="w"> </span><span class="nx">readFile</span><span class="p">(</span><span class="nx">path</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="kt">error</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nx">f</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">os</span><span class="p">.</span><span class="nx">Open</span><span class="p">(</span><span class="nx">path</span><span class="p">)</span>
 <span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
@@ -739,6 +904,9 @@ go<span class="w"> </span>mod<span class="w"> </span>init<span class="w"> </span
 <span class="p">}</span>
 </pre></div>
 </div>
+<p><strong>Đặc điểm defer:</strong>
+- LIFO order (stack): defer đầu tiên chạy cuối cùng.
+- <strong>Argument evaluation ngay khi defer statement execute</strong>, không phải khi defer chạy.</p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kd">func</span><span class="w"> </span><span class="nx">example</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nx">x</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="mi">10</span>
 <span class="w">    </span><span class="k">defer</span><span class="w"> </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&quot;deferred:&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">x</span><span class="p">)</span><span class="w"> </span><span class="c1">// x được eval = 10 ngay lúc này</span>
@@ -750,6 +918,8 @@ go<span class="w"> </span>mod<span class="w"> </span>init<span class="w"> </span
 <span class="c1">// deferred: 10  (không phải 20!)</span>
 </pre></div>
 </div>
+<p><strong>Mental model:</strong> <code>defer</code> = "register cleanup ngay sau khi resource được acquire". Nhẹ hơn try-finally vì bạn không cần nesting. Pattern <code>defer f.Close()</code> ngay sau <code>os.Open()</code> là idiomatic Go.</p>
+<h3 id="111-zero-value-vs-undefinednull">1.11 Zero Value vs <code>undefined</code>/<code>null</code></h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Go: mọi type có zero value rõ ràng</span>
 <span class="kd">var</span><span class="w"> </span><span class="nx">s</span><span class="w"> </span><span class="kt">string</span><span class="w">   </span><span class="c1">// &quot;&quot; (empty string, không phải nil)</span>
 <span class="kd">var</span><span class="w"> </span><span class="nx">n</span><span class="w"> </span><span class="kt">int</span><span class="w">      </span><span class="c1">// 0</span>
@@ -772,6 +942,11 @@ go<span class="w"> </span>mod<span class="w"> </span>init<span class="w"> </span
 <span class="nb">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="s1">&#39;{&quot;a&quot;:null}&#39;</span><span class="p">).</span><span class="nx">a</span><span class="p">;</span><span class="w"> </span><span class="c1">// null</span>
 </pre></div>
 </div>
+<p><strong>Tại sao zero value quan trọng:</strong>
+- <strong>Không bao giờ nil pointer panic</strong> khi dùng value types (string, int, etc.)
+- <strong>Không cần optional chaining</strong> cho value types: <code>var s string</code> → <code>s</code> luôn usable, chỉ là empty string.
+- <strong>Zero value có ý nghĩa</strong>: <code>var count int</code> → count = 0, hợp lệ để dùng.
+- <strong>Chỉ pointer, slice, map, channel, interface, func</strong> mới có thể nil.</p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Zero value cho phép safe usage không cần initialization</span>
 <span class="kd">type</span><span class="w"> </span><span class="nx">Config</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nx">Port</span><span class="w">    </span><span class="kt">int</span><span class="w">    </span><span class="c1">// zero = 0, có thể dùng default</span>
@@ -794,6 +969,10 @@ go<span class="w"> </span>mod<span class="w"> </span>init<span class="w"> </span
 <span class="nx">m</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nb">make</span><span class="p">(</span><span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">int</span><span class="p">)</span><span class="w"> </span><span class="c1">// phải init trước khi write</span>
 </pre></div>
 </div>
+<p><strong>Mental model:</strong> Go không có "null/undefined confusion". Mọi thứ có zero value predictable. Chỉ pointer/reference types mới nil. Đây là source of bugs lớn trong JS nhưng gần như không tồn tại trong Go.</p>
+<hr />
+<h2 id="2-go-is-explicit-node-is-implicit">2. Go is Explicit, Node is Implicit</h2>
+<h3 id="21-error-handling-forced-check-vs-exception-bubbling">2.1 Error Handling: Forced Check vs Exception Bubbling</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Go: BẮT BUỘC check mọi error</span>
 <span class="kd">func</span><span class="w"> </span><span class="nx">GetUser</span><span class="p">(</span><span class="nx">ctx</span><span class="w"> </span><span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span><span class="w"> </span><span class="nx">id</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="nx">User</span><span class="p">,</span><span class="w"> </span><span class="kt">error</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nx">row</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">db</span><span class="p">.</span><span class="nx">QueryRowContext</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;SELECT * FROM users WHERE id = $1&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">id</span><span class="p">)</span>
@@ -834,6 +1013,12 @@ go<span class="w"> </span>mod<span class="w"> </span>init<span class="w"> </span
 <span class="c1">// Hoặc wrap trong try-catch nếu muốn handle</span>
 </pre></div>
 </div>
+<p><strong>Go cho bạn EXPLICIT control flow:</strong>
+- Mọi error path đều visible trong code.
+- Không có "exception invisibly propagate qua 10 layers".
+- Error wrapping cho context: <code>fmt.Errorf("query user %s: %w", id, err)</code> → bạn biết error xảy ra ở step nào.
+- Sentinel errors + <code>errors.Is()</code> cho programmatic error matching.</p>
+<h3 id="22-khong-co-nullundefined-distinction">2.2 Không Có <code>null</code>/<code>undefined</code> Distinction</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">js</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Node: null vs undefined confusion</span>
 <span class="kd">function</span><span class="w"> </span><span class="nx">greet</span><span class="p">(</span><span class="nx">name</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">name</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="kc">undefined</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
@@ -867,6 +1052,8 @@ go<span class="w"> </span>mod<span class="w"> </span>init<span class="w"> </span
 <span class="p">}</span>
 </pre></div>
 </div>
+<p><strong>Trong Go, bạn không bao giờ cần phân biệt "no value" vs "empty value" cho value types.</strong> Zero value đã cover "empty" case.</p>
+<h3 id="23-khong-can-optional-chaining-vi-zero-values">2.3 Không Cần Optional Chaining (Vì Zero Values)</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">js</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Node: optional chaining để tránh TypeError</span>
 <span class="kd">const</span><span class="w"> </span><span class="nx">city</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">user</span><span class="o">?</span><span class="p">.</span><span class="nx">address</span><span class="o">?</span><span class="p">.</span><span class="nx">city</span><span class="o">?</span><span class="p">.</span><span class="nx">toUpperCase</span><span class="p">();</span>
 <span class="kd">const</span><span class="w"> </span><span class="nx">firstTag</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">user</span><span class="o">?</span><span class="p">.</span><span class="nx">tags</span><span class="o">?</span><span class="p">.[</span><span class="mf">0</span><span class="p">];</span>
@@ -894,6 +1081,8 @@ go<span class="w"> </span>mod<span class="w"> </span>init<span class="w"> </span
 <span class="p">}</span>
 </pre></div>
 </div>
+<p><strong>Go code nhìn verbose hơn, nhưng bạn thấy MỌI possible path.</strong> Không có hidden <code>TypeError: Cannot read property 'city' of undefined</code>.</p>
+<h3 id="24-type-system-go-compile-time-vs-typescript-runtime-erasure">2.4 Type System: Go Compile-Time vs TypeScript Runtime Erasure</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">ts</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// TypeScript: types bị erase ở runtime</span>
 <span class="kd">interface</span><span class="w"> </span><span class="nx">User</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nx">id</span><span class="o">:</span><span class="w"> </span><span class="kt">number</span><span class="p">;</span>
@@ -925,6 +1114,14 @@ go<span class="w"> </span>mod<span class="w"> </span>init<span class="w"> </span
 <span class="nx">process</span><span class="p">(</span><span class="nx">User</span><span class="p">{</span><span class="nx">ID</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">Name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;John&quot;</span><span class="p">})</span><span class="w"> </span><span class="c1">// Compile error: cannot use string as int</span>
 </pre></div>
 </div>
+<p><strong>Go type system là REAL, không phải annotation:</strong>
+- Compile-time type checking prevents type errors at runtime.
+- Không có <code>any</code> equivalent dễ dãi (Go có <code>interface{}</code> nhưng dùng rất ít).
+- Không có runtime type assertion surprises (Go type assertion có <code>, ok</code> pattern).
+- Generics trong Go 1.18+ thêm flexibility nhưng vẫn compile-time checked.</p>
+<hr />
+<h2 id="3-memory-model-differences">3. Memory Model Differences</h2>
+<h3 id="31-stack-vs-heap-allocation">3.1 Stack vs Heap Allocation</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Go: compiler quyết định stack hay heap (escape analysis)</span>
 <span class="kd">func</span><span class="w"> </span><span class="nx">createUser</span><span class="p">()</span><span class="w"> </span><span class="o">*</span><span class="nx">User</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nx">u</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">User</span><span class="p">{</span><span class="nx">Name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;John&quot;</span><span class="p">}</span><span class="w"> </span><span class="c1">// có thể stack...</span>
@@ -948,11 +1145,16 @@ go<span class="w"> </span>mod<span class="w"> </span>init<span class="w"> </span
 <span class="c1">// Nhưng fundamentally vẫn là heap allocation + GC</span>
 </pre></div>
 </div>
+<p><strong>Go compiler thực hiện escape analysis:</strong>
+- Nếu variable không "escape" function scope → stack allocation (zero cost).
+- Nếu variable escape (return pointer, stored in global, passed to goroutine) → heap allocation.
+- Stack allocation = trivially cheap (move stack pointer). Heap allocation = cần GC.</p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">bash</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1"># Xem escape analysis</span>
 go<span class="w"> </span>build<span class="w"> </span>-gcflags<span class="o">=</span><span class="s2">&quot;-m&quot;</span><span class="w"> </span>main.go
 <span class="c1"># Output: &quot;moved to heap: u&quot; nếu u escape</span>
 </pre></div>
 </div>
+<h3 id="32-value-semantics-vs-reference-semantics">3.2 Value Semantics vs Reference Semantics</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Go: struct là value type — copy khi assign hoặc pass to function</span>
 <span class="kd">type</span><span class="w"> </span><span class="nx">Point</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nx">X</span><span class="p">,</span><span class="w"> </span><span class="nx">Y</span><span class="w"> </span><span class="kt">float64</span>
@@ -986,6 +1188,8 @@ go<span class="w"> </span>build<span class="w"> </span>-gcflags<span class="o">=
 <span class="kd">const</span><span class="w"> </span><span class="nx">p3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">...</span><span class="nx">p1</span><span class="w"> </span><span class="p">};</span>
 </pre></div>
 </div>
+<p><strong>Value semantics = predictable behavior. Không có "accidental mutation" bugs.</strong></p>
+<p>Khi cần reference semantics, dùng pointer:</p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kd">func</span><span class="w"> </span><span class="nx">movePoint</span><span class="p">(</span><span class="nx">p</span><span class="w"> </span><span class="o">*</span><span class="nx">Point</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nx">p</span><span class="p">.</span><span class="nx">X</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mi">10</span><span class="w"> </span><span class="c1">// modify original qua pointer</span>
 <span class="p">}</span>
@@ -995,6 +1199,15 @@ go<span class="w"> </span>build<span class="w"> </span>-gcflags<span class="o">=
 <span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">p1</span><span class="p">)</span><span class="w"> </span><span class="c1">// {11 2} — modified</span>
 </pre></div>
 </div>
+<h3 id="33-tai-sao-go-khong-can-gc-tuning-nhu-nodev8">3.3 Tại Sao Go Không Cần GC Tuning Như Node/V8</h3>
+<ul>
+<li>Go GC là <strong>concurrent, low-latency</strong> — typical pause time &lt; 1ms.</li>
+<li>Stack allocation giảm pressure trên GC significantly.</li>
+<li>Không có "nursery" hay "generational" GC tuning.</li>
+<li>V8 GC phức tạp hơn: nursery, old generation, mark-sweep, compaction. Node developer phải hiểu heap limits, <code>--max-old-space-size</code>.</li>
+<li>Go: hầu như <strong>không bao giờ</strong> cần tune GC. <code>GOGC</code> environment variable là rare optimization.</li>
+</ul>
+<h3 id="34-pointer-semantics-cho-js-dev">3.4 Pointer Semantics Cho JS Dev</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Pointer trong Go đơn giản hơn C/C++ rất nhiều</span>
 <span class="kd">func</span><span class="w"> </span><span class="nx">increment</span><span class="p">(</span><span class="nx">p</span><span class="w"> </span><span class="o">*</span><span class="kt">int</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="o">*</span><span class="nx">p</span><span class="o">++</span><span class="w"> </span><span class="c1">// dereference và modify</span>
@@ -1007,6 +1220,12 @@ go<span class="w"> </span>build<span class="w"> </span>-gcflags<span class="o">=
 <span class="p">}</span>
 </pre></div>
 </div>
+<p><strong>Mental model cho JS dev:</strong>
+- <code>&amp;x</code> = "get reference to x" (giống tạo object wrapper <code>{value: x}</code> trong JS).
+- <code>*p</code> = "dereference p, get the value" (giống <code>wrapper.value</code> trong JS).
+- Pointer = cho phép function modify caller's variable.
+- Không có pointer arithmetic như C.
+- Không có null pointer exception nếu bạn check nil trước khi use.</p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Idiomatic Go: receiver type quyết định mutation</span>
 <span class="kd">type</span><span class="w"> </span><span class="nx">User</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nx">Name</span><span class="w"> </span><span class="kt">string</span>
@@ -1024,6 +1243,10 @@ go<span class="w"> </span>build<span class="w"> </span>-gcflags<span class="o">=
 <span class="p">}</span>
 </pre></div>
 </div>
+<p><strong>Rule of thumb:</strong> Method nào cần modify state → pointer receiver. Method nào chỉ read → value receiver. Khi unsure → pointer receiver (an toàn hơn).</p>
+<hr />
+<h2 id="4-compilation-vs-interpretation">4. Compilation vs Interpretation</h2>
+<h3 id="41-go-compile-to-single-binary-vs-node-runtime">4.1 Go Compile to Single Binary vs Node Runtime</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">bash</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1"># Go: compile to standalone binary</span>
 go<span class="w"> </span>build<span class="w"> </span>-o<span class="w"> </span>myapp<span class="w"> </span>main.go
 ./myapp<span class="w">  </span><span class="c1"># Chạy trực tiếp, không cần Go installed</span>
@@ -1032,6 +1255,7 @@ go<span class="w"> </span>build<span class="w"> </span>-o<span class="w"> </span
 node<span class="w"> </span>myapp.js<span class="w">  </span><span class="c1"># Cần Node.js installed trên target machine</span>
 </pre></div>
 </div>
+<p><strong>Deployment implications:</strong></p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">dockerfile</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c"># Go: multi-stage build → tiny image</span>
 <span class="k">FROM</span><span class="w"> </span><span class="s">golang:1.21</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="s">builder</span>
 <span class="k">WORKDIR</span><span class="w"> </span><span class="s">/app</span>
@@ -1054,6 +1278,7 @@ node<span class="w"> </span>myapp.js<span class="w">  </span><span class="c1"># 
 <span class="c"># Final image: ~100-200MB (Node runtime + node_modules)</span>
 </pre></div>
 </div>
+<h3 id="42-cross-compilation">4.2 Cross-Compilation</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">bash</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1"># Go: cross-compile cực dễ</span>
 <span class="nv">GOOS</span><span class="o">=</span>linux<span class="w"> </span><span class="nv">GOARCH</span><span class="o">=</span>amd64<span class="w"> </span>go<span class="w"> </span>build<span class="w"> </span>-o<span class="w"> </span>server-linux<span class="w"> </span>.
 <span class="nv">GOOS</span><span class="o">=</span>darwin<span class="w"> </span><span class="nv">GOARCH</span><span class="o">=</span>arm64<span class="w"> </span>go<span class="w"> </span>build<span class="w"> </span>-o<span class="w"> </span>server-mac<span class="w"> </span>.
@@ -1064,6 +1289,43 @@ node<span class="w"> </span>myapp.js<span class="w">  </span><span class="c1"># 
 <span class="c1"># Phải install Node trên target, hoặc bundle với pkg/nexe</span>
 </pre></div>
 </div>
+<h3 id="43-build-time-vs-startup-time-tradeoffs">4.3 Build Time vs Startup Time Tradeoffs</h3>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th>Aspect</th>
+<th>Go</th>
+<th>Node</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Compilation time</td>
+<td>Seconds to minutes</td>
+<td>N/A (interpreted)</td>
+</tr>
+<tr>
+<td>Startup time</td>
+<td><strong>Near-instant</strong> (microseconds)</td>
+<td>50-500ms (module loading, JIT warmup)</td>
+</tr>
+<tr>
+<td>Runtime warmup</td>
+<td>None (compiled to native)</td>
+<td>JIT needs time to optimize hot paths</td>
+</tr>
+<tr>
+<td>Cold start (serverless)</td>
+<td><strong>~1-10ms</strong></td>
+<td><strong>~100-5000ms</strong></td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Tại sao startup time quan trọng:</strong>
+- <strong>Serverless/Lambda:</strong> Go cold start gần như instant. Node cold start có thể 1-5s.
+- <strong>CLI tools:</strong> Go binary chạy ngay. Node cần interpreter boot.
+- <strong>Container orchestration:</strong> Go containers start nhanh hơn, healthcheck pass nhanh hơn.</p>
+<h3 id="44-deployment-advantages">4.4 Deployment Advantages</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">bash</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1"># Go deployment: copy binary là xong</span>
 scp<span class="w"> </span>server<span class="w"> </span>user@prod:/usr/local/bin/
 ssh<span class="w"> </span>user@prod<span class="w"> </span><span class="s1">&#39;systemctl restart myapp&#39;</span>
@@ -1073,6 +1335,9 @@ scp<span class="w"> </span>-r<span class="w"> </span>.<span class="w"> </span>us
 ssh<span class="w"> </span>user@prod<span class="w"> </span><span class="s1">&#39;cd /app &amp;&amp; npm ci &amp;&amp; pm2 restart myapp&#39;</span>
 </pre></div>
 </div>
+<hr />
+<h2 id="5-concurrency-philosophy">5. Concurrency Philosophy</h2>
+<h3 id="51-nodejs-single-threaded-event-loop">5.1 Node.js: Single-Threaded Event Loop</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">js</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Node: single thread, non-blocking I/O</span>
 <span class="kd">const</span><span class="w"> </span><span class="nx">http</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;http&#39;</span><span class="p">);</span>
 
@@ -1105,6 +1370,7 @@ ssh<span class="w"> </span>user@prod<span class="w"> </span><span class="s1">&#3
 └───────────────────────────┘
 </pre></div>
 </div>
+<h3 id="52-go-multi-threaded-by-default">5.2 Go: Multi-Threaded by Default</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Go: multiple OS threads + goroutine scheduler</span>
 <span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="c1">// GOMAXPROCS defaults to number of CPU cores</span>
@@ -1141,6 +1407,7 @@ ssh<span class="w"> </span>user@prod<span class="w"> </span><span class="s1">&#3
 └─────────────────────────────────────┘
 </pre></div>
 </div>
+<h3 id="53-csp-communicating-sequential-processes-vs-event-loop">5.3 CSP (Communicating Sequential Processes) vs Event Loop</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Go CSP: goroutines communicate qua channels</span>
 <span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nx">ch</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nb">make</span><span class="p">(</span><span class="kd">chan</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span>
@@ -1178,6 +1445,7 @@ ssh<span class="w"> </span>user@prod<span class="w"> </span><span class="s1">&#3
 <span class="nx">emitter</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;done&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Done&#39;</span><span class="p">));</span>
 </pre></div>
 </div>
+<h3 id="54-dont-communicate-by-sharing-memory-share-memory-by-communicating">5.4 "Don't Communicate By Sharing Memory; Share Memory By Communicating"</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// SAI (mutex-based, giống Node/JS style):</span>
 <span class="kd">type</span><span class="w"> </span><span class="nx">SafeCounter</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nx">mu</span><span class="w">    </span><span class="nx">sync</span><span class="p">.</span><span class="nx">Mutex</span>
@@ -1209,6 +1477,10 @@ ssh<span class="w"> </span>user@prod<span class="w"> </span><span class="s1">&#3
 <span class="p">}</span>
 </pre></div>
 </div>
+<p><strong>Mental model:</strong>
+- Node: "Tôi có data chia sẻ, tôi cần lock để bảo vệ nó" (mutex).
+- Go: "Tôi gửi data qua channel, mỗi goroutine sở hữu data riêng" (CSP).
+- Channels enforce synchronization: sender và receiver phải "gặp nhau" tại cùng thời điểm (unbuffered) hoặc buffer space available (buffered).</p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Real-world pattern: worker pool với channels</span>
 <span class="kd">func</span><span class="w"> </span><span class="nx">workerPool</span><span class="p">(</span><span class="nx">jobs</span><span class="w"> </span><span class="o">&lt;-</span><span class="kd">chan</span><span class="w"> </span><span class="nx">Job</span><span class="p">,</span><span class="w"> </span><span class="nx">results</span><span class="w"> </span><span class="kd">chan</span><span class="o">&lt;-</span><span class="w"> </span><span class="nx">Result</span><span class="p">,</span><span class="w"> </span><span class="nx">workers</span><span class="w"> </span><span class="kt">int</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="nx">wg</span><span class="w"> </span><span class="nx">sync</span><span class="p">.</span><span class="nx">WaitGroup</span>
@@ -1227,6 +1499,9 @@ ssh<span class="w"> </span>user@prod<span class="w"> </span><span class="s1">&#3
 <span class="p">}</span>
 </pre></div>
 </div>
+<hr />
+<h2 id="6-common-mistakes-node-devs-make-in-go">6. Common Mistakes Node Devs Make in Go</h2>
+<h3 id="61-viet-js-style-code-trong-go">6.1 Viết JS-Style Code Trong Go</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// SAI: JS style — callback hell trong Go</span>
 <span class="kd">func</span><span class="w"> </span><span class="nx">getUser</span><span class="p">(</span><span class="nx">id</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="nx">callback</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="o">*</span><span class="nx">User</span><span class="p">,</span><span class="w"> </span><span class="kt">error</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="c1">// ... async style trong sync language</span>
@@ -1250,6 +1525,7 @@ ssh<span class="w"> </span>user@prod<span class="w"> </span><span class="s1">&#3
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="62-over-using-interfaces">6.2 Over-Using Interfaces</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// SAI: interface cho mọi thứ (Java/TS style)</span>
 <span class="kd">type</span><span class="w"> </span><span class="nx">UserServiceInterface</span><span class="w"> </span><span class="kd">interface</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nx">FindByID</span><span class="p">(</span><span class="nx">ctx</span><span class="w"> </span><span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span><span class="w"> </span><span class="nx">id</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="nx">User</span><span class="p">,</span><span class="w"> </span><span class="kt">error</span><span class="p">)</span>
@@ -1272,6 +1548,8 @@ ssh<span class="w"> </span>user@prod<span class="w"> </span><span class="s1">&#3
 <span class="p">}</span>
 </pre></div>
 </div>
+<p><strong>Rule:</strong> Interface define ở consumer side. Không define interface "just in case".</p>
+<h3 id="63-khong-hieu-value-vs-pointer-semantics">6.3 Không Hiểu Value vs Pointer Semantics</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// SAI: không hiểu mutation</span>
 <span class="kd">func</span><span class="w"> </span><span class="nx">addTag</span><span class="p">(</span><span class="nx">user</span><span class="w"> </span><span class="nx">User</span><span class="p">,</span><span class="w"> </span><span class="nx">tag</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nx">user</span><span class="p">.</span><span class="nx">Tags</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nb">append</span><span class="p">(</span><span class="nx">user</span><span class="p">.</span><span class="nx">Tags</span><span class="p">,</span><span class="w"> </span><span class="nx">tag</span><span class="p">)</span>
@@ -1297,6 +1575,7 @@ ssh<span class="w"> </span>user@prod<span class="w"> </span><span class="s1">&#3
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="64-treat-goroutines-like-promises">6.4 Treat Goroutines Like Promises</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// SAI: fire-and-forget như Promise không await</span>
 <span class="k">go</span><span class="w"> </span><span class="nx">doSomething</span><span class="p">()</span><span class="w">   </span><span class="c1">// goroutine có thể bị GC nếu main() exit</span>
 <span class="k">go</span><span class="w"> </span><span class="nx">doSomethingElse</span><span class="p">()</span><span class="w"> </span><span class="c1">// không có lifecycle management</span>
@@ -1337,6 +1616,7 @@ ssh<span class="w"> </span>user@prod<span class="w"> </span><span class="s1">&#3
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="65-ignoring-error-returns">6.5 Ignoring Error Returns</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// SAI: bỏ qua error</span>
 <span class="nx">json</span><span class="p">.</span><span class="nx">Unmarshal</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">user</span><span class="p">)</span><span class="w"> </span><span class="c1">// error bị bỏ qua</span>
 <span class="nx">resp</span><span class="p">,</span><span class="w"> </span><span class="nx">_</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">http</span><span class="p">.</span><span class="nx">Get</span><span class="p">(</span><span class="nx">url</span><span class="p">)</span><span class="w">    </span><span class="c1">// error bị ignore</span>
@@ -1348,6 +1628,7 @@ ssh<span class="w"> </span>user@prod<span class="w"> </span><span class="s1">&#3
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="66-building-too-many-abstractions-too-early">6.6 Building Too Many Abstractions Too Early</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// SAI: abstract quá sớm (JS/TS framework style)</span>
 <span class="kd">type</span><span class="w"> </span><span class="nx">Repository</span><span class="p">[</span><span class="nx">T</span><span class="w"> </span><span class="kt">any</span><span class="p">]</span><span class="w"> </span><span class="kd">interface</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nx">Find</span><span class="p">(</span><span class="nx">ctx</span><span class="w"> </span><span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span><span class="w"> </span><span class="nx">id</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="nx">T</span><span class="p">,</span><span class="w"> </span><span class="kt">error</span><span class="p">)</span>
@@ -1377,6 +1658,9 @@ ssh<span class="w"> </span>user@prod<span class="w"> </span><span class="s1">&#3
 <span class="c1">// Refactor to interface KHI bạn cần swap implementation (test, different DB, etc.)</span>
 </pre></div>
 </div>
+<hr />
+<h2 id="7-go-lam-tot-hon-nodejs">7. Go Làm Tốt Hơn Node.js</h2>
+<h3 id="71-true-parallelism">7.1 True Parallelism</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Go: thực sự parallel trên nhiều CPU cores</span>
 <span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nx">runtime</span><span class="p">.</span><span class="nx">GOMAXPROCS</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span><span class="w"> </span><span class="c1">// 8 cores</span>
@@ -1423,6 +1707,43 @@ ssh<span class="w"> </span>user@prod<span class="w"> </span><span class="s1">&#3
 <span class="c1">// Và API phức tạp hơn</span>
 </pre></div>
 </div>
+<h3 id="72-cpu-intensive-tasks">7.2 CPU-Intensive Tasks</h3>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th>Task</th>
+<th>Go</th>
+<th>Node</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>JSON parsing (large)</td>
+<td>Native, fast</td>
+<td>Fast (V8 optimized)</td>
+</tr>
+<tr>
+<td>Image processing</td>
+<td>Excellent (standard library + native bindings)</td>
+<td>Need sharp/jimp (native bindings anyway)</td>
+</tr>
+<tr>
+<td>Crypto</td>
+<td>Standard library, no external deps</td>
+<td>Node crypto (good but limited algorithms)</td>
+</tr>
+<tr>
+<td>Compression</td>
+<td>Standard gzip/zlib</td>
+<td>zlib module (OK)</td>
+</tr>
+<tr>
+<td>Data processing</td>
+<td>Fast, parallelizable</td>
+<td>Single-threaded bottleneck</td>
+</tr>
+</tbody>
+</table></div>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Go: standard library cho hầu hết tasks</span>
 <span class="kn">import</span><span class="w"> </span><span class="p">(</span>
 <span class="w">    </span><span class="s">&quot;compress/gzip&quot;</span>
@@ -1435,6 +1756,7 @@ ssh<span class="w"> </span>user@prod<span class="w"> </span><span class="s1">&#3
 <span class="c1">// Không cần npm install cho basic operations</span>
 </pre></div>
 </div>
+<h3 id="73-memory-efficiency">7.3 Memory Efficiency</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Go struct: compact memory layout</span>
 <span class="kd">type</span><span class="w"> </span><span class="nx">User</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nx">ID</span><span class="w">    </span><span class="kt">int64</span><span class="w">   </span><span class="c1">// 8 bytes</span>
@@ -1462,6 +1784,7 @@ ssh<span class="w"> </span>user@prod<span class="w"> </span><span class="s1">&#3
 <span class="c1">// Total: ~100-200MB cho 1M users</span>
 </pre></div>
 </div>
+<h3 id="74-single-binary-deployment">7.4 Single Binary Deployment</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">bash</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1"># Go: deploy anywhere với single binary</span>
 <span class="nv">GOOS</span><span class="o">=</span>linux<span class="w"> </span><span class="nv">GOARCH</span><span class="o">=</span>amd64<span class="w"> </span>go<span class="w"> </span>build<span class="w"> </span>-o<span class="w"> </span>server<span class="w"> </span>.
 scp<span class="w"> </span>server<span class="w"> </span>user@prod:/usr/local/bin/
@@ -1481,6 +1804,7 @@ ssh<span class="w"> </span>user@prod<span class="w"> </span><span class="s1">&#3
 <span class="c1"># Serverless: zip bundle, cold start 100-5000ms</span>
 </pre></div>
 </div>
+<h3 id="75-standard-library-completeness">7.5 Standard Library Completeness</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Go standard library bao gồm HẦU HẾT thứ bạn cần</span>
 <span class="kn">import</span><span class="w"> </span><span class="p">(</span>
 <span class="w">    </span><span class="c1">// HTTP</span>
@@ -1538,6 +1862,7 @@ ssh<span class="w"> </span>user@prod<span class="w"> </span><span class="s1">&#3
 <span class="c1">// ... thêm nhiều nữa</span>
 </pre></div>
 </div>
+<h3 id="76-built-in-tooling">7.6 Built-in Tooling</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">bash</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1"># Go: tất cả built-in, không cần cài thêm</span>
 go<span class="w"> </span>fmt<span class="w"> </span>./...<span class="w">           </span><span class="c1"># Code formatter (standard, không debate style)</span>
 go<span class="w"> </span>vet<span class="w"> </span>./...<span class="w">           </span><span class="c1"># Static analysis</span>
@@ -1562,6 +1887,10 @@ go<span class="w"> </span>run<span class="w"> </span>main.go<span class="w">    
 <span class="c1"># bundler (webpack/vite/esbuild)</span>
 </pre></div>
 </div>
+<p><strong>Mental model:</strong> Go ecosystem "batteries included". Node ecosystem "choose your own adventure".</p>
+<hr />
+<h2 id="8-migration-patterns-node-go">8. Migration Patterns: Node → Go</h2>
+<h3 id="81-http-server">8.1 HTTP Server</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">js</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Node: Express</span>
 <span class="kd">const</span><span class="w"> </span><span class="nx">express</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;express&#39;</span><span class="p">);</span>
 <span class="kd">const</span><span class="w"> </span><span class="nx">app</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">express</span><span class="p">();</span>
@@ -1597,6 +1926,7 @@ go<span class="w"> </span>run<span class="w"> </span>main.go<span class="w">    
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="82-database-query">8.2 Database Query</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">js</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Node: pg/mysql2</span>
 <span class="kd">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">rows</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">db</span><span class="p">.</span><span class="nx">query</span><span class="p">(</span>
 <span class="w">    </span><span class="s1">&#39;SELECT * FROM users WHERE id = $1&#39;</span><span class="p">,</span>
@@ -1618,6 +1948,7 @@ go<span class="w"> </span>run<span class="w"> </span>main.go<span class="w">    
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="83-config-loading">8.3 Config Loading</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">js</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Node: dotenv</span>
 <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;dotenv&#39;</span><span class="p">).</span><span class="nx">config</span><span class="p">();</span>
 <span class="kd">const</span><span class="w"> </span><span class="nx">dbUrl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">DATABASE_URL</span><span class="p">;</span>
@@ -1642,299 +1973,19 @@ go<span class="w"> </span>run<span class="w"> </span>main.go<span class="w">    
 <span class="p">}</span>
 </pre></div>
 </div>
-<h1 id="go-mental-model-cho-senior-nodejs-developer">Go Mental Model Cho Senior Node.js Developer</h1>
-<div class="callout callout-note"><div class="callout-body"><p>Dành cho developer có 4 năm kinh nghiệm Node.js muốn hiểu Go một cách sâu sắc, không phải tutorial surface-level.</p></div></div>
-
-<hr />
-<h2 id="1-deep-mental-model-mapping">1. Deep Mental Model Mapping</h2>
-<p>Mỗi concept lớn trong Go map sang Node.js tương đương, nhưng mapping nào cũng có "mismatch" — phần mismatch mới là thứ quan trọng cần hiểu.</p>
-<h3 id="11-package-main-func-main-vs-indexjs-entrypoint">1.1 <code>package main</code> + <code>func main()</code> vs <code>index.js</code> Entrypoint</h3>
-<p><strong>Giống nhau:</strong> Cả hai đều là entrypoint của chương trình.</p>
-<p><strong>Khác biệt sâu:</strong>
-- Trong Node, <code>index.js</code> chỉ là file JS bình thường. <code>node index.js</code> chạy nó, nhưng bạn cũng có thể <code>require('./index')</code> từ file khác.
-- Trong Go, <code>package main</code> là <strong>duy nhất</strong> đánh dấu executable entrypoint. Compiler tìm <code>func main()</code> trong <code>package main</code> để build binary. Bạn <strong>không thể</strong> import <code>package main</code> từ package khác.
-- Go có thể có nhiều file trong <code>package main</code>, tất cả share cùng namespace. Node mỗi file là module riêng với scope riêng.</p>
-<p><strong>Mental model:</strong> <code>package main</code> = "đây là entrypoint executable, không phải reusable library". Nếu bạn đang viết library, tạo <code>package mylib</code> riêng.</p>
-<h3 id="12-gomod-vs-packagejson-modules-vs-npm">1.2 <code>go.mod</code> vs <code>package.json</code> (Modules vs npm)</h3>
-<p><strong>Khác biệt cốt lõi:</strong>
-- <code>go.mod</code> <strong>không có version của project bạn</strong>. Module path là identifier, không phải versioned package. Go modules chỉ version dependencies, không version chính nó theo cách npm làm.
-- <code>go.sum</code> = checksum file, tương tự <code>package-lock.json</code> nhưng chỉ chứa cryptographic hashes cho integrity verification.
-- Go <strong>không có registry central</strong> như npm. Dependencies được fetch trực tiếp từ source (GitHub, GitLab, etc.) và cache local.
-- <strong>Không có <code>node_modules</code></strong>. Dependencies được download vào <code>$GOPATH/pkg/mod</code>. Binary compile xong chứa tất cả code cần thiết.
-- <code>go mod tidy</code> tự động thêm dependencies thiếu và xóa dependencies không dùng. Không có equivalent npm script nào tiện bằng.</p>
-<p><strong>Mental model:</strong> Go modules nhẹ hơn npm rất nhiều. Không có <code>node_modules</code> hell, không có phantom dependencies, không có hoisting issues.</p>
-<h3 id="13-import-compile-time-vs-requireimport-runtime">1.3 <code>import</code> Compile-Time vs <code>require/import</code> Runtime</h3>
-<p><strong>Đây là khác biệt ARCHITECTURAL quan trọng:</strong>
-- Go import xảy ra <strong>khi compile</strong>. Compiler resolve tất cả dependencies, check types, link code. Nếu thiếu import → compile error. Nếu import mà không dùng → <strong>compile error</strong>.
-- Node require/import xảy ra <strong>khi runtime</strong>. Module được resolve và execute khi dòng code đó chạy lần đầu. Circular dependencies tạo partial objects.</p>
-<p><strong>Tại sao Go làm vậy:</strong>
-- Compile-time resolution cho phép dead code elimination (binary nhỏ hơn)
-- Không có dynamic import tricks → binary có thể optimize hoàn toàn
-- Force developer clean code: không import bừa bãi</p>
-<p><strong>Mental model:</strong> Go import = "khai báo dependency cho compiler". Node import = "lazy load module ở runtime".</p>
-<h3 id="14-struct-vs-classobject-literal">1.4 <code>struct</code> vs Class/Object Literal</h3>
-<p><strong>Khác biệt sâu:</strong>
-- Go <code>struct</code> <strong>chỉ chứa data</strong>. Methods được define riêng với receiver.
-- <strong>Không có inheritance</strong>. Go dùng composition (embedding).
-- <code>struct</code> có zero value tự động: <code>var u User</code> → tất cả fields đều zero value, không phải <code>undefined</code> hay <code>null</code>.
-- <code>struct</code> là <strong>value type</strong>. Copy <code>u1 = u2</code> tạo bản sao hoàn toàn, không share reference.</p>
-<p><strong>Mental model:</strong> <code>struct</code> = "plain data container, không có behavior attached". Behavior nằm ở methods. Composition &gt; Inheritance, luôn luôn.</p>
-<h3 id="15-interface-vs-typescript-interface-implicit-vs-explicit">1.5 Interface vs TypeScript Interface (Implicit vs Explicit)</h3>
-<p><strong>Đây là khác biệt DESIGN PHILOSOPHY lớn:</strong>
-- Go interface = <strong>implicit contract</strong>. Consumer define interface, không phải producer. Bạn không cần biết type <code>X</code> implement interface <code>Y</code> — chỉ cần nó có đúng method signatures.
-- TypeScript interface = <strong>explicit declaration</strong>. Producer phải biết và declare implements.
-- Go interface thường <strong>rất nhỏ</strong> (1-3 methods). <code>io.Reader</code> chỉ có 1 method. <code>fmt.Stringer</code> chỉ có <code>String() string</code>.</p>
-<p><strong>Mental model:</strong> Go interface = "capability declaration ở consumer side". Bạn define interface khi bạn cần abstraction, không phải khi bạn tạo type. Đây gọi là <strong>"Accept interfaces, return structs"</strong>.</p>
-<h3 id="16-goroutine-vs-promiseasync-await-fundamentally-different">1.6 Goroutine vs Promise/async-await (FUNDAMENTALLY DIFFERENT!)</h3>
-<p><strong>Đây là khác biệt LỚN NHẤT. Đừng bỏ qua phần này.</strong></p>
-<div class="tablewrap"><table>
-<thead>
-<tr>
-<th>Aspect</th>
-<th>Goroutine</th>
-<th>Promise/async-await</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Mô hình</td>
-<td>Real concurrent execution (multi-core)</td>
-<td>Cooperative concurrency (single thread)</td>
-</tr>
-<tr>
-<td>Parallelism</td>
-<td><strong>Có</strong> — nhiều goroutines chạy đồng thời trên nhiều CPU cores</td>
-<td><strong>Không</strong> — chỉ có 1 thread, event loop multiplexing</td>
-</tr>
-<tr>
-<td>Blocking</td>
-<td>Goroutine có thể block mà không ảnh hưởng others</td>
-<td>Blocking 1 operation = block toàn bộ event loop</td>
-</tr>
-<tr>
-<td>Memory</td>
-<td>~2KB stack ban đầu, grow tự động</td>
-<td>~microtask allocation, nhưng overhead từ closure chains</td>
-</tr>
-<tr>
-<td>Lifecycle</td>
-<td>Explicit lifecycle management qua channels/context</td>
-<td>Automatic cleanup khi Promise settle</td>
-</tr>
-<tr>
-<td>Creation cost</td>
-<td>Rất rẻ (nanoseconds)</td>
-<td>Rất rẻ</td>
-</tr>
-<tr>
-<td>Scaling</td>
-<td>Scale tới hàng triệu goroutines</td>
-<td>Scale tới hàng trăm nghìn pending promises</td>
-</tr>
-</tbody>
-</table></div>
-<p><strong>Mental model:</strong> Goroutine = "cheap thread bạn tạo thoải mái". Promise = "callback trong event loop". Goroutine cho bạn <strong>true parallelism</strong>. Promise chỉ cho bạn <strong>concurrency</strong> (chuyển đổi context, không chạy đồng thời).</p>
-<h3 id="17-channel-vs-eventemittermessageport">1.7 Channel vs EventEmitter/MessagePort</h3>
-<p><strong>Khác biệt cốt lõi:</strong>
-- Channel là <strong>typed</strong> và <strong>directional</strong> (<code>chan&lt;-</code> send-only, <code>&lt;-chan</code> receive-only).
-- Channel có thể <strong>block</strong>: unbuffered channel block sender cho đến khi có receiver. Đây là synchronization mechanism, không chỉ message passing.
-- Channel là <strong>first-class value</strong> trong Go. Truyền channel vào function, return từ function, lưu trong struct.
-- <strong>Không có event name</strong> — channel itself là identifier. Không có string-based event dispatch.</p>
-<p><strong>Mental model:</strong> Channel = "typed message pipe với built-in synchronization". EventEmitter = "string-keyed observer pattern". Channel mạnh hơn vì nó enforce types, directionality, và synchronization.</p>
-<h3 id="18-contextcontext-vs-abortcontroller">1.8 <code>context.Context</code> vs <code>AbortController</code></h3>
-<p><strong>Go context mạnh hơn AbortController rất nhiều:</strong>
-- Context có thể <strong>carry values</strong> qua call chain (request ID, auth token, etc.)
-- Context có thể <strong>tree hierarchy</strong> — parent cancel → tất cả children cancel.
-- Context là <strong>idiomatic first parameter</strong> trong Go: <code>func DoWork(ctx context.Context, ...) error</code>
-- <strong>Không có try-catch</strong> để cleanup — context + defer là pattern thay thế.</p>
-<p><strong>Mental model:</strong> Context = "cancellation + timeout + value propagation qua call chain". AbortController chỉ là cancellation. Context là backbone của Go request lifecycle.</p>
-<h3 id="19-error-as-value-vs-throwtry-catch">1.9 Error as Value vs throw/try-catch</h3>
-<p><strong>Đây là khác biệt có ảnh hưởng lớn nhất đến code style:</strong></p>
-<p><strong>Go error handling xem như verbose, nhưng thực tế cho bạn control rõ ràng hơn:</strong>
-- Bạn <strong>thấy chính xác</strong> error xảy ra ở đâu (không cần stack trace cho simple errors).
-- Bạn <strong>quyết định</strong> error nào propagate, error nào wrap, error nào swallow.
-- Error wrapping (<code>%w</code>) cho phép unwrap chain: <code>errors.Is(err, context.DeadlineExceeded)</code> traverse qua toàn bộ chain.
-- <strong>Không có unchecked exception</strong> — không bao giờ surprise error từ tầng nào đó.</p>
-<h3 id="110-defer-vs-try-finally">1.10 <code>defer</code> vs <code>try-finally</code></h3>
-<p><strong>Đặc điểm defer:</strong>
-- LIFO order (stack): defer đầu tiên chạy cuối cùng.
-- <strong>Argument evaluation ngay khi defer statement execute</strong>, không phải khi defer chạy.</p>
-<p><strong>Mental model:</strong> <code>defer</code> = "register cleanup ngay sau khi resource được acquire". Nhẹ hơn try-finally vì bạn không cần nesting. Pattern <code>defer f.Close()</code> ngay sau <code>os.Open()</code> là idiomatic Go.</p>
-<h3 id="111-zero-value-vs-undefinednull">1.11 Zero Value vs <code>undefined</code>/<code>null</code></h3>
-<p><strong>Tại sao zero value quan trọng:</strong>
-- <strong>Không bao giờ nil pointer panic</strong> khi dùng value types (string, int, etc.)
-- <strong>Không cần optional chaining</strong> cho value types: <code>var s string</code> → <code>s</code> luôn usable, chỉ là empty string.
-- <strong>Zero value có ý nghĩa</strong>: <code>var count int</code> → count = 0, hợp lệ để dùng.
-- <strong>Chỉ pointer, slice, map, channel, interface, func</strong> mới có thể nil.</p>
-<p><strong>Mental model:</strong> Go không có "null/undefined confusion". Mọi thứ có zero value predictable. Chỉ pointer/reference types mới nil. Đây là source of bugs lớn trong JS nhưng gần như không tồn tại trong Go.</p>
-<hr />
-<h2 id="2-go-is-explicit-node-is-implicit">2. Go is Explicit, Node is Implicit</h2>
-<h3 id="21-error-handling-forced-check-vs-exception-bubbling">2.1 Error Handling: Forced Check vs Exception Bubbling</h3>
-<p><strong>Go cho bạn EXPLICIT control flow:</strong>
-- Mọi error path đều visible trong code.
-- Không có "exception invisibly propagate qua 10 layers".
-- Error wrapping cho context: <code>fmt.Errorf("query user %s: %w", id, err)</code> → bạn biết error xảy ra ở step nào.
-- Sentinel errors + <code>errors.Is()</code> cho programmatic error matching.</p>
-<h3 id="22-khong-co-nullundefined-distinction">2.2 Không Có <code>null</code>/<code>undefined</code> Distinction</h3>
-<p><strong>Trong Go, bạn không bao giờ cần phân biệt "no value" vs "empty value" cho value types.</strong> Zero value đã cover "empty" case.</p>
-<h3 id="23-khong-can-optional-chaining-vi-zero-values">2.3 Không Cần Optional Chaining (Vì Zero Values)</h3>
-<p><strong>Go code nhìn verbose hơn, nhưng bạn thấy MỌI possible path.</strong> Không có hidden <code>TypeError: Cannot read property 'city' of undefined</code>.</p>
-<h3 id="24-type-system-go-compile-time-vs-typescript-runtime-erasure">2.4 Type System: Go Compile-Time vs TypeScript Runtime Erasure</h3>
-<p><strong>Go type system là REAL, không phải annotation:</strong>
-- Compile-time type checking prevents type errors at runtime.
-- Không có <code>any</code> equivalent dễ dãi (Go có <code>interface{}</code> nhưng dùng rất ít).
-- Không có runtime type assertion surprises (Go type assertion có <code>, ok</code> pattern).
-- Generics trong Go 1.18+ thêm flexibility nhưng vẫn compile-time checked.</p>
-<hr />
-<h2 id="3-memory-model-differences">3. Memory Model Differences</h2>
-<h3 id="31-stack-vs-heap-allocation">3.1 Stack vs Heap Allocation</h3>
-<p><strong>Go compiler thực hiện escape analysis:</strong>
-- Nếu variable không "escape" function scope → stack allocation (zero cost).
-- Nếu variable escape (return pointer, stored in global, passed to goroutine) → heap allocation.
-- Stack allocation = trivially cheap (move stack pointer). Heap allocation = cần GC.</p>
-<h3 id="32-value-semantics-vs-reference-semantics">3.2 Value Semantics vs Reference Semantics</h3>
-<p><strong>Value semantics = predictable behavior. Không có "accidental mutation" bugs.</strong></p>
-<p>Khi cần reference semantics, dùng pointer:</p>
-<h3 id="33-tai-sao-go-khong-can-gc-tuning-nhu-nodev8">3.3 Tại Sao Go Không Cần GC Tuning Như Node/V8</h3>
-<ul>
-<li>Go GC là <strong>concurrent, low-latency</strong> — typical pause time &lt; 1ms.</li>
-<li>Stack allocation giảm pressure trên GC significantly.</li>
-<li>Không có "nursery" hay "generational" GC tuning.</li>
-<li>V8 GC phức tạp hơn: nursery, old generation, mark-sweep, compaction. Node developer phải hiểu heap limits, <code>--max-old-space-size</code>.</li>
-<li>Go: hầu như <strong>không bao giờ</strong> cần tune GC. <code>GOGC</code> environment variable là rare optimization.</li>
-</ul>
-<h3 id="34-pointer-semantics-cho-js-dev">3.4 Pointer Semantics Cho JS Dev</h3>
-<p><strong>Mental model cho JS dev:</strong>
-- <code>&amp;x</code> = "get reference to x" (giống tạo object wrapper <code>{value: x}</code> trong JS).
-- <code>*p</code> = "dereference p, get the value" (giống <code>wrapper.value</code> trong JS).
-- Pointer = cho phép function modify caller's variable.
-- Không có pointer arithmetic như C.
-- Không có null pointer exception nếu bạn check nil trước khi use.</p>
-<p><strong>Rule of thumb:</strong> Method nào cần modify state → pointer receiver. Method nào chỉ read → value receiver. Khi unsure → pointer receiver (an toàn hơn).</p>
-<hr />
-<h2 id="4-compilation-vs-interpretation">4. Compilation vs Interpretation</h2>
-<h3 id="41-go-compile-to-single-binary-vs-node-runtime">4.1 Go Compile to Single Binary vs Node Runtime</h3>
-<p><strong>Deployment implications:</strong></p>
-<h3 id="42-cross-compilation">4.2 Cross-Compilation</h3>
-<h3 id="43-build-time-vs-startup-time-tradeoffs">4.3 Build Time vs Startup Time Tradeoffs</h3>
-<div class="tablewrap"><table>
-<thead>
-<tr>
-<th>Aspect</th>
-<th>Go</th>
-<th>Node</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Compilation time</td>
-<td>Seconds to minutes</td>
-<td>N/A (interpreted)</td>
-</tr>
-<tr>
-<td>Startup time</td>
-<td><strong>Near-instant</strong> (microseconds)</td>
-<td>50-500ms (module loading, JIT warmup)</td>
-</tr>
-<tr>
-<td>Runtime warmup</td>
-<td>None (compiled to native)</td>
-<td>JIT needs time to optimize hot paths</td>
-</tr>
-<tr>
-<td>Cold start (serverless)</td>
-<td><strong>~1-10ms</strong></td>
-<td><strong>~100-5000ms</strong></td>
-</tr>
-</tbody>
-</table></div>
-<p><strong>Tại sao startup time quan trọng:</strong>
-- <strong>Serverless/Lambda:</strong> Go cold start gần như instant. Node cold start có thể 1-5s.
-- <strong>CLI tools:</strong> Go binary chạy ngay. Node cần interpreter boot.
-- <strong>Container orchestration:</strong> Go containers start nhanh hơn, healthcheck pass nhanh hơn.</p>
-<h3 id="44-deployment-advantages">4.4 Deployment Advantages</h3>
-<hr />
-<h2 id="5-concurrency-philosophy">5. Concurrency Philosophy</h2>
-<h3 id="51-nodejs-single-threaded-event-loop">5.1 Node.js: Single-Threaded Event Loop</h3>
-<h3 id="52-go-multi-threaded-by-default">5.2 Go: Multi-Threaded by Default</h3>
-<h3 id="53-csp-communicating-sequential-processes-vs-event-loop">5.3 CSP (Communicating Sequential Processes) vs Event Loop</h3>
-<h3 id="54-dont-communicate-by-sharing-memory-share-memory-by-communicating">5.4 "Don't Communicate By Sharing Memory; Share Memory By Communicating"</h3>
-<p><strong>Mental model:</strong>
-- Node: "Tôi có data chia sẻ, tôi cần lock để bảo vệ nó" (mutex).
-- Go: "Tôi gửi data qua channel, mỗi goroutine sở hữu data riêng" (CSP).
-- Channels enforce synchronization: sender và receiver phải "gặp nhau" tại cùng thời điểm (unbuffered) hoặc buffer space available (buffered).</p>
-<hr />
-<h2 id="6-common-mistakes-node-devs-make-in-go">6. Common Mistakes Node Devs Make in Go</h2>
-<h3 id="61-viet-js-style-code-trong-go">6.1 Viết JS-Style Code Trong Go</h3>
-<h3 id="62-over-using-interfaces">6.2 Over-Using Interfaces</h3>
-<p><strong>Rule:</strong> Interface define ở consumer side. Không define interface "just in case".</p>
-<h3 id="63-khong-hieu-value-vs-pointer-semantics">6.3 Không Hiểu Value vs Pointer Semantics</h3>
-<h3 id="64-treat-goroutines-like-promises">6.4 Treat Goroutines Like Promises</h3>
-<h3 id="65-ignoring-error-returns">6.5 Ignoring Error Returns</h3>
-<h3 id="66-building-too-many-abstractions-too-early">6.6 Building Too Many Abstractions Too Early</h3>
-<hr />
-<h2 id="7-go-lam-tot-hon-nodejs">7. Go Làm Tốt Hơn Node.js</h2>
-<h3 id="71-true-parallelism">7.1 True Parallelism</h3>
-<h3 id="72-cpu-intensive-tasks">7.2 CPU-Intensive Tasks</h3>
-<div class="tablewrap"><table>
-<thead>
-<tr>
-<th>Task</th>
-<th>Go</th>
-<th>Node</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>JSON parsing (large)</td>
-<td>Native, fast</td>
-<td>Fast (V8 optimized)</td>
-</tr>
-<tr>
-<td>Image processing</td>
-<td>Excellent (standard library + native bindings)</td>
-<td>Need sharp/jimp (native bindings anyway)</td>
-</tr>
-<tr>
-<td>Crypto</td>
-<td>Standard library, no external deps</td>
-<td>Node crypto (good but limited algorithms)</td>
-</tr>
-<tr>
-<td>Compression</td>
-<td>Standard gzip/zlib</td>
-<td>zlib module (OK)</td>
-</tr>
-<tr>
-<td>Data processing</td>
-<td>Fast, parallelizable</td>
-<td>Single-threaded bottleneck</td>
-</tr>
-</tbody>
-</table></div>
-<h3 id="73-memory-efficiency">7.3 Memory Efficiency</h3>
-<h3 id="74-single-binary-deployment">7.4 Single Binary Deployment</h3>
-<h3 id="75-standard-library-completeness">7.5 Standard Library Completeness</h3>
-<h3 id="76-built-in-tooling">7.6 Built-in Tooling</h3>
-<p><strong>Mental model:</strong> Go ecosystem "batteries included". Node ecosystem "choose your own adventure".</p>
-<hr />
-<h2 id="8-migration-patterns-node-go">8. Migration Patterns: Node → Go</h2>
-<h3 id="81-http-server">8.1 HTTP Server</h3>
-<h3 id="82-database-query">8.2 Database Query</h3>
-<h3 id="83-config-loading">8.3 Config Loading</h3>
 <hr />
 <h2 id="9-checklist-tu-duy-khi-chuyen-tu-node-sang-go">9. Checklist Tư Duy Khi Chuyển Từ Node Sang Go</h2>
 <ul>
-<li class="task"><input type="checkbox" disabled> <strong>Explicit &gt; Implicit</strong>: Mọi thứ phải rõ ràng, không magic.</li>
-<li class="task"><input type="checkbox" disabled> <strong>Value semantics first</strong>: Struct là value type. Hiểu khi nào copy, khi nào pointer.</li>
-<li class="task"><input type="checkbox" disabled> <strong>Error là value</strong>: Handle mọi error. Không ignore, không swallow.</li>
-<li class="task"><input type="checkbox" disabled> <strong>Goroutine lifecycle</strong>: Luôn track goroutine (WaitGroup, context, channel).</li>
-<li class="task"><input type="checkbox" disabled> <strong>Interface ở consumer side</strong>: Define interface khi bạn CẦN abstraction.</li>
-<li class="task"><input type="checkbox" disabled> <strong>Composition &gt; Inheritance</strong>: Dùng embedding, không phải extends.</li>
-<li class="task"><input type="checkbox" disabled> <strong>Standard library trước</strong>: Hầu hết thứ bạn cần đã có sẵn.</li>
-<li class="task"><input type="checkbox" disabled> <strong>Zero value là useful</strong>: Không cần constructor cho mọi thứ.</li>
-<li class="task"><input type="checkbox" disabled> <strong>Channel cho coordination</strong>: Dùng channels để sync goroutines.</li>
-<li class="task"><input type="checkbox" disabled> <strong>Context cho lifecycle</strong>: Mọi long-running operation cần context.</li>
+<li class="task"><input type="checkbox"> <strong>Explicit &gt; Implicit</strong>: Mọi thứ phải rõ ràng, không magic.</li>
+<li class="task"><input type="checkbox"> <strong>Value semantics first</strong>: Struct là value type. Hiểu khi nào copy, khi nào pointer.</li>
+<li class="task"><input type="checkbox"> <strong>Error là value</strong>: Handle mọi error. Không ignore, không swallow.</li>
+<li class="task"><input type="checkbox"> <strong>Goroutine lifecycle</strong>: Luôn track goroutine (WaitGroup, context, channel).</li>
+<li class="task"><input type="checkbox"> <strong>Interface ở consumer side</strong>: Define interface khi bạn CẦN abstraction.</li>
+<li class="task"><input type="checkbox"> <strong>Composition &gt; Inheritance</strong>: Dùng embedding, không phải extends.</li>
+<li class="task"><input type="checkbox"> <strong>Standard library trước</strong>: Hầu hết thứ bạn cần đã có sẵn.</li>
+<li class="task"><input type="checkbox"> <strong>Zero value là useful</strong>: Không cần constructor cho mọi thứ.</li>
+<li class="task"><input type="checkbox"> <strong>Channel cho coordination</strong>: Dùng channels để sync goroutines.</li>
+<li class="task"><input type="checkbox"> <strong>Context cho lifecycle</strong>: Mọi long-running operation cần context.</li>
 </ul>
 <hr />
 <h2 id="10-rule-thuc-dung">10. Rule Thực Dụng</h2>
@@ -1951,11 +2002,75 @@ go<span class="w"> </span>run<span class="w"> </span>main.go<span class="w">    
 <div class="callout callout-note"><div class="callout-body"><p><strong>TL;DR cho senior Node dev:</strong> Go là ngôn ngữ compiled, explicit, value-oriented với concurrency built-in. Bạn trade flexibility và development speed cho performance, type safety, và deployment simplicity. Đừng cố viết JS trong Go — embrace the explicitness.</p></div></div>
 </article>
 <nav class="pager">
-
+<a href="README.html"><span class="dir">← Bài trước</span>Learn Go - Dành Cho Senior Node.js Developer</a>
 <a class="next" href="02-go-syntax-cheatsheet.html"><span class="dir">Bài sau →</span>Go Syntax Cheatsheet - Dành Cho Node.js Develope</a>
 </nav>
 <footer>Generated from Markdown · <a href="../index.html">Về trang chủ docs</a></footer>
 </main>
+
+<button class="progress-fab" id="progress-fab" type="button">📊 Tiến độ <span class="fab-count">0/0</span></button>
+<div class="progress-modal" id="progress-modal" hidden>
+  <div class="progress-dialog" role="dialog" aria-label="Theo dõi tiến độ">
+    <div class="progress-head">
+      <h2>📊 Theo dõi tiến độ <span class="progress-count">0%</span></h2>
+      <button class="progress-close" id="progress-close" type="button" aria-label="Đóng">✕</button>
+    </div>
+    <div class="progress-bar"><i></i></div>
+    <div class="progress-body">
+<div class="callout callout-note"><div class="callout-body"><p>Đây là bảng theo dõi <strong>duy nhất</strong> cho cả bộ tài liệu. Tick vào từng mốc — tiến độ được lưu trên trình duyệt và đồng bộ ở mọi trang qua nút nổi <strong>📊 Tiến độ</strong> ở góc phải dưới. Checklist chi tiết từng ngày vẫn nằm trong bài <code>07 · Fast Track Roadmap</code>.</p></div></div>
+
+<h3>Giai đoạn 1 · Nền tảng (Ngày 1)</h3>
+<ul>
+<li class="task"><input type="checkbox"> Hiểu mental model Go vs Node.js — file <code>01</code></li>
+<li class="task"><input type="checkbox"> Nắm syntax: <code>var</code>, <code>:=</code>, <code>const</code>, slice, map, <code>for</code>, <code>if</code>, <code>switch</code> — file <code>02</code></li>
+<li class="task"><input type="checkbox"> Viết được <code>struct</code> + method + pointer cơ bản</li>
+<li class="task"><input type="checkbox"> Chạy được <code>go run</code>, <code>go fmt</code> và tạo module mới</li>
+</ul>
+<h3>Giai đoạn 2 · Struct, Interface, Error (Ngày 2)</h3>
+<ul>
+<li class="task"><input type="checkbox"> Thiết kế struct, embedding và constructor</li>
+<li class="task"><input type="checkbox"> Hiểu interface + polymorphism trong Go</li>
+<li class="task"><input type="checkbox"> Xử lý lỗi với <code>errors.Is</code>, <code>errors.As</code> và custom error — file <code>03</code></li>
+</ul>
+<h3>Giai đoạn 3 · HTTP API (Ngày 3–4)</h3>
+<ul>
+<li class="task"><input type="checkbox"> Dựng được <code>/health</code> + CRUD bằng <code>net/http</code> hoặc Fiber — file <code>05</code></li>
+<li class="task"><input type="checkbox"> Viết middleware logging + error handling</li>
+<li class="task"><input type="checkbox"> Test API bằng curl/Postman</li>
+<li class="task"><input type="checkbox"> Viết unit test table-driven + <code>httptest</code> — file <code>06</code></li>
+</ul>
+<h3>Giai đoạn 4 · Concurrency (Ngày 5)</h3>
+<ul>
+<li class="task"><input type="checkbox"> Dùng goroutine + <code>WaitGroup</code> — file <code>04</code></li>
+<li class="task"><input type="checkbox"> Dùng channel + <code>select</code></li>
+<li class="task"><input type="checkbox"> Dùng <code>context.WithTimeout</code> để cancel</li>
+<li class="task"><input type="checkbox"> Chạy <code>go run -race .</code> không báo lỗi</li>
+</ul>
+<h3>Giai đoạn 5 · Project Layout &amp; Capstone (Ngày 6–7)</h3>
+<ul>
+<li class="task"><input type="checkbox"> Tách <code>cmd/</code>, <code>internal/</code>, viết repository interface</li>
+<li class="task"><input type="checkbox"> Wire dependency trong <code>main.go</code> + graceful shutdown</li>
+<li class="task"><input type="checkbox"> Hoàn thành 1 mini project kèm test, <code>go vet ./...</code>, <code>go build ./...</code></li>
+</ul>
+<h3>🚦 Mốc sẵn sàng: Phân tích &amp; code project</h3>
+<div class="callout callout-note"><div class="callout-body"><p><strong>Đọc/phân tích project thật:</strong> xong Giai đoạn 1 → 3 (khoảng Ngày 3).
+<strong>Sửa code trong project thật:</strong> xong thêm Giai đoạn 4 (khoảng Ngày 5).
+<strong>Tự code một project hoàn chỉnh:</strong> xong Giai đoạn 5 (khoảng Ngày 6–7).</p></div></div>
+
+<ul>
+<li class="task"><input type="checkbox"> Xong Giai đoạn 1 → 3: đọc hiểu và tự dựng được REST API CRUD</li>
+<li class="task"><input type="checkbox"> Đọc hiểu một repo Go lạ trong khoảng 1 buổi, không cần dịch từng dòng</li>
+<li class="task"><input type="checkbox"> Tự viết CRUD + test table-driven mà không copy nguyên mẫu</li>
+<li class="task"><input type="checkbox"> Giải thích được khi nào dùng goroutine / channel / context</li>
+<li class="task"><input type="checkbox"> Chạy thành thạo <code>go test</code>, <code>go vet</code>, <code>go build</code> và đọc được lỗi</li>
+<li class="task"><input type="checkbox"> Đã phân tích ít nhất 1 project mẫu — vtvcab-identity-api (series Node.js → Go, bài <code>01</code>)</li>
+</ul>
+<hr />
+    </div>
+  </div>
+</div>
+
+
 <script>
 
 (function(){
@@ -2005,6 +2120,88 @@ go<span class="w"> </span>run<span class="w"> </span>main.go<span class="w">    
       navigator.clipboard.writeText(text).then(function(){ done(true); }, fallback);
     } else { fallback(); }
   });
+})();
+// ---- progress tracker: nút nổi + modal, đồng bộ mọi trang qua localStorage ----
+(function(){
+  function qsa(sel, root){ return [].slice.call((root||document).querySelectorAll(sel)); }
+  function load(key){ try{ return JSON.parse(localStorage.getItem(key)||'null'); }catch(e){ return null; } }
+  function save(key, arr){ try{ localStorage.setItem(key, JSON.stringify(arr)); }catch(e){} }
+
+  var KEY_MAIN = 'md2html:progress:docs';
+  var modal = document.getElementById('progress-modal');
+  var fab = document.getElementById('progress-fab');
+  var homeBoxes = qsa('.progress-track .task input');
+  var modalBoxes = modal ? qsa('.task input', modal) : [];
+  var N = Math.max(homeBoxes.length, modalBoxes.length);
+
+  function states(){
+    var saved = load(KEY_MAIN);
+    if (saved && saved.length === N) return saved;
+    var src = homeBoxes.length ? homeBoxes : modalBoxes;
+    return src.map(function(b){ return b.checked; });
+  }
+  function updateCounters(st){
+    var done = st.filter(Boolean).length;
+    if (fab) fab.querySelector('.fab-count').textContent = done + '/' + N;
+    if (modal){
+      modal.querySelector('.progress-bar i').style.width = (N ? done/N*100 : 0) + '%';
+      modal.querySelector('.progress-count').textContent = (N ? Math.round(done/N*100) : 0) + '%';
+    }
+  }
+  function paint(st){
+    for (var i=0;i<N;i++){
+      if (homeBoxes[i]) homeBoxes[i].checked = !!st[i];
+      if (modalBoxes[i]) modalBoxes[i].checked = !!st[i];
+    }
+    updateCounters(st);
+  }
+  if (N){
+    paint(states());
+    var bindMain = function(i){
+      return function(){
+        var st = states(); st[i] = this.checked;
+        save(KEY_MAIN, st); paint(st);
+      };
+    };
+    homeBoxes.forEach(function(b,i){ b.addEventListener('change', bindMain(i)); });
+    modalBoxes.forEach(function(b,i){ b.addEventListener('change', bindMain(i)); });
+  }
+
+  // task list thường của từng trang: lưu riêng theo URL
+  var otherBoxes = qsa('.task input').filter(function(b){
+    return !b.closest('.progress-track') && !(modal && modal.contains(b));
+  });
+  if (otherBoxes.length){
+    var key = 'md2html:page:' + location.pathname;
+    var saved = load(key);
+    if (saved && saved.length === otherBoxes.length){
+      otherBoxes.forEach(function(b,i){ b.checked = !!saved[i]; });
+    }
+    otherBoxes.forEach(function(b){
+      b.addEventListener('change', function(){
+        save(key, otherBoxes.map(function(x){ return x.checked; }));
+      });
+    });
+  }
+
+  if (fab && modal && N){
+    var openModal = function(){
+      paint(states());
+      modal.hidden = false;
+      document.body.style.overflow = 'hidden';
+    };
+    fab.addEventListener('click', openModal);
+    qsa('.progress-open').forEach(function(b){ b.addEventListener('click', openModal); });
+    var closeModal = function(){
+      modal.hidden = true;
+      document.body.style.overflow = '';
+    };
+    document.getElementById('progress-close').addEventListener('click', closeModal);
+    modal.addEventListener('click', function(e){ if (e.target === modal) closeModal(); });
+    document.addEventListener('keydown', function(e){
+      if (e.key === 'Escape' && !modal.hidden) closeModal();
+    });
+  } else if (fab){ fab.hidden = true; }
 })();
 
 </script>

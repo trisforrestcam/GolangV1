@@ -97,7 +97,7 @@ body {
 }
 #progress { position: fixed; top: 0; left: 0; height: 3px; width: 0; z-index: 70;
   background: linear-gradient(90deg, var(--accent), var(--accent-2), #7c3aed); }
-#backtop { position: fixed; right: 26px; bottom: 26px; width: 44px; height: 44px;
+#backtop { position: fixed; right: 26px; bottom: 88px; width: 44px; height: 44px;
   border-radius: 50%; border: 1px solid var(--border); background: #fff;
   color: var(--accent); font-size: 1.15rem; cursor: pointer; opacity: 0;
   pointer-events: none; transition: all .25s; box-shadow: 0 8px 20px rgba(15,23,42,.14); z-index: 60; }
@@ -161,6 +161,17 @@ code {
 .callout .codeblock { box-shadow: none; }
 .callout .codeblock, .callout .codehilite, .callout code { background: #fff; }
 .callout .codehead { background: rgba(237,241,247,.6); }
+/* --- mermaid diagrams --- */
+.mermaidwrap { margin: 1.5em 0; border: 1px solid var(--border); border-radius: 12px;
+  background: #fff; overflow: hidden; box-shadow: 0 2px 6px rgba(15,23,42,.05); }
+.mermaidwrap .codehead { background: #edf1f7; }
+.mermaid-hint { font-size: .72rem; color: #94a3b8; font-weight: 600; }
+.mermaid { display: flex; justify-content: center; padding: 20px 16px; overflow-x: auto; }
+.mermaid svg { max-width: 100%; height: auto; }
+/* khi mermaid.js chưa/chưa kịp load (offline) — vẫn đọc được source dễ chịu */
+.mermaid:not([data-processed]) { font-family: "JetBrains Mono", Consolas, Menlo, monospace;
+  font-size: .8rem; color: #475569; white-space: pre; text-align: left; justify-content: flex-start; }
+.callout .mermaidwrap { box-shadow: none; }
 /* --- tables --- */
 .tablewrap { overflow-x: auto; margin: 1.2em 0; }
 table { border-collapse: collapse; width: 100%; font-size: .94em; margin: 0; }
@@ -223,7 +234,46 @@ kbd { background: #fff; border: 1px solid #cbd5e1; border-bottom-width: 2px;
 .pager .next { text-align: right; }
 .pager .dir { display: block; font-size: .78rem; color: var(--muted); font-weight: 500; }
 footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top: 34px; }
-@media print { #progress, #backtop, .toc, .pager { display: none !important; }
+/* --- floating progress button + modal --- */
+.progress-fab { position: fixed; right: 26px; bottom: 26px; z-index: 70;
+  display: inline-flex; align-items: center; gap: 9px; padding: 11px 19px;
+  border: none; border-radius: 999px; cursor: pointer; font: inherit;
+  font-size: .88rem; font-weight: 700; color: #fff;
+  background: linear-gradient(120deg, var(--accent), var(--accent-2));
+  box-shadow: 0 14px 34px -12px rgba(79,70,229,.55);
+  transition: transform .15s, box-shadow .15s; }
+.progress-fab:hover { transform: translateY(-2px); box-shadow: 0 18px 40px -12px rgba(79,70,229,.62); }
+.fab-count { background: rgba(255,255,255,.24); padding: 1px 10px; border-radius: 999px; font-size: .86em; }
+.progress-modal { position: fixed; inset: 0; z-index: 100; padding: 24px;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(51,65,85,.45); backdrop-filter: blur(3px); }
+.progress-modal[hidden] { display: none; }
+.progress-dialog { background: #fff; border-radius: 18px; width: min(780px, 100%);
+  max-height: 82vh; display: flex; flex-direction: column;
+  box-shadow: 0 40px 90px -20px rgba(51,65,85,.5); overflow: hidden; }
+.progress-head { display: flex; align-items: center; justify-content: space-between;
+  gap: 14px; padding: 20px 28px 14px; }
+.progress-head h2 { margin: 0; padding: 0; border: none; font-size: 1.2rem; }
+.progress-count { color: var(--accent); font-size: .72em; margin-left: .5em; }
+.progress-close { flex-shrink: 0; width: 34px; height: 34px; border-radius: 10px;
+  border: 1px solid var(--border); background: #fff; color: var(--muted);
+  font-size: 1rem; cursor: pointer; transition: all .15s; }
+.progress-close:hover { color: var(--accent); border-color: var(--accent); background: var(--accent-soft); }
+.progress-bar { height: 6px; background: #e2e8f0; margin: 0 28px; border-radius: 99px; overflow: hidden; }
+.progress-bar i { display: block; height: 100%; width: 0; border-radius: 99px;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2)); transition: width .25s; }
+.progress-body { padding: 8px 28px 26px; overflow-y: auto; }
+.progress-body h3 { margin-top: 1.1em; }
+/* --- trang nguồn: checklist inline thay bằng nút mở popup --- */
+.progress-hint { display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+  background: var(--accent-soft); border: 1px dashed #c7d2fe; border-radius: 14px;
+  padding: 16px 20px; color: var(--muted); font-size: .95rem; }
+.progress-open { flex-shrink: 0; border: none; border-radius: 10px; padding: 11px 20px;
+  font: inherit; font-size: .92rem; font-weight: 700; color: #fff; cursor: pointer;
+  background: linear-gradient(120deg, var(--accent), var(--accent-2));
+  box-shadow: 0 8px 18px -8px rgba(79,70,229,.5); transition: transform .15s; }
+.progress-open:hover { transform: translateY(-1px); }
+@media print { #progress, #backtop, .toc, .pager, .progress-fab, .progress-modal { display: none !important; }
   body { background: #fff; } .card { box-shadow: none; border: none; } }
 
 .wrap.wide { max-width: 1340px; }
@@ -264,6 +314,12 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <nav class="crumb"><a href="../index.html">📚 Docs</a> &nbsp;›&nbsp; go-fundamentals</nav>
 <main class="wrap">
 <article class="card">
+<h1 id="struct-interface-error-handling-huong-dan-cho-nodejs-developer">Struct, Interface, Error Handling - Hướng Dẫn Cho Node.js Developer</h1>
+<div class="callout callout-note"><div class="callout-body"><p><strong>Mục tiêu:</strong> Hiểu sâu struct, interface, error handling - ba trụ cột quan trọng nhất trong Go production code. So sánh liên tục với Node.js/TypeScript.</p></div></div>
+
+<hr />
+<h2 id="1-struct-nen-tang-data-model">1. Struct - Nền Tảng Data Model</h2>
+<h3 id="11-khoi-tao-struct">1.1. Khởi tạo Struct</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kd">type</span><span class="w"> </span><span class="nx">User</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
 <span class="w">	</span><span class="nx">ID</span><span class="w">    </span><span class="kt">int</span>
 <span class="w">	</span><span class="nx">Email</span><span class="w"> </span><span class="kt">string</span>
@@ -284,10 +340,42 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="nx">u3</span><span class="p">.</span><span class="nx">Email</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&quot;charlie@example.com&quot;</span>
 </pre></div>
 </div>
+<p><strong>So sánh Node.js:</strong></p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">javascript</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// JS - object literal, không type safety</span>
 <span class="kd">const</span><span class="w"> </span><span class="nx">user</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">id</span><span class="o">:</span><span class="w"> </span><span class="mf">1</span><span class="p">,</span><span class="w"> </span><span class="nx">email</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;alice@example.com&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">name</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Alice&quot;</span><span class="w"> </span><span class="p">};</span>
 </pre></div>
 </div>
+<h3 id="12-zero-value-quan-trong">1.2. Zero Value - Quan Trọng</h3>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Zero value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>int</code>, <code>float64</code></td>
+<td><code>0</code>, <code>0.0</code></td>
+</tr>
+<tr>
+<td><code>string</code></td>
+<td><code>""</code></td>
+</tr>
+<tr>
+<td><code>bool</code></td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>pointer</code>, <code>map</code>, <code>slice</code>, <code>func</code>, <code>interface</code></td>
+<td><code>nil</code></td>
+</tr>
+<tr>
+<td><code>struct</code></td>
+<td>mỗi field là zero value của nó</td>
+</tr>
+</tbody>
+</table></div>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kd">var</span><span class="w"> </span><span class="nx">u</span><span class="w"> </span><span class="nx">User</span>
 <span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">u</span><span class="p">)</span><span class="w"> </span><span class="c1">// {0 &quot;&quot;  0} - sẵn sàng dùng, không null/undefined</span>
 
@@ -296,6 +384,10 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="nx">let</span><span class="w"> </span><span class="nx">user</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="p">{};</span><span class="w"> </span><span class="c1">// {} - user.name -&gt; undefined (không crash nhưng không an toàn)</span>
 </pre></div>
 </div>
+<div class="callout callout-note"><div class="callout-body"><p><strong>Design principle:</strong> Tận dụng zero value hợp lý. Ví dụ: <code>sync.Mutex{}</code> sẵn sàng dùng, <code>bytes.Buffer{}</code> sẵn sàng ghi.</p></div></div>
+
+<h3 id="13-value-vs-pointer-semantics-cuc-ky-quan-trong">1.3. Value vs Pointer Semantics - CỰC KỲ QUAN TRỌNG</h3>
+<p>Trong JS, object luôn là reference. Trong Go, <strong>struct là value type</strong> - gán là copy!</p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="nx">a</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">User</span><span class="p">{</span><span class="nx">ID</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="nx">Name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Alice&quot;</span><span class="p">}</span>
 <span class="nx">b</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">a</span><span class="w">           </span><span class="c1">// COPY!</span>
 <span class="nx">b</span><span class="p">.</span><span class="nx">Name</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&quot;Bob&quot;</span>
@@ -314,6 +406,29 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">a</span><span class="p">.</span><span class="nx">name</span><span class="p">);</span><span class="w"> </span><span class="c1">// &quot;Bob&quot; - BỊ thay đổi</span>
 </pre></div>
 </div>
+<p><strong>Quy tắc chọn:</strong></p>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th>Dùng pointer (<code>*T</code>)</th>
+<th>Dùng value (<code>T</code>)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Method cần mutate state</td>
+<td>Struct nhỏ, immutable</td>
+</tr>
+<tr>
+<td>Struct lớn (tránh copy)</td>
+<td>Data chỉ đọc</td>
+</tr>
+<tr>
+<td>Interface cần consistent</td>
+<td>Không cần thay đổi</td>
+</tr>
+</tbody>
+</table></div>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Hàm nhận value - chỉ là copy</span>
 <span class="kd">func</span><span class="w"> </span><span class="nx">printUser</span><span class="p">(</span><span class="nx">u</span><span class="w"> </span><span class="nx">User</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">	</span><span class="nx">u</span><span class="p">.</span><span class="nx">Name</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&quot;Changed&quot;</span><span class="w"> </span><span class="c1">// chỉ thay đổi copy</span>
@@ -325,6 +440,8 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="14-embedded-structs-composition-over-inheritance">1.4. Embedded Structs - Composition Over Inheritance</h3>
+<p>Go <strong>không có inheritance</strong>. Dùng <strong>composition</strong>:</p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kd">type</span><span class="w"> </span><span class="nx">AuditFields</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
 <span class="w">	</span><span class="nx">CreatedAt</span><span class="w"> </span><span class="nx">time</span><span class="p">.</span><span class="nx">Time</span>
 <span class="w">	</span><span class="nx">UpdatedAt</span><span class="w"> </span><span class="nx">time</span><span class="p">.</span><span class="nx">Time</span>
@@ -340,12 +457,14 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="nx">u</span><span class="p">.</span><span class="nx">CreatedAt</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">time</span><span class="p">.</span><span class="nx">Now</span><span class="p">()</span><span class="w"> </span><span class="c1">// Field promotion - truy cập trực tiếp</span>
 </pre></div>
 </div>
+<p><strong>So sánh TypeScript:</strong></p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">typescript</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// TS - intersection type</span>
 <span class="kr">type</span><span class="w"> </span><span class="nx">User</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">id</span><span class="o">:</span><span class="w"> </span><span class="kt">number</span><span class="p">;</span><span class="w"> </span><span class="nx">email</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="nx">AuditFields</span><span class="p">;</span>
 <span class="c1">// Hoặc class extends</span>
 <span class="kd">class</span><span class="w"> </span><span class="nx">User</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nx">AuditFields</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">}</span>
 </pre></div>
 </div>
+<p><strong>Embedded method promotion:</strong></p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kd">type</span><span class="w"> </span><span class="nx">Logger</span><span class="w"> </span><span class="kd">struct</span><span class="p">{</span><span class="w"> </span><span class="nx">prefix</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="p">}</span>
 <span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">l</span><span class="w"> </span><span class="nx">Logger</span><span class="p">)</span><span class="w"> </span><span class="nx">Log</span><span class="p">(</span><span class="nx">msg</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;[%s] %s\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">l</span><span class="p">.</span><span class="nx">prefix</span><span class="p">,</span><span class="w"> </span><span class="nx">msg</span><span class="p">)</span><span class="w"> </span><span class="p">}</span>
 
@@ -358,6 +477,7 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="nx">s</span><span class="p">.</span><span class="nx">Log</span><span class="p">(</span><span class="s">&quot;started&quot;</span><span class="p">)</span><span class="w"> </span><span class="c1">// [HTTP] started</span>
 </pre></div>
 </div>
+<p><strong>Naming conflict:</strong></p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kd">type</span><span class="w"> </span><span class="nx">C</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
 <span class="w">	</span><span class="nx">A</span><span class="w">  </span><span class="c1">// có Name</span>
 <span class="w">	</span><span class="nx">B</span><span class="w">  </span><span class="c1">// có Name</span>
@@ -367,6 +487,7 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="nx">c</span><span class="p">.</span><span class="nx">A</span><span class="p">.</span><span class="nx">Name</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&quot;from A&quot;</span><span class="w"> </span><span class="c1">// OK</span>
 </pre></div>
 </div>
+<h3 id="15-struct-tags">1.5. Struct Tags</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kd">type</span><span class="w"> </span><span class="nx">User</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
 <span class="w">	</span><span class="nx">ID</span><span class="w">        </span><span class="kt">int</span><span class="w">       </span><span class="s">`json:&quot;id&quot; db:&quot;id&quot; validate:&quot;required&quot;`</span>
 <span class="w">	</span><span class="nx">Email</span><span class="w">     </span><span class="kt">string</span><span class="w">    </span><span class="s">`json:&quot;email&quot; db:&quot;email&quot; validate:&quot;required,email&quot;`</span>
@@ -383,6 +504,7 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="16-anonymous-structs">1.6. Anonymous Structs</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// One-off data</span>
 <span class="nx">response</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
 <span class="w">	</span><span class="nx">Status</span><span class="w">  </span><span class="kt">int</span><span class="w">    </span><span class="s">`json:&quot;status&quot;`</span>
@@ -398,6 +520,7 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="17-struct-comparison">1.7. Struct Comparison</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kd">type</span><span class="w"> </span><span class="nx">Point</span><span class="w"> </span><span class="kd">struct</span><span class="p">{</span><span class="w"> </span><span class="nx">X</span><span class="p">,</span><span class="w"> </span><span class="nx">Y</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="p">}</span>
 <span class="nx">p1</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">Point</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">}</span>
 <span class="nx">p2</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">Point</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">}</span>
@@ -407,6 +530,7 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="c1">// Phải dùng reflect.DeepEqual()</span>
 </pre></div>
 </div>
+<h3 id="18-constructor-pattern-newxxx">1.8. Constructor Pattern (NewXxx)</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kd">type</span><span class="w"> </span><span class="nx">Config</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
 <span class="w">	</span><span class="nx">Host</span><span class="w">     </span><span class="kt">string</span>
 <span class="w">	</span><span class="nx">Port</span><span class="w">     </span><span class="kt">int</span>
@@ -426,6 +550,7 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="nx">cfg</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">NewConfig</span><span class="p">(</span><span class="s">&quot;localhost&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">8080</span><span class="p">)</span>
 </pre></div>
 </div>
+<p><strong>Constructor với validation:</strong></p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kd">type</span><span class="w"> </span><span class="nx">Email</span><span class="w"> </span><span class="kt">string</span>
 
 <span class="kd">func</span><span class="w"> </span><span class="nx">NewEmail</span><span class="p">(</span><span class="nx">raw</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="nx">Email</span><span class="p">,</span><span class="w"> </span><span class="kt">error</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
@@ -436,6 +561,9 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="p">}</span>
 </pre></div>
 </div>
+<hr />
+<h2 id="2-methods">2. Methods</h2>
+<h3 id="21-value-vs-pointer-receiver">2.1. Value vs Pointer Receiver</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kd">type</span><span class="w"> </span><span class="nx">Counter</span><span class="w"> </span><span class="kd">struct</span><span class="p">{</span><span class="w"> </span><span class="nx">Value</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="p">}</span>
 
 <span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">c</span><span class="w"> </span><span class="nx">Counter</span><span class="p">)</span><span class="w"> </span><span class="nx">Get</span><span class="p">()</span><span class="w"> </span><span class="kt">int</span><span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="nx">c</span><span class="p">.</span><span class="nx">Value</span><span class="w"> </span><span class="p">}</span><span class="w">        </span><span class="c1">// Value receiver</span>
@@ -443,11 +571,31 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">c</span><span class="w"> </span><span class="o">*</span><span class="nx">Counter</span><span class="p">)</span><span class="w"> </span><span class="nx">Reset</span><span class="p">()</span><span class="w">     </span><span class="p">{</span><span class="w"> </span><span class="nx">c</span><span class="p">.</span><span class="nx">Value</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">}</span>
 </pre></div>
 </div>
+<p><strong>Lỗi thường gặp:</strong></p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">c</span><span class="w"> </span><span class="nx">Counter</span><span class="p">)</span><span class="w"> </span><span class="nx">BrokenInc</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">	</span><span class="nx">c</span><span class="p">.</span><span class="nx">Value</span><span class="o">++</span><span class="w"> </span><span class="c1">// chỉ thay đổi copy - BUG!</span>
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="22-method-sets-quan-trong-cho-interface">2.2. Method Sets - Quan Trọng Cho Interface</h3>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th>Receiver type</th>
+<th>Method set</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>T</code> (value)</td>
+<td>Chỉ <code>(t T)</code></td>
+</tr>
+<tr>
+<td><code>*T</code> (pointer)</td>
+<td>Cả <code>(t T)</code> và <code>(t *T)</code></td>
+</tr>
+</tbody>
+</table></div>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kd">type</span><span class="w"> </span><span class="nx">Writer</span><span class="w"> </span><span class="kd">interface</span><span class="w"> </span><span class="p">{</span>
 <span class="w">	</span><span class="nx">Write</span><span class="p">(</span><span class="nx">data</span><span class="w"> </span><span class="p">[]</span><span class="kt">byte</span><span class="p">)</span><span class="w"> </span><span class="kt">error</span>
 <span class="p">}</span>
@@ -459,6 +607,7 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="kd">var</span><span class="w"> </span><span class="nx">w</span><span class="w"> </span><span class="nx">Writer</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">File</span><span class="p">{</span><span class="s">&quot;test.txt&quot;</span><span class="p">}</span><span class="w">    </span><span class="c1">// OK</span>
 </pre></div>
 </div>
+<h3 id="23-method-chaining">2.3. Method Chaining</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kd">type</span><span class="w"> </span><span class="nx">QueryBuilder</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
 <span class="w">	</span><span class="nx">table</span><span class="w">      </span><span class="kt">string</span>
 <span class="w">	</span><span class="nx">conditions</span><span class="w"> </span><span class="p">[]</span><span class="kt">string</span>
@@ -486,6 +635,9 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="w">	</span><span class="nx">Build</span><span class="p">()</span>
 </pre></div>
 </div>
+<hr />
+<h2 id="3-interfaces-paradigm-shift">3. Interfaces - Paradigm Shift</h2>
+<h3 id="31-implicit-satisfaction-khong-can-implements">3.1. Implicit Satisfaction - Không Cần <code>implements</code></h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kd">type</span><span class="w"> </span><span class="nx">Greeter</span><span class="w"> </span><span class="kd">interface</span><span class="w"> </span><span class="p">{</span>
 <span class="w">	</span><span class="nx">Greet</span><span class="p">()</span><span class="w"> </span><span class="kt">string</span>
 <span class="p">}</span>
@@ -505,6 +657,9 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="kd">class</span><span class="w"> </span><span class="nx">Person</span><span class="w"> </span><span class="k">implements</span><span class="w"> </span><span class="nx">Greeter</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">}</span>
 </pre></div>
 </div>
+<div class="callout callout-note"><div class="callout-body"><p><strong>Tư duy mới:</strong> Interface define ở <strong>consumer side</strong>, không phải provider side.</p></div></div>
+
+<h3 id="32-empty-interface-any">3.2. Empty Interface <code>any</code></h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kd">func</span><span class="w"> </span><span class="nx">PrintAnything</span><span class="p">(</span><span class="nx">v</span><span class="w"> </span><span class="kt">any</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;%v (type: %T)\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">v</span><span class="p">,</span><span class="w"> </span><span class="nx">v</span><span class="p">)</span>
 <span class="p">}</span>
@@ -514,6 +669,7 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="nx">PrintAnything</span><span class="p">([]</span><span class="kt">int</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">})</span>
 </pre></div>
 </div>
+<h3 id="33-type-assertion-va-type-switch">3.3. Type Assertion và Type Switch</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kd">func</span><span class="w"> </span><span class="nx">process</span><span class="p">(</span><span class="nx">v</span><span class="w"> </span><span class="kt">any</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">	</span><span class="c1">// Type assertion an toàn</span>
 <span class="w">	</span><span class="nx">str</span><span class="p">,</span><span class="w"> </span><span class="nx">ok</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">v</span><span class="p">.(</span><span class="kt">string</span><span class="p">)</span>
@@ -531,6 +687,7 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="p">}</span>
 </pre></div>
 </div>
+<p><strong>Check interface support:</strong></p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kd">type</span><span class="w"> </span><span class="nx">Logger</span><span class="w"> </span><span class="kd">interface</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">Log</span><span class="p">(</span><span class="nx">msg</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="p">}</span>
 <span class="kd">type</span><span class="w"> </span><span class="nx">LoggerWithLevels</span><span class="w"> </span><span class="kd">interface</span><span class="w"> </span><span class="p">{</span>
 <span class="w">	</span><span class="nx">Logger</span>
@@ -546,6 +703,7 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="34-interface-composition">3.4. Interface Composition</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kd">type</span><span class="w"> </span><span class="nx">Reader</span><span class="w"> </span><span class="kd">interface</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">Read</span><span class="p">(</span><span class="nx">p</span><span class="w"> </span><span class="p">[]</span><span class="kt">byte</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="nx">n</span><span class="w"> </span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="kt">error</span><span class="p">)</span><span class="w"> </span><span class="p">}</span>
 <span class="kd">type</span><span class="w"> </span><span class="nx">Writer</span><span class="w"> </span><span class="kd">interface</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">Write</span><span class="p">(</span><span class="nx">p</span><span class="w"> </span><span class="p">[]</span><span class="kt">byte</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="nx">n</span><span class="w"> </span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="kt">error</span><span class="p">)</span><span class="w"> </span><span class="p">}</span>
 <span class="kd">type</span><span class="w"> </span><span class="nx">Closer</span><span class="w"> </span><span class="kd">interface</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">Close</span><span class="p">()</span><span class="w"> </span><span class="kt">error</span><span class="w"> </span><span class="p">}</span>
@@ -554,6 +712,7 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="kd">type</span><span class="w"> </span><span class="nx">ReadWriteCloser</span><span class="w"> </span><span class="kd">interface</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">Reader</span><span class="p">;</span><span class="w"> </span><span class="nx">Writer</span><span class="p">;</span><span class="w"> </span><span class="nx">Closer</span><span class="w"> </span><span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="35-small-interfaces-triet-ly-go">3.5. Small Interfaces - Triết Lý Go</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// 1 method</span>
 <span class="kd">type</span><span class="w"> </span><span class="nx">Stringer</span><span class="w"> </span><span class="kd">interface</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">String</span><span class="p">()</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="p">}</span>
 <span class="kd">type</span><span class="w"> </span><span class="nx">Reader</span><span class="w"> </span><span class="kd">interface</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">Read</span><span class="p">(</span><span class="nx">p</span><span class="w"> </span><span class="p">[]</span><span class="kt">byte</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="nx">n</span><span class="w"> </span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="kt">error</span><span class="p">)</span><span class="w"> </span><span class="p">}</span>
@@ -567,6 +726,8 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="nx">Money</span><span class="p">{</span><span class="mf">99.5</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;USD&quot;</span><span class="p">})</span><span class="w"> </span><span class="c1">// &quot;99.50 USD&quot;</span>
 </pre></div>
 </div>
+<h3 id="36-khi-nao-define-interface">3.6. Khi Nào Define Interface</h3>
+<p><strong>Anti-pattern - quá sớm:</strong></p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kd">type</span><span class="w"> </span><span class="nx">UserRepository</span><span class="w"> </span><span class="kd">interface</span><span class="w"> </span><span class="p">{</span>
 <span class="w">	</span><span class="nx">Create</span><span class="p">(</span><span class="nx">user</span><span class="w"> </span><span class="o">*</span><span class="nx">User</span><span class="p">)</span><span class="w"> </span><span class="kt">error</span>
 <span class="w">	</span><span class="nx">FindByID</span><span class="p">(</span><span class="nx">id</span><span class="w"> </span><span class="kt">int</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="nx">User</span><span class="p">,</span><span class="w"> </span><span class="kt">error</span><span class="p">)</span>
@@ -577,6 +738,7 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="p">}</span>
 </pre></div>
 </div>
+<p><strong>Nên làm - concrete trước, interface ở consumer:</strong></p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Concrete implementation</span>
 <span class="kd">type</span><span class="w"> </span><span class="nx">UserRepo</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">db</span><span class="w"> </span><span class="o">*</span><span class="nx">sql</span><span class="p">.</span><span class="nx">DB</span><span class="w"> </span><span class="p">}</span>
 <span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">r</span><span class="w"> </span><span class="o">*</span><span class="nx">UserRepo</span><span class="p">)</span><span class="w"> </span><span class="nx">FindByID</span><span class="p">(</span><span class="nx">ctx</span><span class="w"> </span><span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span><span class="w"> </span><span class="nx">id</span><span class="w"> </span><span class="kt">int</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="nx">User</span><span class="p">,</span><span class="w"> </span><span class="kt">error</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="o">...</span><span class="w"> </span><span class="p">}</span>
@@ -590,6 +752,7 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="kd">type</span><span class="w"> </span><span class="nx">UserService</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">repo</span><span class="w"> </span><span class="nx">UserFinder</span><span class="w"> </span><span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="37-interface-segregation">3.7. Interface Segregation</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Tách nhỏ theo nhu cầu</span>
 <span class="kd">type</span><span class="w"> </span><span class="nx">Creator</span><span class="p">[</span><span class="nx">T</span><span class="w"> </span><span class="kt">any</span><span class="p">]</span><span class="w"> </span><span class="kd">interface</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">Create</span><span class="p">(</span><span class="nx">ctx</span><span class="w"> </span><span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span><span class="w"> </span><span class="nx">entity</span><span class="w"> </span><span class="nx">T</span><span class="p">)</span><span class="w"> </span><span class="kt">error</span><span class="w"> </span><span class="p">}</span>
 <span class="kd">type</span><span class="w"> </span><span class="nx">Finder</span><span class="p">[</span><span class="nx">T</span><span class="w"> </span><span class="kt">any</span><span class="p">]</span><span class="w"> </span><span class="kd">interface</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">FindByID</span><span class="p">(</span><span class="nx">ctx</span><span class="w"> </span><span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span><span class="w"> </span><span class="nx">id</span><span class="w"> </span><span class="kt">int</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="nx">T</span><span class="p">,</span><span class="w"> </span><span class="kt">error</span><span class="p">)</span><span class="w"> </span><span class="p">}</span>
@@ -601,6 +764,9 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="p">}</span>
 </pre></div>
 </div>
+<hr />
+<h2 id="4-error-handling-exhaustive">4. Error Handling - Exhaustive</h2>
+<h3 id="41-error-as-value">4.1. Error As Value</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">javascript</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Node.js</span>
 <span class="k">try</span><span class="w"> </span><span class="p">{</span>
 <span class="w">	</span><span class="kd">const</span><span class="w"> </span><span class="nx">user</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">getUser</span><span class="p">(</span><span class="nx">id</span><span class="p">);</span>
@@ -619,9 +785,11 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="42-error-interface">4.2. <code>error</code> Interface</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kd">type</span><span class="w"> </span><span class="kt">error</span><span class="w"> </span><span class="kd">interface</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">Error</span><span class="p">()</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="p">}</span>
 </pre></div>
 </div>
+<p>Bất kỳ type nào implement <code>Error() string</code> đều là error:</p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kd">type</span><span class="w"> </span><span class="nx">ValidationError</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
 <span class="w">	</span><span class="nx">Field</span><span class="w">   </span><span class="kt">string</span>
 <span class="w">	</span><span class="nx">Message</span><span class="w"> </span><span class="kt">string</span>
@@ -631,11 +799,13 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="43-errorsnew-vs-fmterrorf">4.3. <code>errors.New</code> vs <code>fmt.Errorf</code></h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kd">var</span><span class="w"> </span><span class="nx">ErrNotFound</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">errors</span><span class="p">.</span><span class="nx">New</span><span class="p">(</span><span class="s">&quot;not found&quot;</span><span class="p">)</span><span class="w">      </span><span class="c1">// sentinel error</span>
 <span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Errorf</span><span class="p">(</span><span class="s">&quot;user %d not found&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">id</span><span class="p">)</span><span class="w">     </span><span class="c1">// formatted</span>
 <span class="k">return</span><span class="w"> </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Errorf</span><span class="p">(</span><span class="s">&quot;database query: %w&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">)</span><span class="w">   </span><span class="c1">// wrap error</span>
 </pre></div>
 </div>
+<h3 id="44-error-wrapping-w-go-113">4.4. Error Wrapping <code>%w</code> (Go 1.13+)</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kd">func</span><span class="w"> </span><span class="nx">GetUser</span><span class="p">(</span><span class="nx">ctx</span><span class="w"> </span><span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span><span class="w"> </span><span class="nx">id</span><span class="w"> </span><span class="kt">int</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="nx">User</span><span class="p">,</span><span class="w"> </span><span class="kt">error</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">	</span><span class="nx">user</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">db</span><span class="p">.</span><span class="nx">FindByID</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="w"> </span><span class="nx">id</span><span class="p">)</span>
 <span class="w">	</span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
@@ -647,6 +817,7 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="c1">// Error chain: HandleRequest: GetUser: find user 42: sql: connection refused</span>
 </pre></div>
 </div>
+<h3 id="45-errorsis-va-errorsas">4.5. <code>errors.Is</code> và <code>errors.As</code></h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kd">var</span><span class="w"> </span><span class="nx">ErrUserNotFound</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">errors</span><span class="p">.</span><span class="nx">New</span><span class="p">(</span><span class="s">&quot;user not found&quot;</span><span class="p">)</span>
 
 <span class="nx">user</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">FindUser</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
@@ -669,6 +840,7 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="46-sentinel-errors-va-custom-error-types">4.6. Sentinel Errors và Custom Error Types</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Sentinel errors</span>
 <span class="kd">var</span><span class="w"> </span><span class="p">(</span>
 <span class="w">	</span><span class="nx">ErrNotFound</span><span class="w">      </span><span class="p">=</span><span class="w"> </span><span class="nx">errors</span><span class="p">.</span><span class="nx">New</span><span class="p">(</span><span class="s">&quot;not found&quot;</span><span class="p">)</span>
@@ -689,6 +861,8 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="47-error-patterns">4.7. Error Patterns</h3>
+<p><strong>Check early, return early:</strong></p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kd">func</span><span class="w"> </span><span class="nx">ProcessOrder</span><span class="p">(</span><span class="nx">ctx</span><span class="w"> </span><span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span><span class="w"> </span><span class="nx">order</span><span class="w"> </span><span class="o">*</span><span class="nx">Order</span><span class="p">)</span><span class="w"> </span><span class="kt">error</span><span class="w"> </span><span class="p">{</span>
 <span class="w">	</span><span class="k">if</span><span class="w"> </span><span class="nx">order</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="nx">errors</span><span class="p">.</span><span class="nx">New</span><span class="p">(</span><span class="s">&quot;order is nil&quot;</span><span class="p">)</span><span class="w"> </span><span class="p">}</span>
 
@@ -701,6 +875,7 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="p">}</span>
 </pre></div>
 </div>
+<p><strong>Error accumulation:</strong></p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kd">func</span><span class="w"> </span><span class="nx">ValidateBatch</span><span class="p">(</span><span class="nx">items</span><span class="w"> </span><span class="p">[]</span><span class="nx">Item</span><span class="p">)</span><span class="w"> </span><span class="kt">error</span><span class="w"> </span><span class="p">{</span>
 <span class="w">	</span><span class="kd">var</span><span class="w"> </span><span class="nx">errs</span><span class="w"> </span><span class="p">[]</span><span class="kt">error</span>
 <span class="w">	</span><span class="k">for</span><span class="w"> </span><span class="nx">i</span><span class="p">,</span><span class="w"> </span><span class="nx">item</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="k">range</span><span class="w"> </span><span class="nx">items</span><span class="w"> </span><span class="p">{</span>
@@ -712,6 +887,8 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="48-panic-va-recover">4.8. Panic và Recover</h3>
+<p><strong>Chỉ dùng panic khi:</strong></p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// 1. Initialization fatal errors</span>
 <span class="kd">func</span><span class="w"> </span><span class="nx">init</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">	</span><span class="nx">cfg</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">loadConfig</span><span class="p">()</span>
@@ -725,6 +902,7 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="kd">var</span><span class="w"> </span><span class="nx">validEmail</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">regexp</span><span class="p">.</span><span class="nx">MustCompile</span><span class="p">(</span><span class="s">`^[a-z]+@[a-z]+\.[a-z]+$`</span><span class="p">)</span>
 </pre></div>
 </div>
+<p><strong>Recover:</strong></p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kd">func</span><span class="w"> </span><span class="nx">SafeHandler</span><span class="p">(</span><span class="nx">fn</span><span class="w"> </span><span class="kd">func</span><span class="p">())</span><span class="w"> </span><span class="p">(</span><span class="nx">err</span><span class="w"> </span><span class="kt">error</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">	</span><span class="k">defer</span><span class="w"> </span><span class="kd">func</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">		</span><span class="k">if</span><span class="w"> </span><span class="nx">r</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nb">recover</span><span class="p">();</span><span class="w"> </span><span class="nx">r</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
@@ -736,6 +914,9 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="p">}</span>
 </pre></div>
 </div>
+<div class="callout callout-note"><div class="callout-body"><p><strong>Rule:</strong> Panic cho flow control trong business logic = <strong>sai</strong>.</p></div></div>
+
+<h3 id="49-error-trong-goroutines-common-pitfall">4.9. Error Trong Goroutines - Common Pitfall</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// SAI - error bị mất</span>
 <span class="k">for</span><span class="w"> </span><span class="nx">_</span><span class="p">,</span><span class="w"> </span><span class="nx">id</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="k">range</span><span class="w"> </span><span class="nx">ids</span><span class="w"> </span><span class="p">{</span>
 <span class="w">	</span><span class="k">go</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">id</span><span class="w"> </span><span class="kt">int</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
@@ -755,6 +936,38 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="410-trycatch-vs-if-err">4.10. Try/Catch vs If Err</h3>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th>Aspect</th>
+<th>Node.js try/catch</th>
+<th>Go if err != nil</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Flow</td>
+<td>Exception - jumps up</td>
+<td>Normal return value</td>
+</tr>
+<tr>
+<td>Performance</td>
+<td>Expensive (stack trace)</td>
+<td>Cheap</td>
+</tr>
+<tr>
+<td>Unhandled</td>
+<td>Runtime crash</td>
+<td>Compile error</td>
+</tr>
+<tr>
+<td>Propagation</td>
+<td>Automatic</td>
+<td>Explicit</td>
+</tr>
+</tbody>
+</table></div>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">javascript</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Node.js - implicit propagation</span>
 <span class="kd">const</span><span class="w"> </span><span class="nx">user</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">getUser</span><span class="p">(</span><span class="nx">id</span><span class="p">);</span><span class="w"> </span><span class="c1">// throws -&gt; caller handles</span>
 </pre></div>
@@ -764,6 +977,9 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="kc">nil</span><span class="p">,</span><span class="w"> </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Errorf</span><span class="p">(</span><span class="s">&quot;get user: %w&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">)</span><span class="w"> </span><span class="p">}</span>
 </pre></div>
 </div>
+<hr />
+<h2 id="5-generics-go-118">5. Generics (Go 1.18+)</h2>
+<h3 id="51-generic-structs">5.1. Generic Structs</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kd">type</span><span class="w"> </span><span class="nx">Stack</span><span class="p">[</span><span class="nx">T</span><span class="w"> </span><span class="kt">any</span><span class="p">]</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">items</span><span class="w"> </span><span class="p">[]</span><span class="nx">T</span><span class="w"> </span><span class="p">}</span>
 
 <span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">s</span><span class="w"> </span><span class="o">*</span><span class="nx">Stack</span><span class="p">[</span><span class="nx">T</span><span class="p">])</span><span class="w"> </span><span class="nx">Push</span><span class="p">(</span><span class="nx">item</span><span class="w"> </span><span class="nx">T</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">s</span><span class="p">.</span><span class="nx">items</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nb">append</span><span class="p">(</span><span class="nx">s</span><span class="p">.</span><span class="nx">items</span><span class="p">,</span><span class="w"> </span><span class="nx">item</span><span class="p">)</span><span class="w"> </span><span class="p">}</span>
@@ -778,6 +994,7 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="nx">intStack</span><span class="p">.</span><span class="nx">Push</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
+<h3 id="52-type-constraints">5.2. Type Constraints</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kd">type</span><span class="w"> </span><span class="nx">Number</span><span class="w"> </span><span class="kd">interface</span><span class="w"> </span><span class="p">{</span>
 <span class="w">	</span><span class="o">~</span><span class="kt">int</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="o">~</span><span class="kt">int32</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="o">~</span><span class="kt">int64</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="o">~</span><span class="kt">float32</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="o">~</span><span class="kt">float64</span>
 <span class="p">}</span>
@@ -789,6 +1006,7 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="53-generic-utilities">5.3. Generic Utilities</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kd">func</span><span class="w"> </span><span class="nx">Contains</span><span class="p">[</span><span class="nx">T</span><span class="w"> </span><span class="kt">comparable</span><span class="p">](</span><span class="nx">slice</span><span class="w"> </span><span class="p">[]</span><span class="nx">T</span><span class="p">,</span><span class="w"> </span><span class="nx">item</span><span class="w"> </span><span class="nx">T</span><span class="p">)</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="p">{</span>
 <span class="w">	</span><span class="k">for</span><span class="w"> </span><span class="nx">_</span><span class="p">,</span><span class="w"> </span><span class="nx">v</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="k">range</span><span class="w"> </span><span class="nx">slice</span><span class="w"> </span><span class="p">{</span>
 <span class="w">		</span><span class="k">if</span><span class="w"> </span><span class="nx">v</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="nx">item</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="kc">true</span><span class="w"> </span><span class="p">}</span>
@@ -811,6 +1029,9 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="p">}</span>
 </pre></div>
 </div>
+<hr />
+<h2 id="6-design-patterns">6. Design Patterns</h2>
+<h3 id="61-repository-pattern">6.1. Repository Pattern</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kd">type</span><span class="w"> </span><span class="nx">UserRepository</span><span class="w"> </span><span class="kd">interface</span><span class="w"> </span><span class="p">{</span>
 <span class="w">	</span><span class="nx">Create</span><span class="p">(</span><span class="nx">ctx</span><span class="w"> </span><span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span><span class="w"> </span><span class="nx">user</span><span class="w"> </span><span class="o">*</span><span class="nx">User</span><span class="p">)</span><span class="w"> </span><span class="kt">error</span>
 <span class="w">	</span><span class="nx">FindByID</span><span class="p">(</span><span class="nx">ctx</span><span class="w"> </span><span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span><span class="w"> </span><span class="nx">id</span><span class="w"> </span><span class="kt">int</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="nx">User</span><span class="p">,</span><span class="w"> </span><span class="kt">error</span><span class="p">)</span>
@@ -825,6 +1046,7 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="kd">type</span><span class="w"> </span><span class="nx">InMemoryUserRepo</span><span class="w"> </span><span class="kd">struct</span><span class="p">{</span><span class="w"> </span><span class="nx">users</span><span class="w"> </span><span class="kd">map</span><span class="p">[</span><span class="kt">int</span><span class="p">]</span><span class="o">*</span><span class="nx">User</span><span class="w"> </span><span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="62-options-pattern-functional-options">6.2. Options Pattern (Functional Options)</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kd">type</span><span class="w"> </span><span class="nx">Server</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
 <span class="w">	</span><span class="nx">host</span><span class="w">         </span><span class="kt">string</span>
 <span class="w">	</span><span class="nx">port</span><span class="w">         </span><span class="kt">int</span>
@@ -856,6 +1078,7 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="kd">const</span><span class="w"> </span><span class="nx">server</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">Server</span><span class="p">(</span><span class="s2">&quot;localhost&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">port</span><span class="o">:</span><span class="w"> </span><span class="mf">3000</span><span class="p">,</span><span class="w"> </span><span class="nx">timeout</span><span class="o">:</span><span class="w"> </span><span class="mf">5000</span><span class="w"> </span><span class="p">});</span>
 </pre></div>
 </div>
+<h3 id="63-middleware-pattern">6.3. Middleware Pattern</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kd">type</span><span class="w"> </span><span class="nx">Handler</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">ctx</span><span class="w"> </span><span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span><span class="w"> </span><span class="nx">w</span><span class="w"> </span><span class="nx">http</span><span class="p">.</span><span class="nx">ResponseWriter</span><span class="p">,</span><span class="w"> </span><span class="nx">r</span><span class="w"> </span><span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Request</span><span class="p">)</span><span class="w"> </span><span class="kt">error</span>
 <span class="kd">type</span><span class="w"> </span><span class="nx">Middleware</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">Handler</span><span class="p">)</span><span class="w"> </span><span class="nx">Handler</span>
 
@@ -889,179 +1112,6 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="nx">handler</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">Chain</span><span class="p">(</span><span class="nx">GetUserHandler</span><span class="p">,</span><span class="w"> </span><span class="nx">RecoveryMiddleware</span><span class="p">,</span><span class="w"> </span><span class="nx">LoggingMiddleware</span><span class="p">,</span><span class="w"> </span><span class="nx">AuthMiddleware</span><span class="p">)</span>
 </pre></div>
 </div>
-<h1 id="struct-interface-error-handling-huong-dan-cho-nodejs-developer">Struct, Interface, Error Handling - Hướng Dẫn Cho Node.js Developer</h1>
-<div class="callout callout-note"><div class="callout-body"><p><strong>Mục tiêu:</strong> Hiểu sâu struct, interface, error handling - ba trụ cột quan trọng nhất trong Go production code. So sánh liên tục với Node.js/TypeScript.</p></div></div>
-
-<hr />
-<h2 id="1-struct-nen-tang-data-model">1. Struct - Nền Tảng Data Model</h2>
-<h3 id="11-khoi-tao-struct">1.1. Khởi tạo Struct</h3>
-<p><strong>So sánh Node.js:</strong></p>
-<h3 id="12-zero-value-quan-trong">1.2. Zero Value - Quan Trọng</h3>
-<div class="tablewrap"><table>
-<thead>
-<tr>
-<th>Type</th>
-<th>Zero value</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>int</code>, <code>float64</code></td>
-<td><code>0</code>, <code>0.0</code></td>
-</tr>
-<tr>
-<td><code>string</code></td>
-<td><code>""</code></td>
-</tr>
-<tr>
-<td><code>bool</code></td>
-<td><code>false</code></td>
-</tr>
-<tr>
-<td><code>pointer</code>, <code>map</code>, <code>slice</code>, <code>func</code>, <code>interface</code></td>
-<td><code>nil</code></td>
-</tr>
-<tr>
-<td><code>struct</code></td>
-<td>mỗi field là zero value của nó</td>
-</tr>
-</tbody>
-</table></div>
-<div class="callout callout-note"><div class="callout-body"><p><strong>Design principle:</strong> Tận dụng zero value hợp lý. Ví dụ: <code>sync.Mutex{}</code> sẵn sàng dùng, <code>bytes.Buffer{}</code> sẵn sàng ghi.</p></div></div>
-
-<h3 id="13-value-vs-pointer-semantics-cuc-ky-quan-trong">1.3. Value vs Pointer Semantics - CỰC KỲ QUAN TRỌNG</h3>
-<p>Trong JS, object luôn là reference. Trong Go, <strong>struct là value type</strong> - gán là copy!</p>
-<p><strong>Quy tắc chọn:</strong></p>
-<div class="tablewrap"><table>
-<thead>
-<tr>
-<th>Dùng pointer (<code>*T</code>)</th>
-<th>Dùng value (<code>T</code>)</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Method cần mutate state</td>
-<td>Struct nhỏ, immutable</td>
-</tr>
-<tr>
-<td>Struct lớn (tránh copy)</td>
-<td>Data chỉ đọc</td>
-</tr>
-<tr>
-<td>Interface cần consistent</td>
-<td>Không cần thay đổi</td>
-</tr>
-</tbody>
-</table></div>
-<h3 id="14-embedded-structs-composition-over-inheritance">1.4. Embedded Structs - Composition Over Inheritance</h3>
-<p>Go <strong>không có inheritance</strong>. Dùng <strong>composition</strong>:</p>
-<p><strong>So sánh TypeScript:</strong></p>
-<p><strong>Embedded method promotion:</strong></p>
-<p><strong>Naming conflict:</strong></p>
-<h3 id="15-struct-tags">1.5. Struct Tags</h3>
-<h3 id="16-anonymous-structs">1.6. Anonymous Structs</h3>
-<h3 id="17-struct-comparison">1.7. Struct Comparison</h3>
-<h3 id="18-constructor-pattern-newxxx">1.8. Constructor Pattern (NewXxx)</h3>
-<p><strong>Constructor với validation:</strong></p>
-<hr />
-<h2 id="2-methods">2. Methods</h2>
-<h3 id="21-value-vs-pointer-receiver">2.1. Value vs Pointer Receiver</h3>
-<p><strong>Lỗi thường gặp:</strong></p>
-<h3 id="22-method-sets-quan-trong-cho-interface">2.2. Method Sets - Quan Trọng Cho Interface</h3>
-<div class="tablewrap"><table>
-<thead>
-<tr>
-<th>Receiver type</th>
-<th>Method set</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>T</code> (value)</td>
-<td>Chỉ <code>(t T)</code></td>
-</tr>
-<tr>
-<td><code>*T</code> (pointer)</td>
-<td>Cả <code>(t T)</code> và <code>(t *T)</code></td>
-</tr>
-</tbody>
-</table></div>
-<h3 id="23-method-chaining">2.3. Method Chaining</h3>
-<hr />
-<h2 id="3-interfaces-paradigm-shift">3. Interfaces - Paradigm Shift</h2>
-<h3 id="31-implicit-satisfaction-khong-can-implements">3.1. Implicit Satisfaction - Không Cần <code>implements</code></h3>
-<div class="callout callout-note"><div class="callout-body"><p><strong>Tư duy mới:</strong> Interface define ở <strong>consumer side</strong>, không phải provider side.</p></div></div>
-
-<h3 id="32-empty-interface-any">3.2. Empty Interface <code>any</code></h3>
-<h3 id="33-type-assertion-va-type-switch">3.3. Type Assertion và Type Switch</h3>
-<p><strong>Check interface support:</strong></p>
-<h3 id="34-interface-composition">3.4. Interface Composition</h3>
-<h3 id="35-small-interfaces-triet-ly-go">3.5. Small Interfaces - Triết Lý Go</h3>
-<h3 id="36-khi-nao-define-interface">3.6. Khi Nào Define Interface</h3>
-<p><strong>Anti-pattern - quá sớm:</strong></p>
-<p><strong>Nên làm - concrete trước, interface ở consumer:</strong></p>
-<h3 id="37-interface-segregation">3.7. Interface Segregation</h3>
-<hr />
-<h2 id="4-error-handling-exhaustive">4. Error Handling - Exhaustive</h2>
-<h3 id="41-error-as-value">4.1. Error As Value</h3>
-<h3 id="42-error-interface">4.2. <code>error</code> Interface</h3>
-<p>Bất kỳ type nào implement <code>Error() string</code> đều là error:</p>
-<h3 id="43-errorsnew-vs-fmterrorf">4.3. <code>errors.New</code> vs <code>fmt.Errorf</code></h3>
-<h3 id="44-error-wrapping-w-go-113">4.4. Error Wrapping <code>%w</code> (Go 1.13+)</h3>
-<h3 id="45-errorsis-va-errorsas">4.5. <code>errors.Is</code> và <code>errors.As</code></h3>
-<h3 id="46-sentinel-errors-va-custom-error-types">4.6. Sentinel Errors và Custom Error Types</h3>
-<h3 id="47-error-patterns">4.7. Error Patterns</h3>
-<p><strong>Check early, return early:</strong></p>
-<p><strong>Error accumulation:</strong></p>
-<h3 id="48-panic-va-recover">4.8. Panic và Recover</h3>
-<p><strong>Chỉ dùng panic khi:</strong></p>
-<p><strong>Recover:</strong></p>
-<div class="callout callout-note"><div class="callout-body"><p><strong>Rule:</strong> Panic cho flow control trong business logic = <strong>sai</strong>.</p></div></div>
-
-<h3 id="49-error-trong-goroutines-common-pitfall">4.9. Error Trong Goroutines - Common Pitfall</h3>
-<h3 id="410-trycatch-vs-if-err">4.10. Try/Catch vs If Err</h3>
-<div class="tablewrap"><table>
-<thead>
-<tr>
-<th>Aspect</th>
-<th>Node.js try/catch</th>
-<th>Go if err != nil</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Flow</td>
-<td>Exception - jumps up</td>
-<td>Normal return value</td>
-</tr>
-<tr>
-<td>Performance</td>
-<td>Expensive (stack trace)</td>
-<td>Cheap</td>
-</tr>
-<tr>
-<td>Unhandled</td>
-<td>Runtime crash</td>
-<td>Compile error</td>
-</tr>
-<tr>
-<td>Propagation</td>
-<td>Automatic</td>
-<td>Explicit</td>
-</tr>
-</tbody>
-</table></div>
-<hr />
-<h2 id="5-generics-go-118">5. Generics (Go 1.18+)</h2>
-<h3 id="51-generic-structs">5.1. Generic Structs</h3>
-<h3 id="52-type-constraints">5.2. Type Constraints</h3>
-<h3 id="53-generic-utilities">5.3. Generic Utilities</h3>
-<hr />
-<h2 id="6-design-patterns">6. Design Patterns</h2>
-<h3 id="61-repository-pattern">6.1. Repository Pattern</h3>
-<h3 id="62-options-pattern-functional-options">6.2. Options Pattern (Functional Options)</h3>
-<h3 id="63-middleware-pattern">6.3. Middleware Pattern</h3>
 <hr />
 <h2 id="7-ieu-de-sai-tu-node-sang-go">7. Điều Dễ Sai Từ Node Sang Go</h2>
 <div class="tablewrap"><table>
@@ -1101,13 +1151,13 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <hr />
 <h2 id="8-checklist">8. Checklist</h2>
 <ul>
-<li class="task"><input type="checkbox" disabled> Struct zero value hữu ích?</li>
-<li class="task"><input type="checkbox" disabled> Value hay pointer receiver?</li>
-<li class="task"><input type="checkbox" disabled> Interface đủ nhỏ? (1-3 methods)</li>
-<li class="task"><input type="checkbox" disabled> Interface ở consumer side?</li>
-<li class="task"><input type="checkbox" disabled> Error wrap với context?</li>
-<li class="task"><input type="checkbox" disabled> Goroutines handle error đúng?</li>
-<li class="task"><input type="checkbox" disabled> Có cần generics không?</li>
+<li class="task"><input type="checkbox"> Struct zero value hữu ích?</li>
+<li class="task"><input type="checkbox"> Value hay pointer receiver?</li>
+<li class="task"><input type="checkbox"> Interface đủ nhỏ? (1-3 methods)</li>
+<li class="task"><input type="checkbox"> Interface ở consumer side?</li>
+<li class="task"><input type="checkbox"> Error wrap với context?</li>
+<li class="task"><input type="checkbox"> Goroutines handle error đúng?</li>
+<li class="task"><input type="checkbox"> Có cần generics không?</li>
 </ul>
 <hr />
 <div class="callout callout-note"><div class="callout-body"><p><strong>Tóm lại:</strong> Go ưu tiên <strong>explicit over implicit</strong>, <strong>composition over inheritance</strong>, <strong>errors as values</strong>. Hiểu sâu struct-interface-error là foundation cho mọi Go code production.</p></div></div>
@@ -1118,6 +1168,70 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 </nav>
 <footer>Generated from Markdown · <a href="../index.html">Về trang chủ docs</a></footer>
 </main>
+
+<button class="progress-fab" id="progress-fab" type="button">📊 Tiến độ <span class="fab-count">0/0</span></button>
+<div class="progress-modal" id="progress-modal" hidden>
+  <div class="progress-dialog" role="dialog" aria-label="Theo dõi tiến độ">
+    <div class="progress-head">
+      <h2>📊 Theo dõi tiến độ <span class="progress-count">0%</span></h2>
+      <button class="progress-close" id="progress-close" type="button" aria-label="Đóng">✕</button>
+    </div>
+    <div class="progress-bar"><i></i></div>
+    <div class="progress-body">
+<div class="callout callout-note"><div class="callout-body"><p>Đây là bảng theo dõi <strong>duy nhất</strong> cho cả bộ tài liệu. Tick vào từng mốc — tiến độ được lưu trên trình duyệt và đồng bộ ở mọi trang qua nút nổi <strong>📊 Tiến độ</strong> ở góc phải dưới. Checklist chi tiết từng ngày vẫn nằm trong bài <code>07 · Fast Track Roadmap</code>.</p></div></div>
+
+<h3>Giai đoạn 1 · Nền tảng (Ngày 1)</h3>
+<ul>
+<li class="task"><input type="checkbox"> Hiểu mental model Go vs Node.js — file <code>01</code></li>
+<li class="task"><input type="checkbox"> Nắm syntax: <code>var</code>, <code>:=</code>, <code>const</code>, slice, map, <code>for</code>, <code>if</code>, <code>switch</code> — file <code>02</code></li>
+<li class="task"><input type="checkbox"> Viết được <code>struct</code> + method + pointer cơ bản</li>
+<li class="task"><input type="checkbox"> Chạy được <code>go run</code>, <code>go fmt</code> và tạo module mới</li>
+</ul>
+<h3>Giai đoạn 2 · Struct, Interface, Error (Ngày 2)</h3>
+<ul>
+<li class="task"><input type="checkbox"> Thiết kế struct, embedding và constructor</li>
+<li class="task"><input type="checkbox"> Hiểu interface + polymorphism trong Go</li>
+<li class="task"><input type="checkbox"> Xử lý lỗi với <code>errors.Is</code>, <code>errors.As</code> và custom error — file <code>03</code></li>
+</ul>
+<h3>Giai đoạn 3 · HTTP API (Ngày 3–4)</h3>
+<ul>
+<li class="task"><input type="checkbox"> Dựng được <code>/health</code> + CRUD bằng <code>net/http</code> hoặc Fiber — file <code>05</code></li>
+<li class="task"><input type="checkbox"> Viết middleware logging + error handling</li>
+<li class="task"><input type="checkbox"> Test API bằng curl/Postman</li>
+<li class="task"><input type="checkbox"> Viết unit test table-driven + <code>httptest</code> — file <code>06</code></li>
+</ul>
+<h3>Giai đoạn 4 · Concurrency (Ngày 5)</h3>
+<ul>
+<li class="task"><input type="checkbox"> Dùng goroutine + <code>WaitGroup</code> — file <code>04</code></li>
+<li class="task"><input type="checkbox"> Dùng channel + <code>select</code></li>
+<li class="task"><input type="checkbox"> Dùng <code>context.WithTimeout</code> để cancel</li>
+<li class="task"><input type="checkbox"> Chạy <code>go run -race .</code> không báo lỗi</li>
+</ul>
+<h3>Giai đoạn 5 · Project Layout &amp; Capstone (Ngày 6–7)</h3>
+<ul>
+<li class="task"><input type="checkbox"> Tách <code>cmd/</code>, <code>internal/</code>, viết repository interface</li>
+<li class="task"><input type="checkbox"> Wire dependency trong <code>main.go</code> + graceful shutdown</li>
+<li class="task"><input type="checkbox"> Hoàn thành 1 mini project kèm test, <code>go vet ./...</code>, <code>go build ./...</code></li>
+</ul>
+<h3>🚦 Mốc sẵn sàng: Phân tích &amp; code project</h3>
+<div class="callout callout-note"><div class="callout-body"><p><strong>Đọc/phân tích project thật:</strong> xong Giai đoạn 1 → 3 (khoảng Ngày 3).
+<strong>Sửa code trong project thật:</strong> xong thêm Giai đoạn 4 (khoảng Ngày 5).
+<strong>Tự code một project hoàn chỉnh:</strong> xong Giai đoạn 5 (khoảng Ngày 6–7).</p></div></div>
+
+<ul>
+<li class="task"><input type="checkbox"> Xong Giai đoạn 1 → 3: đọc hiểu và tự dựng được REST API CRUD</li>
+<li class="task"><input type="checkbox"> Đọc hiểu một repo Go lạ trong khoảng 1 buổi, không cần dịch từng dòng</li>
+<li class="task"><input type="checkbox"> Tự viết CRUD + test table-driven mà không copy nguyên mẫu</li>
+<li class="task"><input type="checkbox"> Giải thích được khi nào dùng goroutine / channel / context</li>
+<li class="task"><input type="checkbox"> Chạy thành thạo <code>go test</code>, <code>go vet</code>, <code>go build</code> và đọc được lỗi</li>
+<li class="task"><input type="checkbox"> Đã phân tích ít nhất 1 project mẫu — vtvcab-identity-api (series Node.js → Go, bài <code>01</code>)</li>
+</ul>
+<hr />
+    </div>
+  </div>
+</div>
+
+
 <script>
 
 (function(){
@@ -1167,6 +1281,88 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
       navigator.clipboard.writeText(text).then(function(){ done(true); }, fallback);
     } else { fallback(); }
   });
+})();
+// ---- progress tracker: nút nổi + modal, đồng bộ mọi trang qua localStorage ----
+(function(){
+  function qsa(sel, root){ return [].slice.call((root||document).querySelectorAll(sel)); }
+  function load(key){ try{ return JSON.parse(localStorage.getItem(key)||'null'); }catch(e){ return null; } }
+  function save(key, arr){ try{ localStorage.setItem(key, JSON.stringify(arr)); }catch(e){} }
+
+  var KEY_MAIN = 'md2html:progress:docs';
+  var modal = document.getElementById('progress-modal');
+  var fab = document.getElementById('progress-fab');
+  var homeBoxes = qsa('.progress-track .task input');
+  var modalBoxes = modal ? qsa('.task input', modal) : [];
+  var N = Math.max(homeBoxes.length, modalBoxes.length);
+
+  function states(){
+    var saved = load(KEY_MAIN);
+    if (saved && saved.length === N) return saved;
+    var src = homeBoxes.length ? homeBoxes : modalBoxes;
+    return src.map(function(b){ return b.checked; });
+  }
+  function updateCounters(st){
+    var done = st.filter(Boolean).length;
+    if (fab) fab.querySelector('.fab-count').textContent = done + '/' + N;
+    if (modal){
+      modal.querySelector('.progress-bar i').style.width = (N ? done/N*100 : 0) + '%';
+      modal.querySelector('.progress-count').textContent = (N ? Math.round(done/N*100) : 0) + '%';
+    }
+  }
+  function paint(st){
+    for (var i=0;i<N;i++){
+      if (homeBoxes[i]) homeBoxes[i].checked = !!st[i];
+      if (modalBoxes[i]) modalBoxes[i].checked = !!st[i];
+    }
+    updateCounters(st);
+  }
+  if (N){
+    paint(states());
+    var bindMain = function(i){
+      return function(){
+        var st = states(); st[i] = this.checked;
+        save(KEY_MAIN, st); paint(st);
+      };
+    };
+    homeBoxes.forEach(function(b,i){ b.addEventListener('change', bindMain(i)); });
+    modalBoxes.forEach(function(b,i){ b.addEventListener('change', bindMain(i)); });
+  }
+
+  // task list thường của từng trang: lưu riêng theo URL
+  var otherBoxes = qsa('.task input').filter(function(b){
+    return !b.closest('.progress-track') && !(modal && modal.contains(b));
+  });
+  if (otherBoxes.length){
+    var key = 'md2html:page:' + location.pathname;
+    var saved = load(key);
+    if (saved && saved.length === otherBoxes.length){
+      otherBoxes.forEach(function(b,i){ b.checked = !!saved[i]; });
+    }
+    otherBoxes.forEach(function(b){
+      b.addEventListener('change', function(){
+        save(key, otherBoxes.map(function(x){ return x.checked; }));
+      });
+    });
+  }
+
+  if (fab && modal && N){
+    var openModal = function(){
+      paint(states());
+      modal.hidden = false;
+      document.body.style.overflow = 'hidden';
+    };
+    fab.addEventListener('click', openModal);
+    qsa('.progress-open').forEach(function(b){ b.addEventListener('click', openModal); });
+    var closeModal = function(){
+      modal.hidden = true;
+      document.body.style.overflow = '';
+    };
+    document.getElementById('progress-close').addEventListener('click', closeModal);
+    modal.addEventListener('click', function(e){ if (e.target === modal) closeModal(); });
+    document.addEventListener('keydown', function(e){
+      if (e.key === 'Escape' && !modal.hidden) closeModal();
+    });
+  } else if (fab){ fab.hidden = true; }
 })();
 
 </script>

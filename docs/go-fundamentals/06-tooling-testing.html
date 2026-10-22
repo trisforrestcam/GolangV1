@@ -97,7 +97,7 @@ body {
 }
 #progress { position: fixed; top: 0; left: 0; height: 3px; width: 0; z-index: 70;
   background: linear-gradient(90deg, var(--accent), var(--accent-2), #7c3aed); }
-#backtop { position: fixed; right: 26px; bottom: 26px; width: 44px; height: 44px;
+#backtop { position: fixed; right: 26px; bottom: 88px; width: 44px; height: 44px;
   border-radius: 50%; border: 1px solid var(--border); background: #fff;
   color: var(--accent); font-size: 1.15rem; cursor: pointer; opacity: 0;
   pointer-events: none; transition: all .25s; box-shadow: 0 8px 20px rgba(15,23,42,.14); z-index: 60; }
@@ -161,6 +161,17 @@ code {
 .callout .codeblock { box-shadow: none; }
 .callout .codeblock, .callout .codehilite, .callout code { background: #fff; }
 .callout .codehead { background: rgba(237,241,247,.6); }
+/* --- mermaid diagrams --- */
+.mermaidwrap { margin: 1.5em 0; border: 1px solid var(--border); border-radius: 12px;
+  background: #fff; overflow: hidden; box-shadow: 0 2px 6px rgba(15,23,42,.05); }
+.mermaidwrap .codehead { background: #edf1f7; }
+.mermaid-hint { font-size: .72rem; color: #94a3b8; font-weight: 600; }
+.mermaid { display: flex; justify-content: center; padding: 20px 16px; overflow-x: auto; }
+.mermaid svg { max-width: 100%; height: auto; }
+/* khi mermaid.js chưa/chưa kịp load (offline) — vẫn đọc được source dễ chịu */
+.mermaid:not([data-processed]) { font-family: "JetBrains Mono", Consolas, Menlo, monospace;
+  font-size: .8rem; color: #475569; white-space: pre; text-align: left; justify-content: flex-start; }
+.callout .mermaidwrap { box-shadow: none; }
 /* --- tables --- */
 .tablewrap { overflow-x: auto; margin: 1.2em 0; }
 table { border-collapse: collapse; width: 100%; font-size: .94em; margin: 0; }
@@ -223,7 +234,46 @@ kbd { background: #fff; border: 1px solid #cbd5e1; border-bottom-width: 2px;
 .pager .next { text-align: right; }
 .pager .dir { display: block; font-size: .78rem; color: var(--muted); font-weight: 500; }
 footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top: 34px; }
-@media print { #progress, #backtop, .toc, .pager { display: none !important; }
+/* --- floating progress button + modal --- */
+.progress-fab { position: fixed; right: 26px; bottom: 26px; z-index: 70;
+  display: inline-flex; align-items: center; gap: 9px; padding: 11px 19px;
+  border: none; border-radius: 999px; cursor: pointer; font: inherit;
+  font-size: .88rem; font-weight: 700; color: #fff;
+  background: linear-gradient(120deg, var(--accent), var(--accent-2));
+  box-shadow: 0 14px 34px -12px rgba(79,70,229,.55);
+  transition: transform .15s, box-shadow .15s; }
+.progress-fab:hover { transform: translateY(-2px); box-shadow: 0 18px 40px -12px rgba(79,70,229,.62); }
+.fab-count { background: rgba(255,255,255,.24); padding: 1px 10px; border-radius: 999px; font-size: .86em; }
+.progress-modal { position: fixed; inset: 0; z-index: 100; padding: 24px;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(51,65,85,.45); backdrop-filter: blur(3px); }
+.progress-modal[hidden] { display: none; }
+.progress-dialog { background: #fff; border-radius: 18px; width: min(780px, 100%);
+  max-height: 82vh; display: flex; flex-direction: column;
+  box-shadow: 0 40px 90px -20px rgba(51,65,85,.5); overflow: hidden; }
+.progress-head { display: flex; align-items: center; justify-content: space-between;
+  gap: 14px; padding: 20px 28px 14px; }
+.progress-head h2 { margin: 0; padding: 0; border: none; font-size: 1.2rem; }
+.progress-count { color: var(--accent); font-size: .72em; margin-left: .5em; }
+.progress-close { flex-shrink: 0; width: 34px; height: 34px; border-radius: 10px;
+  border: 1px solid var(--border); background: #fff; color: var(--muted);
+  font-size: 1rem; cursor: pointer; transition: all .15s; }
+.progress-close:hover { color: var(--accent); border-color: var(--accent); background: var(--accent-soft); }
+.progress-bar { height: 6px; background: #e2e8f0; margin: 0 28px; border-radius: 99px; overflow: hidden; }
+.progress-bar i { display: block; height: 100%; width: 0; border-radius: 99px;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2)); transition: width .25s; }
+.progress-body { padding: 8px 28px 26px; overflow-y: auto; }
+.progress-body h3 { margin-top: 1.1em; }
+/* --- trang nguồn: checklist inline thay bằng nút mở popup --- */
+.progress-hint { display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+  background: var(--accent-soft); border: 1px dashed #c7d2fe; border-radius: 14px;
+  padding: 16px 20px; color: var(--muted); font-size: .95rem; }
+.progress-open { flex-shrink: 0; border: none; border-radius: 10px; padding: 11px 20px;
+  font: inherit; font-size: .92rem; font-weight: 700; color: #fff; cursor: pointer;
+  background: linear-gradient(120deg, var(--accent), var(--accent-2));
+  box-shadow: 0 8px 18px -8px rgba(79,70,229,.5); transition: transform .15s; }
+.progress-open:hover { transform: translateY(-1px); }
+@media print { #progress, #backtop, .toc, .pager, .progress-fab, .progress-modal { display: none !important; }
   body { background: #fff; } .card { box-shadow: none; border: none; } }
 
 .wrap.wide { max-width: 1340px; }
@@ -260,10 +310,17 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <body>
 <div id="progress"></div>
 <button id="backtop" aria-label="Lên đầu trang">↑</button>
-<aside class="toc"><div class="toc-title">📋 Nội dung</div><a class="l2" href="#1-go-toolchain">1. Go Toolchain</a><a class="l3" href="#11-go-run-go-build-go-install">1.1 go run, go build, go install</a><a class="l3" href="#12-go-mod-dependency-management">1.2 go mod - Dependency Management</a><a class="l3" href="#13-go-fmt-non-negotiable-trong-go-culture">1.3 go fmt - Non-negotiable trong Go Culture</a><a class="l3" href="#14-go-vet-static-analysis">1.4 go vet - Static Analysis</a><a class="l3" href="#15-go-doc-documentation">1.5 go doc - Documentation</a><a class="l3" href="#16-cross-compilation">1.6 Cross-Compilation</a><a class="l3" href="#17-build-tags">1.7 Build Tags</a><a class="l3" href="#18-ldflags-version-injection">1.8 ldflags - Version Injection</a><a class="l2" href="#2-testing-exhaustive">2. Testing - Exhaustive</a><a class="l3" href="#21-testing-package-deep-dive">2.1 Testing Package Deep Dive</a><a class="l3" href="#22-table-driven-tests">2.2 Table-Driven Tests</a><a class="l3" href="#23-subtests">2.3 Subtests</a><a class="l3" href="#24-test-fixtures">2.4 Test Fixtures</a><a class="l3" href="#25-test-helpers">2.5 Test Helpers</a><a class="l3" href="#26-testmain-setupteardown">2.6 TestMain - Setup/Teardown</a><a class="l3" href="#27-parallel-tests">2.7 Parallel Tests</a><a class="l3" href="#28-benchmarks">2.8 Benchmarks</a><a class="l3" href="#29-fuzzing-go-118">2.9 Fuzzing (Go 1.18+)</a><a class="l3" href="#210-test-coverage">2.10 Test Coverage</a><a class="l3" href="#211-so-sanh-voi-jestmocha">2.11 So sánh với Jest/Mocha</a><a class="l2" href="#3-mocking-va-test-doubles">3. Mocking và Test Doubles</a><a class="l3" href="#31-interface-based-mocking">3.1 Interface-based Mocking</a><a class="l3" href="#32-testify-mock">3.2 Testify Mock</a><a class="l3" href="#33-gomock">3.3 gomock</a><a class="l3" href="#34-httptest-package">3.4 httptest Package</a><a class="l3" href="#35-sql-mock-patterns">3.5 SQL Mock Patterns</a><a class="l2" href="#4-debugging-va-profiling">4. Debugging và Profiling</a><a class="l3" href="#41-delve-debugger">4.1 Delve Debugger</a><a class="l3" href="#42-pprof-profiling">4.2 pprof - Profiling</a><a class="l3" href="#43-trace-tool">4.3 Trace Tool</a><a class="l3" href="#44-go-tool-compile">4.4 go tool compile</a><a class="l3" href="#45-race-detector">4.5 Race Detector</a><a class="l2" href="#5-linting-va-code-quality">5. Linting và Code Quality</a><a class="l3" href="#51-golangci-lint">5.1 golangci-lint</a><a class="l3" href="#52-staticcheck">5.2 Staticcheck</a><a class="l3" href="#53-gosec-security-linter">5.3 gosec - Security Linter</a><a class="l3" href="#54-cicd-patterns">5.4 CI/CD Patterns</a><a class="l2" href="#6-dependency-management">6. Dependency Management</a><a class="l3" href="#61-go-get-vs-go-install">6.1 go get vs go install</a><a class="l3" href="#62-module-versioning">6.2 Module Versioning</a><a class="l3" href="#63-replace-directives">6.3 Replace Directives</a><a class="l3" href="#64-private-modules">6.4 Private Modules</a><a class="l3" href="#65-so-sanh-voi-npmyarn">6.5 So sánh với npm/yarn</a><a class="l2" href="#tips-va-best-practices">Tips và Best Practices</a><a class="l3" href="#workflow-hoc-nhanh">Workflow học nhanh</a><a class="l3" href="#checklist-truoc-khi-commit">Checklist trước khi commit</a><a class="l3" href="#makefile-template">Makefile template</a><a class="l3" href="#thu-nen-uu-tien-trong-1-2-tuan-au">Thứ nên ưu tiên trong 1-2 tuần đầu</a></aside>
+<aside class="toc"><div class="toc-title">📋 Nội dung</div><a class="l2" href="#1-go-toolchain">1. Go Toolchain</a><a class="l3" href="#11-go-run-go-build-go-install">1.1 go run, go build, go install</a><a class="l3" href="#12-go-mod-dependency-management">1.2 go mod - Dependency Management</a><a class="l3" href="#13-go-fmt-non-negotiable-trong-go-culture">1.3 go fmt - Non-negotiable trong Go Culture</a><a class="l3" href="#14-go-vet-static-analysis">1.4 go vet - Static Analysis</a><a class="l3" href="#15-go-doc-documentation">1.5 go doc - Documentation</a><a class="l3" href="#16-cross-compilation">1.6 Cross-Compilation</a><a class="l3" href="#17-build-tags">1.7 Build Tags</a><a class="l3" href="#18-ldflags-version-injection">1.8 ldflags - Version Injection</a><a class="l3" href="#19-quan-ly-nhieu-phien-ban-go-nvm-goenv-gotoolchain">1.9 Quản lý Nhiều Phiên bản Go (nvm ↔ goenv / GOTOOLCHAIN)</a><a class="l2" href="#2-testing-exhaustive">2. Testing - Exhaustive</a><a class="l3" href="#21-testing-package-deep-dive">2.1 Testing Package Deep Dive</a><a class="l3" href="#22-table-driven-tests">2.2 Table-Driven Tests</a><a class="l3" href="#23-subtests">2.3 Subtests</a><a class="l3" href="#24-test-fixtures">2.4 Test Fixtures</a><a class="l3" href="#25-test-helpers">2.5 Test Helpers</a><a class="l3" href="#26-testmain-setupteardown">2.6 TestMain - Setup/Teardown</a><a class="l3" href="#27-parallel-tests">2.7 Parallel Tests</a><a class="l3" href="#28-benchmarks">2.8 Benchmarks</a><a class="l3" href="#29-fuzzing-go-118">2.9 Fuzzing (Go 1.18+)</a><a class="l3" href="#210-test-coverage">2.10 Test Coverage</a><a class="l3" href="#211-so-sanh-voi-jestmocha">2.11 So sánh với Jest/Mocha</a><a class="l2" href="#3-mocking-va-test-doubles">3. Mocking và Test Doubles</a><a class="l3" href="#31-interface-based-mocking">3.1 Interface-based Mocking</a><a class="l3" href="#32-testify-mock">3.2 Testify Mock</a><a class="l3" href="#33-gomock">3.3 gomock</a><a class="l3" href="#34-httptest-package">3.4 httptest Package</a><a class="l3" href="#35-sql-mock-patterns">3.5 SQL Mock Patterns</a><a class="l2" href="#4-debugging-va-profiling">4. Debugging và Profiling</a><a class="l3" href="#41-delve-debugger">4.1 Delve Debugger</a><a class="l3" href="#42-pprof-profiling">4.2 pprof - Profiling</a><a class="l3" href="#43-trace-tool">4.3 Trace Tool</a><a class="l3" href="#44-go-tool-compile">4.4 go tool compile</a><a class="l3" href="#45-race-detector">4.5 Race Detector</a><a class="l2" href="#5-linting-va-code-quality">5. Linting và Code Quality</a><a class="l3" href="#51-golangci-lint">5.1 golangci-lint</a><a class="l3" href="#52-staticcheck">5.2 Staticcheck</a><a class="l3" href="#53-gosec-security-linter">5.3 gosec - Security Linter</a><a class="l3" href="#54-cicd-patterns">5.4 CI/CD Patterns</a><a class="l2" href="#6-dependency-management">6. Dependency Management</a><a class="l3" href="#61-go-get-vs-go-install">6.1 go get vs go install</a><a class="l3" href="#62-module-versioning">6.2 Module Versioning</a><a class="l3" href="#63-replace-directives">6.3 Replace Directives</a><a class="l3" href="#64-private-modules">6.4 Private Modules</a><a class="l3" href="#65-so-sanh-voi-npmyarn">6.5 So sánh với npm/yarn</a><a class="l2" href="#tips-va-best-practices">Tips và Best Practices</a><a class="l3" href="#workflow-hoc-nhanh">Workflow học nhanh</a><a class="l3" href="#checklist-truoc-khi-commit">Checklist trước khi commit</a><a class="l3" href="#makefile-template">Makefile template</a><a class="l3" href="#thu-nen-uu-tien-trong-1-2-tuan-au">Thứ nên ưu tiên trong 1-2 tuần đầu</a></aside>
 <nav class="crumb"><a href="../index.html">📚 Docs</a> &nbsp;›&nbsp; go-fundamentals</nav>
 <main class="wrap">
 <article class="card">
+<h1 id="tooling-testing-va-workflow-trong-go">Tooling, Testing và Workflow Trong Go</h1>
+<div class="callout callout-note"><div class="callout-body"><p>Mục tiêu: Thành thạo Go toolchain, viết test chuyên nghiệp, debug và profile hiệu quả.
+So sánh trực tiếp với npm/Jest/ESLint để bạn map kiến thức nhanh.</p></div></div>
+
+<hr />
+<h2 id="1-go-toolchain">1. Go Toolchain</h2>
+<h3 id="11-go-run-go-build-go-install">1.1 go run, go build, go install</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">bash</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1"># Chạy file trực tiếp (compile + run, không tạo binary)</span>
 go<span class="w"> </span>run<span class="w"> </span>main.go
 go<span class="w"> </span>run<span class="w"> </span>.<span class="w"> </span><span class="c1"># Chạy package trong thư mục hiện tại</span>
@@ -281,6 +338,35 @@ go<span class="w"> </span>install<span class="w">                  </span><span 
 go<span class="w"> </span>install<span class="w"> </span>./cmd/api<span class="w">        </span><span class="c1"># Install specific package</span>
 </pre></div>
 </div>
+<p><strong>So sánh với Node.js:</strong></p>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th>Go</th>
+<th>Node.js</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>go run main.go</code></td>
+<td><code>node main.js</code></td>
+</tr>
+<tr>
+<td><code>go build -o myapp</code></td>
+<td><code>npm run build</code> (tùy framework)</td>
+</tr>
+<tr>
+<td><code>go install</code></td>
+<td><code>npm install -g .</code></td>
+</tr>
+<tr>
+<td>Binary standalone</td>
+<td>Cần Node.js runtime</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Điểm mạnh Go:</strong> Binary standalone, không cần runtime. Deploy chỉ cần copy 1 file.</p>
+<h3 id="12-go-mod-dependency-management">1.2 go mod - Dependency Management</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">bash</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1"># Khởi tạo module mới (tương đương npm init)</span>
 go<span class="w"> </span>mod<span class="w"> </span>init<span class="w"> </span>github.com/username/myapp
 
@@ -308,6 +394,46 @@ go<span class="w"> </span>mod<span class="w"> </span>why<span class="w"> </span>
 go<span class="w"> </span>mod<span class="w"> </span>edit<span class="w"> </span>-module<span class="w"> </span>new/path
 </pre></div>
 </div>
+<p><strong>So sánh với npm:</strong></p>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th>Go</th>
+<th>npm</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>go.mod</code> + <code>go.sum</code></td>
+<td><code>package.json</code> + <code>package-lock.json</code></td>
+</tr>
+<tr>
+<td><code>go mod init</code></td>
+<td><code>npm init</code></td>
+</tr>
+<tr>
+<td><code>go get pkg</code></td>
+<td><code>npm install pkg</code></td>
+</tr>
+<tr>
+<td><code>go mod tidy</code></td>
+<td><code>npm prune</code> + <code>npm install</code></td>
+</tr>
+<tr>
+<td><code>go mod vendor</code></td>
+<td><code>npm ci</code> (với lockfile)</td>
+</tr>
+<tr>
+<td><code>go mod graph</code></td>
+<td><code>npm ls</code></td>
+</tr>
+<tr>
+<td><code>go.sum</code> (checksums)</td>
+<td><code>package-lock.json</code> (integrity)</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>go.mod file:</strong></p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="nx">module</span><span class="w"> </span><span class="nx">github</span><span class="p">.</span><span class="nx">com</span><span class="o">/</span><span class="nx">username</span><span class="o">/</span><span class="nx">myapp</span>
 
 <span class="k">go</span><span class="w"> </span><span class="mf">1.22</span>
@@ -324,6 +450,11 @@ go<span class="w"> </span>mod<span class="w"> </span>edit<span class="w"> </span
 <span class="p">)</span>
 </pre></div>
 </div>
+<p><strong>go.sum file:</strong>
+- Chứa cryptographic hashes của dependencies
+- Tương tự <code>package-lock.json</code> nhưng chỉ chứa checksums
+- Commit vào git để đảm bảo reproducible builds</p>
+<h3 id="13-go-fmt-non-negotiable-trong-go-culture">1.3 go fmt - Non-negotiable trong Go Culture</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">bash</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1"># Format tất cả files trong package</span>
 go<span class="w"> </span>fmt<span class="w"> </span>./...
 
@@ -337,6 +468,12 @@ gofmt<span class="w"> </span>-d<span class="w"> </span>.<span class="w">        
 <span class="c1"># go fmt = gofmt -l -w (tự động sửa)</span>
 </pre></div>
 </div>
+<p><strong>Quan trọng:</strong>
+- Go community CỰC KỲ strict về formatting
+- Không có debates về tabs vs spaces, braces placement, etc.
+- <code>go fmt</code> là tool duy nhất - mọi người dùng cùng style
+- Code không format = code không review được</p>
+<p><strong>So sánh với JavaScript:</strong></p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">bash</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1"># JavaScript - nhiều tools khác nhau</span>
 eslint<span class="w"> </span>--fix<span class="w"> </span>.
 prettier<span class="w"> </span>--write<span class="w"> </span>.
@@ -346,6 +483,7 @@ standard<span class="w"> </span>--fix
 go<span class="w"> </span>fmt<span class="w"> </span>./...
 </pre></div>
 </div>
+<p><strong>Setup editor để auto-format:</strong></p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">json</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// VS Code settings.json</span>
 <span class="p">{</span>
 <span class="w">    </span><span class="nt">&quot;go.formatTool&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;goimports&quot;</span><span class="p">,</span>
@@ -356,6 +494,7 @@ go<span class="w"> </span>fmt<span class="w"> </span>./...
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="14-go-vet-static-analysis">1.4 go vet - Static Analysis</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// go vet tìm các lỗi phổ biến mà compiler không bắt</span>
 
 <span class="c1">// Ví dụ 1: Printf format mismatch</span>
@@ -385,6 +524,7 @@ go<span class="w"> </span>vet<span class="w"> </span>./...
 go<span class="w"> </span><span class="nb">test</span><span class="w"> </span>./...<span class="w">  </span><span class="c1"># Tự động chạy vet trước khi test</span>
 </pre></div>
 </div>
+<h3 id="15-go-doc-documentation">1.5 go doc - Documentation</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">bash</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1"># Xem doc cho package</span>
 go<span class="w"> </span>doc<span class="w"> </span>fmt
 go<span class="w"> </span>doc<span class="w"> </span>net/http
@@ -402,6 +542,7 @@ godoc<span class="w"> </span>-http<span class="o">=</span>:6060
 <span class="c1"># Mở http://localhost:6060</span>
 </pre></div>
 </div>
+<p><strong>Viết doc comments:</strong></p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// UserService xử lý business logic liên quan đến User.</span>
 <span class="c1">// Nó validate input, gọi repository, và trả về kết quả.</span>
 <span class="kd">type</span><span class="w"> </span><span class="nx">UserService</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
@@ -423,6 +564,8 @@ godoc<span class="w"> </span>-http<span class="o">=</span>:6060
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="16-cross-compilation">1.6 Cross-Compilation</h3>
+<p>Go compile native code cho mọi platform. Không cần cross-compile tools:</p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">bash</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1"># Xem danh sách platforms hỗ trợ</span>
 go<span class="w"> </span>tool<span class="w"> </span>dist<span class="w"> </span>list
 
@@ -445,6 +588,7 @@ go<span class="w"> </span>tool<span class="w"> </span>dist<span class="w"> </spa
 <span class="nv">CGO_ENABLED</span><span class="o">=</span><span class="m">0</span><span class="w"> </span><span class="nv">GOOS</span><span class="o">=</span>linux<span class="w"> </span><span class="nv">GOARCH</span><span class="o">=</span>amd64<span class="w"> </span>go<span class="w"> </span>build<span class="w"> </span>-o<span class="w"> </span>myapp-alpine
 </pre></div>
 </div>
+<p><strong>Dockerfile cho Go (multi-stage build):</strong></p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">dockerfile</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c"># Build stage</span>
 <span class="k">FROM</span><span class="w"> </span><span class="s">golang:1.22-alpine</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="s">builder</span>
 <span class="k">WORKDIR</span><span class="w"> </span><span class="s">/app</span>
@@ -461,6 +605,7 @@ go<span class="w"> </span>tool<span class="w"> </span>dist<span class="w"> </spa
 <span class="k">CMD</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;myapp&quot;</span><span class="p">]</span>
 </pre></div>
 </div>
+<p><strong>So sánh với Node.js:</strong></p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">dockerfile</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c"># Node.js Dockerfile</span>
 <span class="k">FROM</span><span class="w"> </span><span class="s">node:20-alpine</span>
 <span class="k">WORKDIR</span><span class="w"> </span><span class="s">/app</span>
@@ -475,6 +620,8 @@ go<span class="w"> </span>tool<span class="w"> </span>dist<span class="w"> </spa
 <span class="c"># Image size: ~10-20MB (Alpine + binary)</span>
 </pre></div>
 </div>
+<h3 id="17-build-tags">1.7 Build Tags</h3>
+<p>Build tags cho phép compile conditionally:</p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// file: db_postgres.go</span>
 <span class="c1">//go:build postgres</span>
 
@@ -509,6 +656,11 @@ go<span class="w"> </span>build<span class="w"> </span>-tags<span class="w"> </s
 go<span class="w"> </span>build<span class="w"> </span>-tags<span class="w"> </span><span class="s2">&quot;postgres,jsoniter&quot;</span><span class="w"> </span>-o<span class="w"> </span>myapp<span class="w"> </span>.
 </pre></div>
 </div>
+<p><strong>Common use cases:</strong>
+- Database drivers khác nhau
+- Platform-specific code (linux, darwin, windows)
+- Feature flags
+- Test builds</p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// file: platform_linux.go</span>
 <span class="c1">//go:build linux</span>
 
@@ -523,6 +675,8 @@ go<span class="w"> </span>build<span class="w"> </span>-tags<span class="w"> </s
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="18-ldflags-version-injection">1.8 ldflags - Version Injection</h3>
+<p>Inject version info vào binary tại build time:</p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// main.go</span>
 <span class="kn">package</span><span class="w"> </span><span class="nx">main</span>
 
@@ -557,6 +711,7 @@ go<span class="w"> </span>build<span class="w"> </span>-ldflags<span class="w"> 
 <span class="c1"># Built: 2024-01-15T10:30:00Z</span>
 </pre></div>
 </div>
+<p><strong>Makefile helper:</strong></p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">makefile</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="nv">VERSION</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="k">$(</span>shell<span class="w"> </span>git<span class="w"> </span>describe<span class="w"> </span>--tags<span class="w"> </span>--always<span class="k">)</span>
 <span class="nv">COMMIT</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="k">$(</span>shell<span class="w"> </span>git<span class="w"> </span>rev-parse<span class="w"> </span>--short<span class="w"> </span>HEAD<span class="k">)</span>
 <span class="nv">BUILD_TIME</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="k">$(</span>shell<span class="w"> </span>date<span class="w"> </span>-u<span class="w"> </span>+%Y-%m-%dT%H:%M:%SZ<span class="k">)</span>
@@ -575,6 +730,128 @@ go<span class="w"> </span>build<span class="w"> </span>-ldflags<span class="w"> 
 <span class="w">	</span><span class="nv">GOOS</span><span class="o">=</span>windows<span class="w"> </span><span class="nv">GOARCH</span><span class="o">=</span>amd64<span class="w"> </span>go<span class="w"> </span>build<span class="w"> </span><span class="k">$(</span>LDFLAGS<span class="k">)</span><span class="w"> </span>-o<span class="w"> </span>bin/myapp.exe<span class="w"> </span>./cmd/api
 </pre></div>
 </div>
+<h3 id="19-quan-ly-nhieu-phien-ban-go-nvm-goenv-gotoolchain">1.9 Quản lý Nhiều Phiên bản Go (nvm ↔ goenv / GOTOOLCHAIN)</h3>
+<p>Trong Node.js bạn quen với <code>nvm install 20 &amp;&amp; nvm use 20</code>. Go <strong>không có nvm chính chủ</strong>, nhưng có 4 cách — trong đó từ <strong>Go 1.21+ cách chuẩn là <code>GOTOOLCHAIN</code></strong>: lệnh <code>go</code> tự tải và tự switch đúng version theo <code>go.mod</code>, không cần cài tool gì thêm.</p>
+<h4 id="cach-1-gotoolchain-co-che-chinh-chu-tu-go-121-khuyen-nghi">Cách 1: GOTOOLCHAIN — cơ chế chính chủ từ Go 1.21 (khuyến nghị)</h4>
+<p>Khai báo version ngay trong <code>go.mod</code>, giống <code>engines</code> trong <code>package.json</code> nhưng <strong>tự động</strong>:</p>
+<div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// go.mod</span>
+<span class="nx">module</span><span class="w"> </span><span class="nx">myapp</span>
+
+<span class="k">go</span><span class="w"> </span><span class="mf">1.22.0</span><span class="w">          </span><span class="c1">// version tối thiểu của project (như &quot;engines&quot;: {&quot;node&quot;: &quot;&gt;=20&quot;})</span>
+<span class="nx">toolchain</span><span class="w"> </span><span class="nx">go1</span><span class="mf">.22.5</span><span class="w"> </span><span class="c1">// toolchain cụ thể muốn dùng</span>
+</pre></div>
+</div>
+<div class="codeblock"><div class="codehead"><span class="lang-chip">bash</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span>go<span class="w"> </span>env<span class="w"> </span>GOTOOLCHAIN<span class="w">    </span><span class="c1"># mặc định: auto</span>
+
+<span class="c1"># auto: project cần Go mới hơn -&gt; lệnh go TỰ download &amp; dùng, không cần làm gì</span>
+go<span class="w"> </span>version<span class="w">            </span><span class="c1"># go version go1.22.5 ...</span>
+
+<span class="c1"># Ép dùng đúng một version cho 1 lần chạy (như nvm exec)</span>
+<span class="nv">GOTOOLCHAIN</span><span class="o">=</span>go1.21.3<span class="w"> </span>go<span class="w"> </span>build<span class="w"> </span>./...
+
+<span class="c1"># Chỉ dùng toolchain đã cài, không bao giờ tự tải (hay dùng cho CI, offline)</span>
+<span class="nv">GOTOOLCHAIN</span><span class="o">=</span><span class="nb">local</span><span class="w"> </span>go<span class="w"> </span><span class="nb">test</span><span class="w"> </span>./...
+
+<span class="c1"># Set vĩnh viễn (như nvm alias default)</span>
+go<span class="w"> </span>env<span class="w"> </span>-w<span class="w"> </span><span class="nv">GOTOOLCHAIN</span><span class="o">=</span>auto
+</pre></div>
+</div>
+<div class="callout callout-compare"><div class="callout-title"><span class="callout-icon">📦</span><span>**Node.js → Go mapping</span></div><div class="callout-body"><ul>
+<li><code>.nvmrc</code> ↔ dòng <code>go 1.22</code> trong <code>go.mod</code> (khi <code>GOTOOLCHAIN=auto</code>)</li>
+<li><code>nvm use</code> ↔ tự động khi <code>cd</code> vào project, không cần gõ lệnh nào</li>
+<li><code>nvm exec 18 ...</code> ↔ <code>GOTOOLCHAIN=go1.21.3 go build ./...</code></li>
+<li><code>nvm alias default</code> ↔ <code>go env -w GOTOOLCHAIN=auto</code></li>
+</ul></div></div>
+
+<div class="callout callout-note"><div class="callout-body"><p>💡 Thực tế: chỉ cần <code>cd</code> vào project có <code>go 1.23</code> trong <code>go.mod</code> là mọi lệnh <code>go ...</code> đã chạy bằng toolchain 1.23. Người Go lâu năm hầu như không cài thêm gì nữa.</p></div></div>
+
+<h4 id="cach-2-goenv-giong-nvm-nhat-shim-based">Cách 2: goenv — giống nvm nhất (shim-based)</h4>
+<p>Đúng như bạn đoán, Go có <a href="https://github.com/goenv/goenv">goenv</a> — viết theo mô-típ pyenv/nvm, quản lý version qua <strong>shims</strong> (<code>~/.goenv/shims/go</code> chặn lệnh <code>go</code> và route tới version đã chọn):</p>
+<div class="codeblock"><div class="codehead"><span class="lang-chip">bash</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1"># Cài goenv (Linux/WSL/macOS)</span>
+git<span class="w"> </span>clone<span class="w"> </span>https://github.com/goenv/goenv.git<span class="w"> </span>~/.goenv
+<span class="nb">export</span><span class="w"> </span><span class="nv">GOENV_ROOT</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$HOME</span><span class="s2">/.goenv&quot;</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$GOENV_ROOT</span><span class="s2">/bin:</span><span class="nv">$PATH</span><span class="s2">&quot;</span>
+<span class="nb">eval</span><span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span>goenv<span class="w"> </span>init<span class="w"> </span>-<span class="k">)</span><span class="s2">&quot;</span><span class="w">    </span><span class="c1"># thêm 3 dòng này vào .bashrc/.zshrc</span>
+
+<span class="c1"># Lệnh 1-1 với nvm</span>
+goenv<span class="w"> </span>install<span class="w"> </span>--list<span class="w">      </span><span class="c1"># nvm ls-remote</span>
+goenv<span class="w"> </span>install<span class="w"> </span><span class="m">1</span>.22.1<span class="w">      </span><span class="c1"># nvm install 20</span>
+goenv<span class="w"> </span>global<span class="w"> </span><span class="m">1</span>.22.1<span class="w">       </span><span class="c1"># nvm alias default 20</span>
+goenv<span class="w"> </span><span class="nb">local</span><span class="w"> </span><span class="m">1</span>.21.5<span class="w">        </span><span class="c1"># nvm use (ghi vào file .go-version của thư mục)</span>
+goenv<span class="w"> </span>versions<span class="w">            </span><span class="c1"># nvm ls</span>
+</pre></div>
+</div>
+<h4 id="cach-3-g-nhe-hon-goenv-pho-bien-trong-cong-ong-go">Cách 3: g — nhẹ hơn goenv, phổ biến trong cộng đồng Go</h4>
+<p><a href="https://github.com/voidint/g">g (voidint/g)</a> dùng <strong>symlink <code>$GOROOT</code></strong> thay vì shims nên chuyển version nhanh hơn:</p>
+<div class="codeblock"><div class="codehead"><span class="lang-chip">bash</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span>g<span class="w"> </span>ls-remote<span class="w">        </span><span class="c1"># nvm ls-remote</span>
+g<span class="w"> </span>install<span class="w"> </span><span class="m">1</span>.22.1<span class="w">   </span><span class="c1"># nvm install</span>
+g<span class="w"> </span>use<span class="w"> </span><span class="m">1</span>.22.1<span class="w">       </span><span class="c1"># nvm use</span>
+g<span class="w"> </span>ls<span class="w">               </span><span class="c1"># nvm ls</span>
+</pre></div>
+</div>
+<h4 id="cach-4-asdf-mise-neu-ban-a-dung-chung-cho-node">Cách 4: asdf / mise — nếu bạn đã dùng chúng cho Node</h4>
+<div class="codeblock"><div class="codehead"><span class="lang-chip">bash</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1"># mise (kế thừa asdf, quản lý nhiều runtime: node + go + python)</span>
+mise<span class="w"> </span>use<span class="w"> </span>--global<span class="w"> </span>node@20
+mise<span class="w"> </span>use<span class="w"> </span>--global<span class="w"> </span>go@1.22.1
+
+<span class="c1"># asdf</span>
+asdf<span class="w"> </span>plugin<span class="w"> </span>add<span class="w"> </span>golang<span class="w"> </span>https://github.com/asdf-community/asdf-golang.git
+asdf<span class="w"> </span>install<span class="w"> </span>golang<span class="w"> </span><span class="m">1</span>.22.1
+asdf<span class="w"> </span>global<span class="w"> </span>golang<span class="w"> </span><span class="m">1</span>.22.1
+</pre></div>
+</div>
+<h4 id="so-sanh-nhanh-chon-cai-nao">So sánh nhanh — chọn cái nào?</h4>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th>Cách</th>
+<th>Cơ chế</th>
+<th>Giống nvm nhất ở điểm</th>
+<th>Khi nào dùng</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>GOTOOLCHAIN</strong> (Go 1.21+)</td>
+<td><code>go</code> tự tải theo <code>go.mod</code></td>
+<td><code>nvm use</code> tự động theo project</td>
+<td>✅ Mặc định — không cài gì thêm</td>
+</tr>
+<tr>
+<td><strong>goenv</strong></td>
+<td>Shims</td>
+<td><code>install/global/local</code> 1-1</td>
+<td>Quen nvm/pyenv, muốn pin version theo thư mục</td>
+</tr>
+<tr>
+<td><strong>g</strong></td>
+<td>Symlink <code>$GOROOT</code></td>
+<td><code>install/use/ls</code></td>
+<td>Muốn nhẹ, chuyển version nhanh</td>
+</tr>
+<tr>
+<td><strong>asdf / mise</strong></td>
+<td>Shim/symlink multi-runtime</td>
+<td>Quản lý cả node + go</td>
+<td>Đã dùng cho nhiều ngôn ngữ rồi</td>
+</tr>
+</tbody>
+</table></div>
+<p>Ngoài ra Go còn có cách chính chủ để <strong>cài song song nhiều version</strong> (wrapper binary, không phải switch):</p>
+<div class="codeblock"><div class="codehead"><span class="lang-chip">bash</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span>go<span class="w"> </span>install<span class="w"> </span>golang.org/dl/go1.21.5@latest
+go1.21.5<span class="w"> </span>download
+go1.21.5<span class="w"> </span>version<span class="w">    </span><span class="c1"># gọi tường minh version này khi cần</span>
+</pre></div>
+</div>
+<div class="callout callout-note"><div class="callout-body"><p>✅ <strong>Khuyến nghị cho dev Node chuyển sang Go:</strong> đừng vội cài goenv. Để mặc định <code>GOTOOLCHAIN=auto</code> + ghi <code>go 1.x</code> trong <code>go.mod</code> — mỗi project tự dùng đúng version, teammate clone về là có ngay môi trường chuẩn. Chỉ cài goenv/g/mise khi bạn cần chạy nhiều version <strong>ngoài</strong> project (build thử bản cũ, debug toolchain...).</p></div></div>
+
+<hr />
+<h2 id="2-testing-exhaustive">2. Testing - Exhaustive</h2>
+<h3 id="21-testing-package-deep-dive">2.1 Testing Package Deep Dive</h3>
+<p><strong>Cấu trúc file test:</strong>
+- File test: <code>user_test.go</code> (cùng package với <code>user.go</code>)
+- Function test: <code>func TestXxx(t *testing.T)</code> (bắt đầu bằng <code>Test</code>)
+- Package: <code>_test</code> suffix (black-box) hoặc cùng package (white-box)</p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// user.go</span>
 <span class="kn">package</span><span class="w"> </span><span class="nx">user</span>
 
@@ -618,6 +895,7 @@ go<span class="w"> </span>build<span class="w"> </span>-ldflags<span class="w"> 
 <span class="p">}</span>
 </pre></div>
 </div>
+<p><strong>Testing.T methods:</strong></p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kd">func</span><span class="w"> </span><span class="nx">TestExample</span><span class="p">(</span><span class="nx">t</span><span class="w"> </span><span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="c1">// Log (chỉ hiện khi test fail hoặc -v)</span>
 <span class="w">    </span><span class="nx">t</span><span class="p">.</span><span class="nx">Log</span><span class="p">(</span><span class="s">&quot;this is a log message&quot;</span><span class="p">)</span>
@@ -652,6 +930,8 @@ go<span class="w"> </span>build<span class="w"> </span>-ldflags<span class="w"> 
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="22-table-driven-tests">2.2 Table-Driven Tests</h3>
+<p>Đây là pattern idiomatic nhất trong Go:</p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kd">func</span><span class="w"> </span><span class="nx">TestAdd</span><span class="p">(</span><span class="nx">t</span><span class="w"> </span><span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nx">tests</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="p">[]</span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="nx">name</span><span class="w">     </span><span class="kt">string</span>
@@ -676,6 +956,7 @@ go<span class="w"> </span>build<span class="w"> </span>-ldflags<span class="w"> 
 <span class="p">}</span>
 </pre></div>
 </div>
+<p><strong>Table-driven test cho HTTP handler:</strong></p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kd">func</span><span class="w"> </span><span class="nx">TestCreateUser</span><span class="p">(</span><span class="nx">t</span><span class="w"> </span><span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nx">tests</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="p">[]</span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="nx">name</span><span class="w">       </span><span class="kt">string</span>
@@ -745,6 +1026,7 @@ go<span class="w"> </span>build<span class="w"> </span>-ldflags<span class="w"> 
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="23-subtests">2.3 Subtests</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kd">func</span><span class="w"> </span><span class="nx">TestUserService</span><span class="p">(</span><span class="nx">t</span><span class="w"> </span><span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nx">repo</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">repository</span><span class="p">.</span><span class="nx">NewInMemoryUserRepository</span><span class="p">()</span>
 <span class="w">    </span><span class="nx">svc</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">service</span><span class="p">.</span><span class="nx">NewUserService</span><span class="p">(</span><span class="nx">repo</span><span class="p">)</span>
@@ -797,6 +1079,7 @@ go<span class="w"> </span>build<span class="w"> </span>-ldflags<span class="w"> 
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="24-test-fixtures">2.4 Test Fixtures</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// testdata/ directory - Go convention</span>
 <span class="c1">// testdata/ được tự động ignore bởi go tools</span>
 
@@ -827,6 +1110,7 @@ go<span class="w"> </span>build<span class="w"> </span>-ldflags<span class="w"> 
 <span class="p">}</span>
 </pre></div>
 </div>
+<p><strong>Test fixtures với golden files:</strong></p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kd">func</span><span class="w"> </span><span class="nx">TestRenderTemplate</span><span class="p">(</span><span class="nx">t</span><span class="w"> </span><span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nx">got</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">RenderTemplate</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span>
 
@@ -849,6 +1133,7 @@ go<span class="w"> </span>build<span class="w"> </span>-ldflags<span class="w"> 
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="25-test-helpers">2.5 Test Helpers</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// testutil/helpers.go</span>
 <span class="kn">package</span><span class="w"> </span><span class="nx">testutil</span>
 
@@ -916,6 +1201,7 @@ go<span class="w"> </span>build<span class="w"> </span>-ldflags<span class="w"> 
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="26-testmain-setupteardown">2.6 TestMain - Setup/Teardown</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// main_test.go</span>
 <span class="kn">package</span><span class="w"> </span><span class="nx">myapp_test</span>
 
@@ -979,6 +1265,7 @@ go<span class="w"> </span>build<span class="w"> </span>-ldflags<span class="w"> 
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="27-parallel-tests">2.7 Parallel Tests</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kd">func</span><span class="w"> </span><span class="nx">TestParallel</span><span class="p">(</span><span class="nx">t</span><span class="w"> </span><span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nx">tests</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="p">[]</span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="nx">name</span><span class="w"> </span><span class="kt">string</span>
@@ -1001,6 +1288,12 @@ go<span class="w"> </span>build<span class="w"> </span>-ldflags<span class="w"> 
 <span class="p">}</span>
 </pre></div>
 </div>
+<p><strong>Lưu ý khi dùng Parallel:</strong>
+- Mỗi subtest phải độc lập
+- Không share mutable state
+- Dùng <code>t.Parallel()</code> ngay đầu subtest
+- Go 1.22+ không cần capture range variable</p>
+<h3 id="28-benchmarks">2.8 Benchmarks</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Benchmark function bắt đầu bằng Benchmark</span>
 <span class="kd">func</span><span class="w"> </span><span class="nx">BenchmarkAdd</span><span class="p">(</span><span class="nx">b</span><span class="w"> </span><span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">B</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="nx">i</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="nx">i</span><span class="w"> </span><span class="p">&lt;</span><span class="w"> </span><span class="nx">b</span><span class="p">.</span><span class="nx">N</span><span class="p">;</span><span class="w"> </span><span class="nx">i</span><span class="o">++</span><span class="w"> </span><span class="p">{</span>
@@ -1064,11 +1357,14 @@ go<span class="w"> </span><span class="nb">test</span><span class="w"> </span>-b
 benchstat<span class="w"> </span>old.txt<span class="w"> </span>new.txt
 </pre></div>
 </div>
+<p><strong>Output mẫu:</strong></p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip"></span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span>BenchmarkAdd-8          1000000000           0.25 ns/op        0 B/op          0 allocs/op
 BenchmarkSortLargeSlice-8     1000       1500000 ns/op        0 B/op          0 allocs/op
 BenchmarkJSONMarshal-8     5000000           350 ns/op         128 B/op         1 allocs/op
 </pre></div>
 </div>
+<h3 id="29-fuzzing-go-118">2.9 Fuzzing (Go 1.18+)</h3>
+<p>Fuzzing tự động tạo test inputs để tìm bugs:</p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Fuzz function bắt đầu bằng Fuzz</span>
 <span class="kd">func</span><span class="w"> </span><span class="nx">FuzzReverse</span><span class="p">(</span><span class="nx">f</span><span class="w"> </span><span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">F</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="c1">// Seed corpus - inputs ban đầu</span>
@@ -1116,6 +1412,7 @@ go<span class="w"> </span><span class="nb">test</span><span class="w"> </span>-f
 go<span class="w"> </span><span class="nb">test</span><span class="w"> </span>-fuzz<span class="o">=</span>FuzzReverse<span class="w"> </span>-fuzztime<span class="o">=</span>5m
 </pre></div>
 </div>
+<h3 id="210-test-coverage">2.10 Test Coverage</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">bash</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1"># Chạy tests với coverage</span>
 go<span class="w"> </span><span class="nb">test</span><span class="w"> </span>-cover<span class="w"> </span>./...
 
@@ -1135,11 +1432,13 @@ go<span class="w"> </span><span class="nb">test</span><span class="w"> </span>-c
 go<span class="w"> </span><span class="nb">test</span><span class="w"> </span>-coverpkg<span class="o">=</span>./...<span class="w"> </span>-coverprofile<span class="o">=</span>coverage.out<span class="w"> </span>./...
 </pre></div>
 </div>
+<p><strong>Coverage output mẫu:</strong></p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip"></span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span>myapp/internal/service    coverage: 85.2% of statements
 myapp/internal/handler    coverage: 72.1% of statements
 myapp/internal/repository coverage: 90.5% of statements
 </pre></div>
 </div>
+<p><strong>So sánh với Jest:</strong></p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">bash</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1"># Jest</span>
 npm<span class="w"> </span><span class="nb">test</span><span class="w"> </span>--<span class="w"> </span>--coverage
 <span class="c1"># Tạo coverage/lcov-report/</span>
@@ -1149,6 +1448,67 @@ go<span class="w"> </span><span class="nb">test</span><span class="w"> </span>-c
 go<span class="w"> </span>tool<span class="w"> </span>cover<span class="w"> </span>-html<span class="o">=</span>coverage.out
 </pre></div>
 </div>
+<h3 id="211-so-sanh-voi-jestmocha">2.11 So sánh với Jest/Mocha</h3>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Jest/Mocha</th>
+<th>Go testing</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>File naming</td>
+<td><code>*.test.js</code>, <code>*.spec.js</code></td>
+<td><code>*_test.go</code></td>
+</tr>
+<tr>
+<td>Test function</td>
+<td><code>describe</code>, <code>it</code>, <code>test</code></td>
+<td><code>func TestXxx(t *testing.T)</code></td>
+</tr>
+<tr>
+<td>Assertions</td>
+<td><code>expect(x).toBe(y)</code></td>
+<td><code>if x != y { t.Error() }</code></td>
+</tr>
+<tr>
+<td>Setup/Teardown</td>
+<td><code>beforeEach</code>, <code>afterEach</code></td>
+<td><code>t.Cleanup()</code>, <code>TestMain</code></td>
+</tr>
+<tr>
+<td>Mocking</td>
+<td><code>jest.mock()</code></td>
+<td>Interfaces + mock implementations</td>
+</tr>
+<tr>
+<td>Coverage</td>
+<td><code>--coverage</code></td>
+<td><code>-cover</code></td>
+</tr>
+<tr>
+<td>Snapshot</td>
+<td><code>toMatchSnapshot()</code></td>
+<td>Golden files</td>
+</tr>
+<tr>
+<td>Parallel</td>
+<td><code>--runInBand</code> (disable)</td>
+<td><code>t.Parallel()</code></td>
+</tr>
+<tr>
+<td>Watch mode</td>
+<td><code>--watch</code></td>
+<td><code>air</code>, <code>CompileDaemon</code></td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+<h2 id="3-mocking-va-test-doubles">3. Mocking và Test Doubles</h2>
+<h3 id="31-interface-based-mocking">3.1 Interface-based Mocking</h3>
+<p>Go dùng interfaces để mock dependencies:</p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// internal/repository/user.go</span>
 <span class="kn">package</span><span class="w"> </span><span class="nx">repository</span>
 
@@ -1172,6 +1532,7 @@ go<span class="w"> </span>tool<span class="w"> </span>cover<span class="w"> </sp
 <span class="p">}</span>
 </pre></div>
 </div>
+<p><strong>Sử dụng mock trong test:</strong></p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kd">func</span><span class="w"> </span><span class="nx">TestGetUser</span><span class="p">(</span><span class="nx">t</span><span class="w"> </span><span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nx">mockRepo</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">MockUserRepository</span><span class="p">{</span>
 <span class="w">        </span><span class="nx">FindByIDFunc</span><span class="p">:</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">id</span><span class="w"> </span><span class="kt">int</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="nx">model</span><span class="p">.</span><span class="nx">User</span><span class="p">,</span><span class="w"> </span><span class="kt">error</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
@@ -1206,6 +1567,7 @@ go<span class="w"> </span>tool<span class="w"> </span>cover<span class="w"> </sp
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="32-testify-mock">3.2 Testify Mock</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="p">(</span>
 <span class="w">    </span><span class="s">&quot;github.com/stretchr/testify/assert&quot;</span>
 <span class="w">    </span><span class="s">&quot;github.com/stretchr/testify/mock&quot;</span>
@@ -1266,6 +1628,7 @@ go<span class="w"> </span>tool<span class="w"> </span>cover<span class="w"> </sp
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="33-gomock">3.3 gomock</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">bash</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1"># Install gomock</span>
 go<span class="w"> </span>install<span class="w"> </span>go.uber.org/mock/mockgen@latest
 
@@ -1298,6 +1661,8 @@ mockgen<span class="w"> </span>-source<span class="o">=</span>internal/repositor
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="34-httptest-package">3.4 httptest Package</h3>
+<p>Test HTTP handlers mà không cần start server:</p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="s">&quot;net/http/httptest&quot;</span>
 
 <span class="kd">func</span><span class="w"> </span><span class="nx">TestHealthHandler</span><span class="p">(</span><span class="nx">t</span><span class="w"> </span><span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
@@ -1381,6 +1746,7 @@ mockgen<span class="w"> </span>-source<span class="o">=</span>internal/repositor
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="35-sql-mock-patterns">3.5 SQL Mock Patterns</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="s">&quot;github.com/DATA-DOG/go-sqlmock&quot;</span>
 
 <span class="kd">func</span><span class="w"> </span><span class="nx">TestUserRepository_FindByID</span><span class="p">(</span><span class="nx">t</span><span class="w"> </span><span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
@@ -1448,6 +1814,9 @@ mockgen<span class="w"> </span>-source<span class="o">=</span>internal/repositor
 <span class="p">}</span>
 </pre></div>
 </div>
+<hr />
+<h2 id="4-debugging-va-profiling">4. Debugging và Profiling</h2>
+<h3 id="41-delve-debugger">4.1 Delve Debugger</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">bash</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1"># Install Delve</span>
 go<span class="w"> </span>install<span class="w"> </span>github.com/go-delve/delve/cmd/dlv@latest
 
@@ -1464,6 +1833,7 @@ dlv<span class="w"> </span>attach<span class="w"> </span>&lt;PID&gt;
 dlv<span class="w"> </span>debug<span class="w"> </span>--headless<span class="w"> </span>--listen<span class="o">=</span>:2345<span class="w"> </span>--api-version<span class="o">=</span><span class="m">2</span><span class="w"> </span>./cmd/api
 </pre></div>
 </div>
+<p><strong>Delve commands:</strong></p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">javascript</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="p">(</span><span class="nx">dlv</span><span class="p">)</span><span class="w"> </span><span class="k">break</span><span class="w"> </span><span class="nx">main</span><span class="p">.</span><span class="nx">main</span><span class="w">           </span><span class="err">#</span><span class="w"> </span><span class="nb">Set</span><span class="w"> </span><span class="nx">breakpoint</span>
 <span class="p">(</span><span class="nx">dlv</span><span class="p">)</span><span class="w"> </span><span class="k">break</span><span class="w"> </span><span class="nx">service</span><span class="p">.</span><span class="nx">go</span><span class="o">:</span><span class="mf">42</span><span class="w">       </span><span class="err">#</span><span class="w"> </span><span class="nx">Break</span><span class="w"> </span><span class="nx">at</span><span class="w"> </span><span class="nx">line</span>
 <span class="p">(</span><span class="nx">dlv</span><span class="p">)</span><span class="w"> </span><span class="k">break</span><span class="w"> </span><span class="nx">GetUser</span><span class="w">             </span><span class="err">#</span><span class="w"> </span><span class="nx">Break</span><span class="w"> </span><span class="nx">at</span><span class="w"> </span><span class="kd">function</span>
@@ -1481,6 +1851,7 @@ dlv<span class="w"> </span>debug<span class="w"> </span>--headless<span class="w
 <span class="p">(</span><span class="nx">dlv</span><span class="p">)</span><span class="w"> </span><span class="nx">quit</span><span class="w">                      </span><span class="err">#</span><span class="w"> </span><span class="nx">Exit</span>
 </pre></div>
 </div>
+<p><strong>VS Code配置:</strong></p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">json</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// .vscode/launch.json</span>
 <span class="p">{</span>
 <span class="w">    </span><span class="nt">&quot;version&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;0.2.0&quot;</span><span class="p">,</span>
@@ -1506,6 +1877,7 @@ dlv<span class="w"> </span>debug<span class="w"> </span>--headless<span class="w
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="42-pprof-profiling">4.2 pprof - Profiling</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="p">(</span>
 <span class="w">    </span><span class="s">&quot;net/http&quot;</span>
 <span class="w">    </span><span class="nx">_</span><span class="w"> </span><span class="s">&quot;net/http/pprof&quot;</span><span class="w"> </span><span class="c1">// Import để register handlers</span>
@@ -1537,6 +1909,7 @@ go<span class="w"> </span>tool<span class="w"> </span>pprof<span class="w"> </sp
 go<span class="w"> </span>tool<span class="w"> </span>pprof<span class="w"> </span>http://localhost:6060/debug/pprof/mutex
 </pre></div>
 </div>
+<p><strong>pprof commands:</strong></p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip"></span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span>(pprof) top                    # Top functions by CPU usage
 (pprof) top20                  # Top 20
 (pprof) list GetUser           # Annotated source code
@@ -1545,6 +1918,7 @@ go<span class="w"> </span>tool<span class="w"> </span>pprof<span class="w"> </sp
 (pprof) save profile.pb.gz     # Save for later analysis
 </pre></div>
 </div>
+<p><strong>Chương trình CLI profiling:</strong></p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="p">(</span>
 <span class="w">    </span><span class="s">&quot;os&quot;</span>
 <span class="w">    </span><span class="s">&quot;runtime/pprof&quot;</span>
@@ -1571,6 +1945,7 @@ go<span class="w"> </span>tool<span class="w"> </span>pprof<span class="w"> </sp
 go<span class="w"> </span>tool<span class="w"> </span>pprof<span class="w"> </span>mem.prof
 </pre></div>
 </div>
+<h3 id="43-trace-tool">4.3 Trace Tool</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">bash</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1"># Generate trace</span>
 curl<span class="w"> </span>-o<span class="w"> </span>trace.out<span class="w"> </span>http://localhost:6060/debug/pprof/trace?seconds<span class="o">=</span><span class="m">5</span>
 
@@ -1591,6 +1966,7 @@ go<span class="w"> </span>tool<span class="w"> </span>trace<span class="w"> </sp
 <span class="c1"># Opens in browser - xem goroutines, GC, network, etc.</span>
 </pre></div>
 </div>
+<h3 id="44-go-tool-compile">4.4 go tool compile</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">bash</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1"># Xem assembly</span>
 go<span class="w"> </span>tool<span class="w"> </span>compile<span class="w"> </span>-S<span class="w"> </span>main.go
 
@@ -1602,6 +1978,8 @@ go<span class="w"> </span>build<span class="w"> </span>-gcflags<span class="o">=
 go<span class="w"> </span>build<span class="w"> </span>-gcflags<span class="o">=</span><span class="s2">&quot;-N -l&quot;</span><span class="w"> </span>./...
 </pre></div>
 </div>
+<h3 id="45-race-detector">4.5 Race Detector</h3>
+<p>Go có built-in race detector để tìm data races:</p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Code có race condition</span>
 <span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nx">counter</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="mi">0</span>
@@ -1625,6 +2003,7 @@ go<span class="w"> </span><span class="nb">test</span><span class="w"> </span>-r
 go<span class="w"> </span>build<span class="w"> </span>-race<span class="w"> </span>-o<span class="w"> </span>myapp<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>./myapp
 </pre></div>
 </div>
+<p><strong>Output khi detect race:</strong></p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip"></span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span>WARNING: DATA RACE
 Write at 0x00c0000b4010 by goroutine 8:
   main.main.func1()
@@ -1635,6 +2014,7 @@ Previous write at 0x00c0000b4010 by goroutine 7:
       /path/to/main.go:12 +0x4e
 </pre></div>
 </div>
+<p><strong>Fix race condition:</strong></p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="nx">counter</span><span class="w"> </span><span class="kt">int64</span>
 
@@ -1651,6 +2031,9 @@ Previous write at 0x00c0000b4010 by goroutine 7:
 <span class="p">}</span>
 </pre></div>
 </div>
+<hr />
+<h2 id="5-linting-va-code-quality">5. Linting và Code Quality</h2>
+<h3 id="51-golangci-lint">5.1 golangci-lint</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">bash</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1"># Install</span>
 go<span class="w"> </span>install<span class="w"> </span>github.com/golangci/golangci-lint/cmd/golangci-lint@latest
 
@@ -1661,6 +2044,7 @@ golangci-lint<span class="w"> </span>run
 golangci-lint<span class="w"> </span>run<span class="w"> </span>--config<span class="w"> </span>.golangci.yml
 </pre></div>
 </div>
+<p><strong><code>.golangci.yml</code> config:</strong></p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">yaml</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="nt">run</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">timeout</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5m</span>
 <span class="w">  </span><span class="nt">go</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1.22&quot;</span>
@@ -1703,6 +2087,7 @@ golangci-lint<span class="w"> </span>run<span class="w"> </span>--config<span cl
 <span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dupl</span>
 </pre></div>
 </div>
+<h3 id="52-staticcheck">5.2 Staticcheck</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">bash</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1"># Install</span>
 go<span class="w"> </span>install<span class="w"> </span>honnef.co/go/tools/cmd/staticcheck@latest
 
@@ -1710,6 +2095,14 @@ go<span class="w"> </span>install<span class="w"> </span>honnef.co/go/tools/cmd/
 staticcheck<span class="w"> </span>./...
 </pre></div>
 </div>
+<p>Staticcheck tìm:</p>
+<ul>
+<li>Bugs</li>
+<li>Performance issues</li>
+<li>Style issues</li>
+<li>Deprecated API usage</li>
+</ul>
+<h3 id="53-gosec-security-linter">5.3 gosec - Security Linter</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">bash</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1"># Install</span>
 go<span class="w"> </span>install<span class="w"> </span>github.com/securego/gosec/v2/cmd/gosec@latest
 
@@ -1720,6 +2113,15 @@ gosec<span class="w"> </span>./...
 gosec<span class="w"> </span>-fmt<span class="o">=</span>json<span class="w"> </span>-out<span class="o">=</span>results.json<span class="w"> </span>./...
 </pre></div>
 </div>
+<p><strong>gosec tìm:</strong>
+- Hardcoded credentials
+- SQL injection
+- Command injection
+- Insecure TLS configuration
+- Weak cryptography
+- File path traversal</p>
+<h3 id="54-cicd-patterns">5.4 CI/CD Patterns</h3>
+<p><strong>GitHub Actions:</strong></p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">yaml</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1"># .github/workflows/ci.yml</span>
 <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CI</span>
 
@@ -1794,6 +2196,9 @@ gosec<span class="w"> </span>-fmt<span class="o">=</span>json<span class="w"> </
 <span class="w">          </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">myapp-*</span>
 </pre></div>
 </div>
+<hr />
+<h2 id="6-dependency-management">6. Dependency Management</h2>
+<h3 id="61-go-get-vs-go-install">6.1 go get vs go install</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">bash</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1"># go get - thêm dependency vào go.mod</span>
 go<span class="w"> </span>get<span class="w"> </span>github.com/go-chi/chi/v5
 go<span class="w"> </span>get<span class="w"> </span>github.com/go-chi/chi/v5@v5.0.10
@@ -1809,6 +2214,8 @@ go<span class="w"> </span>get<span class="w"> </span>-u<span class="w"> </span>g
 go<span class="w"> </span>get<span class="w"> </span>-u<span class="o">=</span>patch<span class="w"> </span>./...<span class="w">              </span><span class="c1"># Update patch versions only</span>
 </pre></div>
 </div>
+<h3 id="62-module-versioning">6.2 Module Versioning</h3>
+<p>Go modules dùng semantic versioning:</p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// go.mod</span>
 <span class="nx">require</span><span class="w"> </span><span class="p">(</span>
 <span class="w">    </span><span class="nx">github</span><span class="p">.</span><span class="nx">com</span><span class="o">/</span><span class="nx">foo</span><span class="o">/</span><span class="nx">bar</span><span class="w"> </span><span class="nx">v1</span><span class="mf">.2.3</span><span class="w">        </span><span class="c1">// Release version</span>
@@ -1833,6 +2240,7 @@ go<span class="w"> </span>get<span class="w"> </span>github.com/go-chi/chi/v5@v5
 go<span class="w"> </span>get<span class="w"> </span>github.com/foo/bar/v2
 </pre></div>
 </div>
+<p><strong>Major version convention:</strong></p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// v0.x.x và v1.x.x - cùng import path</span>
 <span class="kn">import</span><span class="w"> </span><span class="s">&quot;github.com/foo/bar&quot;</span>
 
@@ -1843,6 +2251,7 @@ go<span class="w"> </span>get<span class="w"> </span>github.com/foo/bar/v2
 <span class="nx">module</span><span class="w"> </span><span class="nx">github</span><span class="p">.</span><span class="nx">com</span><span class="o">/</span><span class="nx">foo</span><span class="o">/</span><span class="nx">bar</span><span class="o">/</span><span class="nx">v2</span>
 </pre></div>
 </div>
+<h3 id="63-replace-directives">6.3 Replace Directives</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// go.mod</span>
 <span class="nx">module</span><span class="w"> </span><span class="nx">myapp</span>
 
@@ -1860,6 +2269,12 @@ go<span class="w"> </span>get<span class="w"> </span>github.com/foo/bar/v2
 <span class="nx">replace</span><span class="w"> </span><span class="nx">github</span><span class="p">.</span><span class="nx">com</span><span class="o">/</span><span class="nx">some</span><span class="o">/</span><span class="nx">dependency</span><span class="w"> </span><span class="nx">v1</span><span class="mf">.0.0</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">github</span><span class="p">.</span><span class="nx">com</span><span class="o">/</span><span class="nx">some</span><span class="o">/</span><span class="nx">dependency</span><span class="w"> </span><span class="nx">v1</span><span class="mf">.0.1</span>
 </pre></div>
 </div>
+<p><strong>Khi nào dùng replace:</strong>
+- Local development (chưa publish)
+- Fork cần fix bug
+- Test với local changes</p>
+<p><strong>Lưu ý:</strong> <code>replace</code> trong <code>go.mod</code> không ảnh hưởng khi package được import bởi project khác.</p>
+<h3 id="64-private-modules">6.4 Private Modules</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">bash</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1"># Configure private module access</span>
 go<span class="w"> </span>env<span class="w"> </span>-w<span class="w"> </span><span class="nv">GOPRIVATE</span><span class="o">=</span>github.com/mycompany/*
 go<span class="w"> </span>env<span class="w"> </span>-w<span class="w"> </span><span class="nv">GOPRIVATE</span><span class="o">=</span>github.com/mycompany/*,gitlab.com/myteam/*
@@ -1871,318 +2286,6 @@ go<span class="w"> </span>env<span class="w"> </span>-w<span class="w"> </span><
 git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>url.<span class="s2">&quot;git@github.com:&quot;</span>.insteadOf<span class="w"> </span><span class="s2">&quot;https://github.com/&quot;</span>
 </pre></div>
 </div>
-<div class="codeblock"><div class="codehead"><span class="lang-chip">bash</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1"># Tạo workspace</span>
-go<span class="w"> </span>work<span class="w"> </span>init<span class="w"> </span>./module1<span class="w"> </span>./module2
-
-<span class="c1"># Add module vào workspace</span>
-go<span class="w"> </span>work<span class="w"> </span>use<span class="w"> </span>./module3
-
-<span class="c1"># Sync dependencies</span>
-go<span class="w"> </span>work<span class="w"> </span>sync
-</pre></div>
-</div>
-<div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// go.work</span>
-<span class="k">go</span><span class="w"> </span><span class="mf">1.22</span>
-
-<span class="nx">use</span><span class="w"> </span><span class="p">(</span>
-<span class="w">    </span><span class="p">.</span><span class="o">/</span><span class="nx">api</span>
-<span class="w">    </span><span class="p">.</span><span class="o">/</span><span class="nx">shared</span>
-<span class="w">    </span><span class="p">.</span><span class="o">/</span><span class="nx">worker</span>
-<span class="p">)</span>
-</pre></div>
-</div>
-<div class="codeblock"><div class="codehead"><span class="lang-chip">bash</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1"># Format</span>
-go<span class="w"> </span>fmt<span class="w"> </span>./...
-
-<span class="c1"># Vet</span>
-go<span class="w"> </span>vet<span class="w"> </span>./...
-
-<span class="c1"># Lint</span>
-golangci-lint<span class="w"> </span>run
-
-<span class="c1"># Test</span>
-go<span class="w"> </span><span class="nb">test</span><span class="w"> </span>-race<span class="w"> </span>./...
-
-<span class="c1"># Build</span>
-go<span class="w"> </span>build<span class="w"> </span>./cmd/api
-</pre></div>
-</div>
-<div class="codeblock"><div class="codehead"><span class="lang-chip">makefile</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="nf">.PHONY</span><span class="o">:</span><span class="w"> </span><span class="n">build</span> <span class="n">test</span> <span class="n">lint</span> <span class="n">clean</span>
-
-<span class="nf">build</span><span class="o">:</span>
-<span class="w">	</span>go<span class="w"> </span>build<span class="w"> </span>-ldflags<span class="o">=</span><span class="s2">&quot;-s -w&quot;</span><span class="w"> </span>-o<span class="w"> </span>bin/api<span class="w"> </span>./cmd/api
-
-<span class="nf">test</span><span class="o">:</span>
-<span class="w">	</span>go<span class="w"> </span><span class="nb">test</span><span class="w"> </span>-race<span class="w"> </span>-cover<span class="w"> </span>./...
-
-<span class="nf">lint</span><span class="o">:</span>
-<span class="w">	</span>golangci-lint<span class="w"> </span>run
-
-<span class="nf">fmt</span><span class="o">:</span>
-<span class="w">	</span>go<span class="w"> </span>fmt<span class="w"> </span>./...
-<span class="w">	</span>goimports<span class="w"> </span>-w<span class="w"> </span>.
-
-<span class="nf">clean</span><span class="o">:</span>
-<span class="w">	</span>rm<span class="w"> </span>-rf<span class="w"> </span>bin/
-
-<span class="nf">run</span><span class="o">:</span><span class="w"> </span><span class="n">build</span>
-<span class="w">	</span>./bin/api
-
-<span class="nf">dev</span><span class="o">:</span>
-<span class="w">	</span>go<span class="w"> </span>run<span class="w"> </span>./cmd/api
-
-<span class="nf">docker</span><span class="o">:</span>
-<span class="w">	</span>docker<span class="w"> </span>build<span class="w"> </span>-t<span class="w"> </span>myapp<span class="w"> </span>.
-</pre></div>
-</div>
-<h1 id="tooling-testing-va-workflow-trong-go">Tooling, Testing và Workflow Trong Go</h1>
-<div class="callout callout-note"><div class="callout-body"><p>Mục tiêu: Thành thạo Go toolchain, viết test chuyên nghiệp, debug và profile hiệu quả.
-So sánh trực tiếp với npm/Jest/ESLint để bạn map kiến thức nhanh.</p></div></div>
-
-<hr />
-<h2 id="1-go-toolchain">1. Go Toolchain</h2>
-<h3 id="11-go-run-go-build-go-install">1.1 go run, go build, go install</h3>
-<p><strong>So sánh với Node.js:</strong></p>
-<div class="tablewrap"><table>
-<thead>
-<tr>
-<th>Go</th>
-<th>Node.js</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>go run main.go</code></td>
-<td><code>node main.js</code></td>
-</tr>
-<tr>
-<td><code>go build -o myapp</code></td>
-<td><code>npm run build</code> (tùy framework)</td>
-</tr>
-<tr>
-<td><code>go install</code></td>
-<td><code>npm install -g .</code></td>
-</tr>
-<tr>
-<td>Binary standalone</td>
-<td>Cần Node.js runtime</td>
-</tr>
-</tbody>
-</table></div>
-<p><strong>Điểm mạnh Go:</strong> Binary standalone, không cần runtime. Deploy chỉ cần copy 1 file.</p>
-<h3 id="12-go-mod-dependency-management">1.2 go mod - Dependency Management</h3>
-<p><strong>So sánh với npm:</strong></p>
-<div class="tablewrap"><table>
-<thead>
-<tr>
-<th>Go</th>
-<th>npm</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>go.mod</code> + <code>go.sum</code></td>
-<td><code>package.json</code> + <code>package-lock.json</code></td>
-</tr>
-<tr>
-<td><code>go mod init</code></td>
-<td><code>npm init</code></td>
-</tr>
-<tr>
-<td><code>go get pkg</code></td>
-<td><code>npm install pkg</code></td>
-</tr>
-<tr>
-<td><code>go mod tidy</code></td>
-<td><code>npm prune</code> + <code>npm install</code></td>
-</tr>
-<tr>
-<td><code>go mod vendor</code></td>
-<td><code>npm ci</code> (với lockfile)</td>
-</tr>
-<tr>
-<td><code>go mod graph</code></td>
-<td><code>npm ls</code></td>
-</tr>
-<tr>
-<td><code>go.sum</code> (checksums)</td>
-<td><code>package-lock.json</code> (integrity)</td>
-</tr>
-</tbody>
-</table></div>
-<p><strong>go.mod file:</strong></p>
-<p><strong>go.sum file:</strong>
-- Chứa cryptographic hashes của dependencies
-- Tương tự <code>package-lock.json</code> nhưng chỉ chứa checksums
-- Commit vào git để đảm bảo reproducible builds</p>
-<h3 id="13-go-fmt-non-negotiable-trong-go-culture">1.3 go fmt - Non-negotiable trong Go Culture</h3>
-<p><strong>Quan trọng:</strong>
-- Go community CỰC KỲ strict về formatting
-- Không có debates về tabs vs spaces, braces placement, etc.
-- <code>go fmt</code> là tool duy nhất - mọi người dùng cùng style
-- Code không format = code không review được</p>
-<p><strong>So sánh với JavaScript:</strong></p>
-<p><strong>Setup editor để auto-format:</strong></p>
-<h3 id="14-go-vet-static-analysis">1.4 go vet - Static Analysis</h3>
-<h3 id="15-go-doc-documentation">1.5 go doc - Documentation</h3>
-<p><strong>Viết doc comments:</strong></p>
-<h3 id="16-cross-compilation">1.6 Cross-Compilation</h3>
-<p>Go compile native code cho mọi platform. Không cần cross-compile tools:</p>
-<p><strong>Dockerfile cho Go (multi-stage build):</strong></p>
-<p><strong>So sánh với Node.js:</strong></p>
-<h3 id="17-build-tags">1.7 Build Tags</h3>
-<p>Build tags cho phép compile conditionally:</p>
-<p><strong>Common use cases:</strong>
-- Database drivers khác nhau
-- Platform-specific code (linux, darwin, windows)
-- Feature flags
-- Test builds</p>
-<h3 id="18-ldflags-version-injection">1.8 ldflags - Version Injection</h3>
-<p>Inject version info vào binary tại build time:</p>
-<p><strong>Makefile helper:</strong></p>
-<hr />
-<h2 id="2-testing-exhaustive">2. Testing - Exhaustive</h2>
-<h3 id="21-testing-package-deep-dive">2.1 Testing Package Deep Dive</h3>
-<p><strong>Cấu trúc file test:</strong>
-- File test: <code>user_test.go</code> (cùng package với <code>user.go</code>)
-- Function test: <code>func TestXxx(t *testing.T)</code> (bắt đầu bằng <code>Test</code>)
-- Package: <code>_test</code> suffix (black-box) hoặc cùng package (white-box)</p>
-<p><strong>Testing.T methods:</strong></p>
-<h3 id="22-table-driven-tests">2.2 Table-Driven Tests</h3>
-<p>Đây là pattern idiomatic nhất trong Go:</p>
-<p><strong>Table-driven test cho HTTP handler:</strong></p>
-<h3 id="23-subtests">2.3 Subtests</h3>
-<h3 id="24-test-fixtures">2.4 Test Fixtures</h3>
-<p><strong>Test fixtures với golden files:</strong></p>
-<h3 id="25-test-helpers">2.5 Test Helpers</h3>
-<h3 id="26-testmain-setupteardown">2.6 TestMain - Setup/Teardown</h3>
-<h3 id="27-parallel-tests">2.7 Parallel Tests</h3>
-<p><strong>Lưu ý khi dùng Parallel:</strong>
-- Mỗi subtest phải độc lập
-- Không share mutable state
-- Dùng <code>t.Parallel()</code> ngay đầu subtest
-- Go 1.22+ không cần capture range variable</p>
-<h3 id="28-benchmarks">2.8 Benchmarks</h3>
-<p><strong>Output mẫu:</strong></p>
-<h3 id="29-fuzzing-go-118">2.9 Fuzzing (Go 1.18+)</h3>
-<p>Fuzzing tự động tạo test inputs để tìm bugs:</p>
-<h3 id="210-test-coverage">2.10 Test Coverage</h3>
-<p><strong>Coverage output mẫu:</strong></p>
-<p><strong>So sánh với Jest:</strong></p>
-<h3 id="211-so-sanh-voi-jestmocha">2.11 So sánh với Jest/Mocha</h3>
-<div class="tablewrap"><table>
-<thead>
-<tr>
-<th>Feature</th>
-<th>Jest/Mocha</th>
-<th>Go testing</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>File naming</td>
-<td><code>*.test.js</code>, <code>*.spec.js</code></td>
-<td><code>*_test.go</code></td>
-</tr>
-<tr>
-<td>Test function</td>
-<td><code>describe</code>, <code>it</code>, <code>test</code></td>
-<td><code>func TestXxx(t *testing.T)</code></td>
-</tr>
-<tr>
-<td>Assertions</td>
-<td><code>expect(x).toBe(y)</code></td>
-<td><code>if x != y { t.Error() }</code></td>
-</tr>
-<tr>
-<td>Setup/Teardown</td>
-<td><code>beforeEach</code>, <code>afterEach</code></td>
-<td><code>t.Cleanup()</code>, <code>TestMain</code></td>
-</tr>
-<tr>
-<td>Mocking</td>
-<td><code>jest.mock()</code></td>
-<td>Interfaces + mock implementations</td>
-</tr>
-<tr>
-<td>Coverage</td>
-<td><code>--coverage</code></td>
-<td><code>-cover</code></td>
-</tr>
-<tr>
-<td>Snapshot</td>
-<td><code>toMatchSnapshot()</code></td>
-<td>Golden files</td>
-</tr>
-<tr>
-<td>Parallel</td>
-<td><code>--runInBand</code> (disable)</td>
-<td><code>t.Parallel()</code></td>
-</tr>
-<tr>
-<td>Watch mode</td>
-<td><code>--watch</code></td>
-<td><code>air</code>, <code>CompileDaemon</code></td>
-</tr>
-</tbody>
-</table></div>
-<hr />
-<h2 id="3-mocking-va-test-doubles">3. Mocking và Test Doubles</h2>
-<h3 id="31-interface-based-mocking">3.1 Interface-based Mocking</h3>
-<p>Go dùng interfaces để mock dependencies:</p>
-<p><strong>Sử dụng mock trong test:</strong></p>
-<h3 id="32-testify-mock">3.2 Testify Mock</h3>
-<h3 id="33-gomock">3.3 gomock</h3>
-<h3 id="34-httptest-package">3.4 httptest Package</h3>
-<p>Test HTTP handlers mà không cần start server:</p>
-<h3 id="35-sql-mock-patterns">3.5 SQL Mock Patterns</h3>
-<hr />
-<h2 id="4-debugging-va-profiling">4. Debugging và Profiling</h2>
-<h3 id="41-delve-debugger">4.1 Delve Debugger</h3>
-<p><strong>Delve commands:</strong></p>
-<p><strong>VS Code配置:</strong></p>
-<h3 id="42-pprof-profiling">4.2 pprof - Profiling</h3>
-<p><strong>pprof commands:</strong></p>
-<p><strong>Chương trình CLI profiling:</strong></p>
-<h3 id="43-trace-tool">4.3 Trace Tool</h3>
-<h3 id="44-go-tool-compile">4.4 go tool compile</h3>
-<h3 id="45-race-detector">4.5 Race Detector</h3>
-<p>Go có built-in race detector để tìm data races:</p>
-<p><strong>Output khi detect race:</strong></p>
-<p><strong>Fix race condition:</strong></p>
-<hr />
-<h2 id="5-linting-va-code-quality">5. Linting và Code Quality</h2>
-<h3 id="51-golangci-lint">5.1 golangci-lint</h3>
-<p><strong><code>.golangci.yml</code> config:</strong></p>
-<h3 id="52-staticcheck">5.2 Staticcheck</h3>
-<p>Staticcheck tìm:
-- Bugs
-- Performance issues
-- Style issues
-- Deprecated API usage</p>
-<h3 id="53-gosec-security-linter">5.3 gosec - Security Linter</h3>
-<p><strong>gosec tìm:</strong>
-- Hardcoded credentials
-- SQL injection
-- Command injection
-- Insecure TLS configuration
-- Weak cryptography
-- File path traversal</p>
-<h3 id="54-cicd-patterns">5.4 CI/CD Patterns</h3>
-<p><strong>GitHub Actions:</strong></p>
-<hr />
-<h2 id="6-dependency-management">6. Dependency Management</h2>
-<h3 id="61-go-get-vs-go-install">6.1 go get vs go install</h3>
-<h3 id="62-module-versioning">6.2 Module Versioning</h3>
-<p>Go modules dùng semantic versioning:</p>
-<p><strong>Major version convention:</strong></p>
-<h3 id="63-replace-directives">6.3 Replace Directives</h3>
-<p><strong>Khi nào dùng replace:</strong>
-- Local development (chưa publish)
-- Fork cần fix bug
-- Test với local changes</p>
-<p><strong>Lưu ý:</strong> <code>replace</code> trong <code>go.mod</code> không ảnh hưởng khi package được import bởi project khác.</p>
-<h3 id="64-private-modules">6.4 Private Modules</h3>
 <h3 id="65-so-sanh-voi-npmyarn">6.5 So sánh với npm/yarn</h3>
 <div class="tablewrap"><table>
 <thead>
@@ -2246,6 +2349,26 @@ So sánh trực tiếp với npm/Jest/ESLint để bạn map kiến thức nhanh
 </tbody>
 </table></div>
 <p><strong>Go workspaces (Go 1.18+):</strong></p>
+<div class="codeblock"><div class="codehead"><span class="lang-chip">bash</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1"># Tạo workspace</span>
+go<span class="w"> </span>work<span class="w"> </span>init<span class="w"> </span>./module1<span class="w"> </span>./module2
+
+<span class="c1"># Add module vào workspace</span>
+go<span class="w"> </span>work<span class="w"> </span>use<span class="w"> </span>./module3
+
+<span class="c1"># Sync dependencies</span>
+go<span class="w"> </span>work<span class="w"> </span>sync
+</pre></div>
+</div>
+<div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// go.work</span>
+<span class="k">go</span><span class="w"> </span><span class="mf">1.22</span>
+
+<span class="nx">use</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="p">.</span><span class="o">/</span><span class="nx">api</span>
+<span class="w">    </span><span class="p">.</span><span class="o">/</span><span class="nx">shared</span>
+<span class="w">    </span><span class="p">.</span><span class="o">/</span><span class="nx">worker</span>
+<span class="p">)</span>
+</pre></div>
+</div>
 <hr />
 <h2 id="tips-va-best-practices">Tips và Best Practices</h2>
 <h3 id="workflow-hoc-nhanh">Workflow học nhanh</h3>
@@ -2257,7 +2380,51 @@ So sánh trực tiếp với npm/Jest/ESLint để bạn map kiến thức nhanh
 <li>So sánh với Node.js</li>
 </ol>
 <h3 id="checklist-truoc-khi-commit">Checklist trước khi commit</h3>
+<div class="codeblock"><div class="codehead"><span class="lang-chip">bash</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1"># Format</span>
+go<span class="w"> </span>fmt<span class="w"> </span>./...
+
+<span class="c1"># Vet</span>
+go<span class="w"> </span>vet<span class="w"> </span>./...
+
+<span class="c1"># Lint</span>
+golangci-lint<span class="w"> </span>run
+
+<span class="c1"># Test</span>
+go<span class="w"> </span><span class="nb">test</span><span class="w"> </span>-race<span class="w"> </span>./...
+
+<span class="c1"># Build</span>
+go<span class="w"> </span>build<span class="w"> </span>./cmd/api
+</pre></div>
+</div>
 <h3 id="makefile-template">Makefile template</h3>
+<div class="codeblock"><div class="codehead"><span class="lang-chip">makefile</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="nf">.PHONY</span><span class="o">:</span><span class="w"> </span><span class="n">build</span> <span class="n">test</span> <span class="n">lint</span> <span class="n">clean</span>
+
+<span class="nf">build</span><span class="o">:</span>
+<span class="w">	</span>go<span class="w"> </span>build<span class="w"> </span>-ldflags<span class="o">=</span><span class="s2">&quot;-s -w&quot;</span><span class="w"> </span>-o<span class="w"> </span>bin/api<span class="w"> </span>./cmd/api
+
+<span class="nf">test</span><span class="o">:</span>
+<span class="w">	</span>go<span class="w"> </span><span class="nb">test</span><span class="w"> </span>-race<span class="w"> </span>-cover<span class="w"> </span>./...
+
+<span class="nf">lint</span><span class="o">:</span>
+<span class="w">	</span>golangci-lint<span class="w"> </span>run
+
+<span class="nf">fmt</span><span class="o">:</span>
+<span class="w">	</span>go<span class="w"> </span>fmt<span class="w"> </span>./...
+<span class="w">	</span>goimports<span class="w"> </span>-w<span class="w"> </span>.
+
+<span class="nf">clean</span><span class="o">:</span>
+<span class="w">	</span>rm<span class="w"> </span>-rf<span class="w"> </span>bin/
+
+<span class="nf">run</span><span class="o">:</span><span class="w"> </span><span class="n">build</span>
+<span class="w">	</span>./bin/api
+
+<span class="nf">dev</span><span class="o">:</span>
+<span class="w">	</span>go<span class="w"> </span>run<span class="w"> </span>./cmd/api
+
+<span class="nf">docker</span><span class="o">:</span>
+<span class="w">	</span>docker<span class="w"> </span>build<span class="w"> </span>-t<span class="w"> </span>myapp<span class="w"> </span>.
+</pre></div>
+</div>
 <h3 id="thu-nen-uu-tien-trong-1-2-tuan-au">Thứ nên ưu tiên trong 1-2 tuần đầu</h3>
 <ol>
 <li><code>go fmt ./...</code> - luôn format code</li>
@@ -2275,6 +2442,70 @@ So sánh trực tiếp với npm/Jest/ESLint để bạn map kiến thức nhanh
 </nav>
 <footer>Generated from Markdown · <a href="../index.html">Về trang chủ docs</a></footer>
 </main>
+
+<button class="progress-fab" id="progress-fab" type="button">📊 Tiến độ <span class="fab-count">0/0</span></button>
+<div class="progress-modal" id="progress-modal" hidden>
+  <div class="progress-dialog" role="dialog" aria-label="Theo dõi tiến độ">
+    <div class="progress-head">
+      <h2>📊 Theo dõi tiến độ <span class="progress-count">0%</span></h2>
+      <button class="progress-close" id="progress-close" type="button" aria-label="Đóng">✕</button>
+    </div>
+    <div class="progress-bar"><i></i></div>
+    <div class="progress-body">
+<div class="callout callout-note"><div class="callout-body"><p>Đây là bảng theo dõi <strong>duy nhất</strong> cho cả bộ tài liệu. Tick vào từng mốc — tiến độ được lưu trên trình duyệt và đồng bộ ở mọi trang qua nút nổi <strong>📊 Tiến độ</strong> ở góc phải dưới. Checklist chi tiết từng ngày vẫn nằm trong bài <code>07 · Fast Track Roadmap</code>.</p></div></div>
+
+<h3>Giai đoạn 1 · Nền tảng (Ngày 1)</h3>
+<ul>
+<li class="task"><input type="checkbox"> Hiểu mental model Go vs Node.js — file <code>01</code></li>
+<li class="task"><input type="checkbox"> Nắm syntax: <code>var</code>, <code>:=</code>, <code>const</code>, slice, map, <code>for</code>, <code>if</code>, <code>switch</code> — file <code>02</code></li>
+<li class="task"><input type="checkbox"> Viết được <code>struct</code> + method + pointer cơ bản</li>
+<li class="task"><input type="checkbox"> Chạy được <code>go run</code>, <code>go fmt</code> và tạo module mới</li>
+</ul>
+<h3>Giai đoạn 2 · Struct, Interface, Error (Ngày 2)</h3>
+<ul>
+<li class="task"><input type="checkbox"> Thiết kế struct, embedding và constructor</li>
+<li class="task"><input type="checkbox"> Hiểu interface + polymorphism trong Go</li>
+<li class="task"><input type="checkbox"> Xử lý lỗi với <code>errors.Is</code>, <code>errors.As</code> và custom error — file <code>03</code></li>
+</ul>
+<h3>Giai đoạn 3 · HTTP API (Ngày 3–4)</h3>
+<ul>
+<li class="task"><input type="checkbox"> Dựng được <code>/health</code> + CRUD bằng <code>net/http</code> hoặc Fiber — file <code>05</code></li>
+<li class="task"><input type="checkbox"> Viết middleware logging + error handling</li>
+<li class="task"><input type="checkbox"> Test API bằng curl/Postman</li>
+<li class="task"><input type="checkbox"> Viết unit test table-driven + <code>httptest</code> — file <code>06</code></li>
+</ul>
+<h3>Giai đoạn 4 · Concurrency (Ngày 5)</h3>
+<ul>
+<li class="task"><input type="checkbox"> Dùng goroutine + <code>WaitGroup</code> — file <code>04</code></li>
+<li class="task"><input type="checkbox"> Dùng channel + <code>select</code></li>
+<li class="task"><input type="checkbox"> Dùng <code>context.WithTimeout</code> để cancel</li>
+<li class="task"><input type="checkbox"> Chạy <code>go run -race .</code> không báo lỗi</li>
+</ul>
+<h3>Giai đoạn 5 · Project Layout &amp; Capstone (Ngày 6–7)</h3>
+<ul>
+<li class="task"><input type="checkbox"> Tách <code>cmd/</code>, <code>internal/</code>, viết repository interface</li>
+<li class="task"><input type="checkbox"> Wire dependency trong <code>main.go</code> + graceful shutdown</li>
+<li class="task"><input type="checkbox"> Hoàn thành 1 mini project kèm test, <code>go vet ./...</code>, <code>go build ./...</code></li>
+</ul>
+<h3>🚦 Mốc sẵn sàng: Phân tích &amp; code project</h3>
+<div class="callout callout-note"><div class="callout-body"><p><strong>Đọc/phân tích project thật:</strong> xong Giai đoạn 1 → 3 (khoảng Ngày 3).
+<strong>Sửa code trong project thật:</strong> xong thêm Giai đoạn 4 (khoảng Ngày 5).
+<strong>Tự code một project hoàn chỉnh:</strong> xong Giai đoạn 5 (khoảng Ngày 6–7).</p></div></div>
+
+<ul>
+<li class="task"><input type="checkbox"> Xong Giai đoạn 1 → 3: đọc hiểu và tự dựng được REST API CRUD</li>
+<li class="task"><input type="checkbox"> Đọc hiểu một repo Go lạ trong khoảng 1 buổi, không cần dịch từng dòng</li>
+<li class="task"><input type="checkbox"> Tự viết CRUD + test table-driven mà không copy nguyên mẫu</li>
+<li class="task"><input type="checkbox"> Giải thích được khi nào dùng goroutine / channel / context</li>
+<li class="task"><input type="checkbox"> Chạy thành thạo <code>go test</code>, <code>go vet</code>, <code>go build</code> và đọc được lỗi</li>
+<li class="task"><input type="checkbox"> Đã phân tích ít nhất 1 project mẫu — vtvcab-identity-api (series Node.js → Go, bài <code>01</code>)</li>
+</ul>
+<hr />
+    </div>
+  </div>
+</div>
+
+
 <script>
 
 (function(){
@@ -2324,6 +2555,88 @@ So sánh trực tiếp với npm/Jest/ESLint để bạn map kiến thức nhanh
       navigator.clipboard.writeText(text).then(function(){ done(true); }, fallback);
     } else { fallback(); }
   });
+})();
+// ---- progress tracker: nút nổi + modal, đồng bộ mọi trang qua localStorage ----
+(function(){
+  function qsa(sel, root){ return [].slice.call((root||document).querySelectorAll(sel)); }
+  function load(key){ try{ return JSON.parse(localStorage.getItem(key)||'null'); }catch(e){ return null; } }
+  function save(key, arr){ try{ localStorage.setItem(key, JSON.stringify(arr)); }catch(e){} }
+
+  var KEY_MAIN = 'md2html:progress:docs';
+  var modal = document.getElementById('progress-modal');
+  var fab = document.getElementById('progress-fab');
+  var homeBoxes = qsa('.progress-track .task input');
+  var modalBoxes = modal ? qsa('.task input', modal) : [];
+  var N = Math.max(homeBoxes.length, modalBoxes.length);
+
+  function states(){
+    var saved = load(KEY_MAIN);
+    if (saved && saved.length === N) return saved;
+    var src = homeBoxes.length ? homeBoxes : modalBoxes;
+    return src.map(function(b){ return b.checked; });
+  }
+  function updateCounters(st){
+    var done = st.filter(Boolean).length;
+    if (fab) fab.querySelector('.fab-count').textContent = done + '/' + N;
+    if (modal){
+      modal.querySelector('.progress-bar i').style.width = (N ? done/N*100 : 0) + '%';
+      modal.querySelector('.progress-count').textContent = (N ? Math.round(done/N*100) : 0) + '%';
+    }
+  }
+  function paint(st){
+    for (var i=0;i<N;i++){
+      if (homeBoxes[i]) homeBoxes[i].checked = !!st[i];
+      if (modalBoxes[i]) modalBoxes[i].checked = !!st[i];
+    }
+    updateCounters(st);
+  }
+  if (N){
+    paint(states());
+    var bindMain = function(i){
+      return function(){
+        var st = states(); st[i] = this.checked;
+        save(KEY_MAIN, st); paint(st);
+      };
+    };
+    homeBoxes.forEach(function(b,i){ b.addEventListener('change', bindMain(i)); });
+    modalBoxes.forEach(function(b,i){ b.addEventListener('change', bindMain(i)); });
+  }
+
+  // task list thường của từng trang: lưu riêng theo URL
+  var otherBoxes = qsa('.task input').filter(function(b){
+    return !b.closest('.progress-track') && !(modal && modal.contains(b));
+  });
+  if (otherBoxes.length){
+    var key = 'md2html:page:' + location.pathname;
+    var saved = load(key);
+    if (saved && saved.length === otherBoxes.length){
+      otherBoxes.forEach(function(b,i){ b.checked = !!saved[i]; });
+    }
+    otherBoxes.forEach(function(b){
+      b.addEventListener('change', function(){
+        save(key, otherBoxes.map(function(x){ return x.checked; }));
+      });
+    });
+  }
+
+  if (fab && modal && N){
+    var openModal = function(){
+      paint(states());
+      modal.hidden = false;
+      document.body.style.overflow = 'hidden';
+    };
+    fab.addEventListener('click', openModal);
+    qsa('.progress-open').forEach(function(b){ b.addEventListener('click', openModal); });
+    var closeModal = function(){
+      modal.hidden = true;
+      document.body.style.overflow = '';
+    };
+    document.getElementById('progress-close').addEventListener('click', closeModal);
+    modal.addEventListener('click', function(e){ if (e.target === modal) closeModal(); });
+    document.addEventListener('keydown', function(e){
+      if (e.key === 'Escape' && !modal.hidden) closeModal();
+    });
+  } else if (fab){ fab.hidden = true; }
 })();
 
 </script>

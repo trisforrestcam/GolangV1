@@ -97,7 +97,7 @@ body {
 }
 #progress { position: fixed; top: 0; left: 0; height: 3px; width: 0; z-index: 70;
   background: linear-gradient(90deg, var(--accent), var(--accent-2), #7c3aed); }
-#backtop { position: fixed; right: 26px; bottom: 26px; width: 44px; height: 44px;
+#backtop { position: fixed; right: 26px; bottom: 88px; width: 44px; height: 44px;
   border-radius: 50%; border: 1px solid var(--border); background: #fff;
   color: var(--accent); font-size: 1.15rem; cursor: pointer; opacity: 0;
   pointer-events: none; transition: all .25s; box-shadow: 0 8px 20px rgba(15,23,42,.14); z-index: 60; }
@@ -161,6 +161,17 @@ code {
 .callout .codeblock { box-shadow: none; }
 .callout .codeblock, .callout .codehilite, .callout code { background: #fff; }
 .callout .codehead { background: rgba(237,241,247,.6); }
+/* --- mermaid diagrams --- */
+.mermaidwrap { margin: 1.5em 0; border: 1px solid var(--border); border-radius: 12px;
+  background: #fff; overflow: hidden; box-shadow: 0 2px 6px rgba(15,23,42,.05); }
+.mermaidwrap .codehead { background: #edf1f7; }
+.mermaid-hint { font-size: .72rem; color: #94a3b8; font-weight: 600; }
+.mermaid { display: flex; justify-content: center; padding: 20px 16px; overflow-x: auto; }
+.mermaid svg { max-width: 100%; height: auto; }
+/* khi mermaid.js chưa/chưa kịp load (offline) — vẫn đọc được source dễ chịu */
+.mermaid:not([data-processed]) { font-family: "JetBrains Mono", Consolas, Menlo, monospace;
+  font-size: .8rem; color: #475569; white-space: pre; text-align: left; justify-content: flex-start; }
+.callout .mermaidwrap { box-shadow: none; }
 /* --- tables --- */
 .tablewrap { overflow-x: auto; margin: 1.2em 0; }
 table { border-collapse: collapse; width: 100%; font-size: .94em; margin: 0; }
@@ -223,7 +234,46 @@ kbd { background: #fff; border: 1px solid #cbd5e1; border-bottom-width: 2px;
 .pager .next { text-align: right; }
 .pager .dir { display: block; font-size: .78rem; color: var(--muted); font-weight: 500; }
 footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top: 34px; }
-@media print { #progress, #backtop, .toc, .pager { display: none !important; }
+/* --- floating progress button + modal --- */
+.progress-fab { position: fixed; right: 26px; bottom: 26px; z-index: 70;
+  display: inline-flex; align-items: center; gap: 9px; padding: 11px 19px;
+  border: none; border-radius: 999px; cursor: pointer; font: inherit;
+  font-size: .88rem; font-weight: 700; color: #fff;
+  background: linear-gradient(120deg, var(--accent), var(--accent-2));
+  box-shadow: 0 14px 34px -12px rgba(79,70,229,.55);
+  transition: transform .15s, box-shadow .15s; }
+.progress-fab:hover { transform: translateY(-2px); box-shadow: 0 18px 40px -12px rgba(79,70,229,.62); }
+.fab-count { background: rgba(255,255,255,.24); padding: 1px 10px; border-radius: 999px; font-size: .86em; }
+.progress-modal { position: fixed; inset: 0; z-index: 100; padding: 24px;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(51,65,85,.45); backdrop-filter: blur(3px); }
+.progress-modal[hidden] { display: none; }
+.progress-dialog { background: #fff; border-radius: 18px; width: min(780px, 100%);
+  max-height: 82vh; display: flex; flex-direction: column;
+  box-shadow: 0 40px 90px -20px rgba(51,65,85,.5); overflow: hidden; }
+.progress-head { display: flex; align-items: center; justify-content: space-between;
+  gap: 14px; padding: 20px 28px 14px; }
+.progress-head h2 { margin: 0; padding: 0; border: none; font-size: 1.2rem; }
+.progress-count { color: var(--accent); font-size: .72em; margin-left: .5em; }
+.progress-close { flex-shrink: 0; width: 34px; height: 34px; border-radius: 10px;
+  border: 1px solid var(--border); background: #fff; color: var(--muted);
+  font-size: 1rem; cursor: pointer; transition: all .15s; }
+.progress-close:hover { color: var(--accent); border-color: var(--accent); background: var(--accent-soft); }
+.progress-bar { height: 6px; background: #e2e8f0; margin: 0 28px; border-radius: 99px; overflow: hidden; }
+.progress-bar i { display: block; height: 100%; width: 0; border-radius: 99px;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2)); transition: width .25s; }
+.progress-body { padding: 8px 28px 26px; overflow-y: auto; }
+.progress-body h3 { margin-top: 1.1em; }
+/* --- trang nguồn: checklist inline thay bằng nút mở popup --- */
+.progress-hint { display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+  background: var(--accent-soft); border: 1px dashed #c7d2fe; border-radius: 14px;
+  padding: 16px 20px; color: var(--muted); font-size: .95rem; }
+.progress-open { flex-shrink: 0; border: none; border-radius: 10px; padding: 11px 20px;
+  font: inherit; font-size: .92rem; font-weight: 700; color: #fff; cursor: pointer;
+  background: linear-gradient(120deg, var(--accent), var(--accent-2));
+  box-shadow: 0 8px 18px -8px rgba(79,70,229,.5); transition: transform .15s; }
+.progress-open:hover { transform: translateY(-1px); }
+@media print { #progress, #backtop, .toc, .pager, .progress-fab, .progress-modal { display: none !important; }
   body { background: #fff; } .card { box-shadow: none; border: none; } }
 
 .wrap.wide { max-width: 1340px; }
@@ -264,6 +314,12 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <nav class="crumb"><a href="../index.html">📚 Docs</a> &nbsp;›&nbsp; nodejs-to-go</nav>
 <main class="wrap">
 <article class="card">
+<h1 id="phan-tich-project-structure-vtvcab-identity-api">📁 Phân Tích Project Structure - vtvcab-identity-api</h1>
+<div class="callout callout-note"><div class="callout-body"><p><strong>Dành cho:</strong> NodeJS dev muốn hiểu Go project architecture
+<strong>Mục tiêu:</strong> Hiểu cách một Go web API được tổ chức và hoạt động</p></div></div>
+
+<hr />
+<h2 id="directory-tree-overview">🗺️ Directory Tree Overview</h2>
 <div class="codeblock"><div class="codehead"><span class="lang-chip"></span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span>vtvcab-identity-api/
 ├── main.go                          # 🚀 Entry point - App bootstrap
 ├── go.mod                           # 📦 Dependencies (giống package.json)
@@ -359,6 +415,9 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
     └── interactiveKey.pem           #    Interactive key
 </pre></div>
 </div>
+<hr />
+<h2 id="entry-point-analysis-maingo">🚀 Entry Point Analysis - main.go</h2>
+<h3 id="nodejs-vs-go-comparison">NodeJS vs Go Comparison</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">javascript</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// NodeJS (Express)</span>
 <span class="kd">const</span><span class="w"> </span><span class="nx">app</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">express</span><span class="p">();</span>
 <span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">cors</span><span class="p">());</span>
@@ -396,6 +455,15 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="key-differences-tu-nodejs">Key Differences từ NodeJS:</h3>
+<ol>
+<li><strong>Dependency Injection rõ ràng</strong> - Dependencies được inject qua function params, không phải global imports</li>
+<li><strong>Multiple Database Connections</strong> - Go quản lý nhiều DB connections cùng lúc</li>
+<li><strong>Graceful Shutdown</strong> - Go có built-in graceful shutdown pattern</li>
+</ol>
+<hr />
+<h2 id="key-architectural-patterns">🏗️ Key Architectural Patterns</h2>
+<h3 id="1-repository-pattern-data-access-layer">1. Repository Pattern (Data Access Layer)</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip"></span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span>Controller → Service → Repository → Database
 </pre></div>
 </div>
@@ -419,6 +487,7 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="p">}</span>
 </pre></div>
 </div>
+<p><strong>NodeJS Equivalent:</strong></p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">javascript</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kd">class</span><span class="w"> </span><span class="nx">PostgresRepository</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="kr">constructor</span><span class="p">(</span><span class="nx">db</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="k">this</span><span class="p">.</span><span class="nx">db</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">db</span><span class="p">;</span>
@@ -431,6 +500,7 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="2-controller-pattern-http-handlers">2. Controller Pattern (HTTP Handlers)</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Controller là function trả về fiber.Handler</span>
 <span class="kd">func</span><span class="w"> </span><span class="nx">Login</span><span class="p">(</span><span class="nx">sql</span><span class="w"> </span><span class="o">*</span><span class="nx">gorm</span><span class="p">.</span><span class="nx">DB</span><span class="p">,</span><span class="w"> </span><span class="nx">redisToken</span><span class="w"> </span><span class="o">*</span><span class="nx">redis</span><span class="p">.</span><span class="nx">Client</span><span class="p">,</span><span class="w"> </span><span class="nx">mongo</span><span class="w"> </span><span class="o">*</span><span class="nx">mongo</span><span class="p">.</span><span class="nx">Database</span><span class="p">)</span><span class="w"> </span><span class="nx">fiber</span><span class="p">.</span><span class="nx">Handler</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">c</span><span class="w"> </span><span class="o">*</span><span class="nx">fiber</span><span class="p">.</span><span class="nx">Ctx</span><span class="p">)</span><span class="w"> </span><span class="kt">error</span><span class="w"> </span><span class="p">{</span>
@@ -451,6 +521,7 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="p">}</span>
 </pre></div>
 </div>
+<p><strong>NodeJS Equivalent:</strong></p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">javascript</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kd">const</span><span class="w"> </span><span class="nx">login</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">async</span><span class="w"> </span><span class="p">(</span><span class="nx">req</span><span class="p">,</span><span class="w"> </span><span class="nx">res</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">body</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">req</span><span class="p">.</span><span class="nx">body</span><span class="p">;</span>
 <span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">user</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">postgresRepo</span><span class="p">.</span><span class="nx">loginAccount</span><span class="p">(</span><span class="nx">body</span><span class="p">);</span>
@@ -458,6 +529,7 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="p">};</span>
 </pre></div>
 </div>
+<h3 id="3-middleware-pattern">3. Middleware Pattern</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Middleware là function kiểm tra request trước khi đến controller</span>
 <span class="kd">func</span><span class="w"> </span><span class="nx">VerifyToken</span><span class="p">(</span><span class="nx">redisToken</span><span class="w"> </span><span class="o">*</span><span class="nx">redis</span><span class="p">.</span><span class="nx">Client</span><span class="p">,</span><span class="w"> </span><span class="nx">mongo</span><span class="w"> </span><span class="o">*</span><span class="nx">mongo</span><span class="p">.</span><span class="nx">Database</span><span class="p">)</span><span class="w"> </span><span class="nx">fiber</span><span class="p">.</span><span class="nx">Handler</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">c</span><span class="w"> </span><span class="o">*</span><span class="nx">fiber</span><span class="p">.</span><span class="nx">Ctx</span><span class="p">)</span><span class="w"> </span><span class="kt">error</span><span class="w"> </span><span class="p">{</span>
@@ -485,6 +557,8 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="nx">api</span><span class="p">.</span><span class="nx">Get</span><span class="p">(</span><span class="s">&quot;my&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">middleware</span><span class="p">.</span><span class="nx">VerifyToken</span><span class="p">(</span><span class="o">...</span><span class="p">),</span><span class="w"> </span><span class="nx">controller</span><span class="p">.</span><span class="nx">GetMy</span><span class="p">(</span><span class="o">...</span><span class="p">))</span><span class="w">  </span><span class="c1">// Protected route</span>
 </pre></div>
 </div>
+<hr />
+<h2 id="data-flow-request-lifecycle">🔄 Data Flow - Request Lifecycle</h2>
 <div class="codeblock"><div class="codehead"><span class="lang-chip"></span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span>Client Request
      │
      ▼
@@ -526,6 +600,7 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 └─────────────────────────────────────────────────────────────┘
 </pre></div>
 </div>
+<h3 id="vi-du-cu-the-login-flow">Ví dụ cụ thể: Login Flow</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// 1. Client gửi POST /api/login</span>
 <span class="c1">// Route: api.Post(&quot;login/postgres&quot;, controller.Login(pos, redisToken, mongoDb))</span>
 
@@ -550,163 +625,6 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="p">}</span>
 </pre></div>
 </div>
-<div class="codeblock"><div class="codehead"><span class="lang-chip"></span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span>.env (environment variables)
-    ↓
-settings.{dev,staging,prod}.toml (app config)
-    ↓
-Viper (config loader)
-    ↓
-Config struct (accessible throughout app)
-</pre></div>
-</div>
-<div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// 1. .env auto-loaded via godotenv</span>
-<span class="nx">_</span><span class="w"> </span><span class="s">&quot;github.com/joho/godotenv/autoload&quot;</span><span class="w">  </span><span class="c1">// In main.go import</span>
-
-<span class="c1">// 2. STAGE_STATUS env var determines which TOML to load</span>
-<span class="kd">func</span><span class="w"> </span><span class="nx">LoadSetting</span><span class="p">(</span><span class="nx">env</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="nx">Config</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="k">switch</span><span class="w"> </span><span class="nx">env</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="s">&quot;prod&quot;</span><span class="p">:</span>
-<span class="w">        </span><span class="nx">config</span><span class="p">.</span><span class="nx">SetConfigName</span><span class="p">(</span><span class="s">&quot;settings.prod&quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="s">&quot;staging&quot;</span><span class="p">:</span>
-<span class="w">        </span><span class="nx">config</span><span class="p">.</span><span class="nx">SetConfigName</span><span class="p">(</span><span class="s">&quot;settings.staging&quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="k">default</span><span class="p">:</span>
-<span class="w">        </span><span class="nx">config</span><span class="p">.</span><span class="nx">SetConfigName</span><span class="p">(</span><span class="s">&quot;settings.dev&quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="p">}</span>
-<span class="w">    </span><span class="nx">config</span><span class="p">.</span><span class="nx">SetConfigType</span><span class="p">(</span><span class="s">&quot;toml&quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="nx">config</span><span class="p">.</span><span class="nx">ReadInConfig</span><span class="p">()</span>
-<span class="p">}</span>
-
-<span class="c1">// 3. Config accessible via Viper</span>
-<span class="nx">config</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">configs</span><span class="p">.</span><span class="nx">LoadSetting</span><span class="p">(</span><span class="nx">os</span><span class="p">.</span><span class="nx">Getenv</span><span class="p">(</span><span class="s">&quot;STAGE_STATUS&quot;</span><span class="p">))</span>
-<span class="nx">jwtSecret</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">config</span><span class="p">.</span><span class="nx">GetString</span><span class="p">(</span><span class="s">&quot;JWT_SECRET_KEY&quot;</span><span class="p">)</span>
-<span class="nx">accessTokenExpiry</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">config</span><span class="p">.</span><span class="nx">GetInt</span><span class="p">(</span><span class="s">&quot;JWT_ACCESS_TOKEN_EXPIRES&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-<div class="codeblock"><div class="codehead"><span class="lang-chip">toml</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="k">[database]</span>
-<span class="n">POSTGRES_URL</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;postgres://user:pass@localhost:5432/db&quot;</span>
-<span class="n">MONGODB_URL</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;mongodb://localhost:27017&quot;</span>
-<span class="n">MSSQL_URL</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;sqlserver://...&quot;</span>
-
-<span class="k">[redis]</span>
-<span class="n">REDIS_URL</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;redis://localhost:6379/0&quot;</span>
-<span class="n">REDIS_URL_TOKEN</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;redis://localhost:6379/1&quot;</span>
-<span class="n">REDIS_URL_BAN_CHAT</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;redis://localhost:6379/2&quot;</span>
-
-<span class="k">[jwt]</span>
-<span class="n">JWT_SECRET_KEY</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;your-secret-key&quot;</span>
-<span class="n">JWT_ACCESS_TOKEN_EXPIRES</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3600</span>
-<span class="n">JWT_REFRESH_TOKEN_EXPIRES</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">300</span>
-</pre></div>
-</div>
-<div class="codeblock"><div class="codehead"><span class="lang-chip"></span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span>┌─────────────────────────────────────────────────────────────┐
-│  Redis Instance 1 (REDIS_URL)                                │
-│  └── Cache Store                                             │
-│      • User info cache                                       │
-│      • Session data                                          │
-│      • Temporary data                                        │
-└─────────────────────────────────────────────────────────────┘
-
-┌─────────────────────────────────────────────────────────────┐
-│  Redis Instance 2 (REDIS_URL_TOKEN)                          │
-│  └── Token Store                                             │
-│      • JWT access tokens                                     │
-│      • JWT refresh tokens                                    │
-│      • Token blacklist                                       │
-└─────────────────────────────────────────────────────────────┘
-
-┌─────────────────────────────────────────────────────────────┐
-│  Redis Instance 3 (REDIS_URL_BAN_CHAT)                       │
-│  └── Ban Chat Store                                          │
-│      • Banned user list                                      │
-│      • Chat restrictions                                     │
-└─────────────────────────────────────────────────────────────┘
-</pre></div>
-</div>
-<div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// PostgreSQL - Connection pooling with APM</span>
-<span class="kd">func</span><span class="w"> </span><span class="nx">PostgresConnection</span><span class="p">()</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="nx">gorm</span><span class="p">.</span><span class="nx">DB</span><span class="p">,</span><span class="w"> </span><span class="kt">error</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="nx">db</span><span class="p">,</span><span class="w"> </span><span class="nx">_</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">gorm</span><span class="p">.</span><span class="nx">Open</span><span class="p">(</span><span class="nx">postgresApm</span><span class="p">.</span><span class="nx">Open</span><span class="p">(</span><span class="nx">url</span><span class="p">),</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">gorm</span><span class="p">.</span><span class="nx">Config</span><span class="p">{</span>
-<span class="w">        </span><span class="nx">SkipDefaultTransaction</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
-<span class="w">        </span><span class="nx">PrepareStmt</span><span class="p">:</span><span class="w">            </span><span class="kc">true</span><span class="p">,</span>
-<span class="w">    </span><span class="p">})</span>
-<span class="w">    </span><span class="nx">sqlDB</span><span class="p">,</span><span class="w"> </span><span class="nx">_</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">db</span><span class="p">.</span><span class="nx">DB</span><span class="p">()</span>
-<span class="w">    </span><span class="nx">sqlDB</span><span class="p">.</span><span class="nx">SetMaxIdleConns</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
-<span class="w">    </span><span class="nx">sqlDB</span><span class="p">.</span><span class="nx">SetMaxOpenConns</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
-<span class="w">    </span><span class="nx">sqlDB</span><span class="p">.</span><span class="nx">SetConnMaxLifetime</span><span class="p">(</span><span class="nx">time</span><span class="p">.</span><span class="nx">Hour</span><span class="p">)</span>
-<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">db</span><span class="p">,</span><span class="w"> </span><span class="kc">nil</span>
-<span class="p">}</span>
-
-<span class="c1">// Redis - 3 separate instances</span>
-<span class="nx">redisStore</span><span class="p">,</span><span class="w"> </span><span class="nx">_</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">cache</span><span class="p">.</span><span class="nx">RedisConnection</span><span class="p">(</span><span class="nx">os</span><span class="p">.</span><span class="nx">Getenv</span><span class="p">(</span><span class="s">&quot;REDIS_URL&quot;</span><span class="p">),</span><span class="w"> </span><span class="mi">250</span><span class="p">)</span>
-<span class="nx">redisToken</span><span class="p">,</span><span class="w"> </span><span class="nx">_</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">cache</span><span class="p">.</span><span class="nx">RedisConnection</span><span class="p">(</span><span class="nx">os</span><span class="p">.</span><span class="nx">Getenv</span><span class="p">(</span><span class="s">&quot;REDIS_URL_TOKEN&quot;</span><span class="p">),</span><span class="w"> </span><span class="mi">250</span><span class="p">)</span>
-<span class="nx">redisBanChat</span><span class="p">,</span><span class="w"> </span><span class="nx">_</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">cache</span><span class="p">.</span><span class="nx">RedisConnection</span><span class="p">(</span><span class="nx">os</span><span class="p">.</span><span class="nx">Getenv</span><span class="p">(</span><span class="s">&quot;REDIS_URL_BAN_CHAT&quot;</span><span class="p">),</span><span class="w"> </span><span class="mi">150</span><span class="p">)</span>
-</pre></div>
-</div>
-<div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kd">type</span><span class="w"> </span><span class="nx">UserAccount</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="nx">Id</span><span class="w">       </span><span class="kt">uint</span><span class="w">   </span><span class="s">`json:&quot;id&quot;`</span>
-<span class="w">    </span><span class="nx">Name</span><span class="w">     </span><span class="kt">string</span><span class="w"> </span><span class="s">`json:&quot;name&quot;`</span>
-<span class="w">    </span><span class="nx">Phone</span><span class="w">    </span><span class="kt">string</span><span class="w"> </span><span class="s">`json:&quot;phone&quot;`</span>
-<span class="p">}</span>
-
-<span class="c1">// Methods defined outside struct</span>
-<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">user</span><span class="w"> </span><span class="o">*</span><span class="nx">UserAccount</span><span class="p">)</span><span class="w"> </span><span class="nx">HashPassword</span><span class="p">(</span><span class="nx">password</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="kt">error</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="c1">// ...</span>
-<span class="p">}</span>
-</pre></div>
-</div>
-<div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="nx">user</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">connect</span><span class="p">.</span><span class="nx">LoginAccountDb</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="w"> </span><span class="nx">body</span><span class="p">)</span>
-<span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">utils</span><span class="p">.</span><span class="nx">HTTPFailResponse</span><span class="p">(</span><span class="nx">c</span><span class="p">,</span><span class="w"> </span><span class="nx">fiber</span><span class="p">.</span><span class="nx">StatusBadRequest</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">)</span>
-<span class="p">}</span>
-</pre></div>
-</div>
-<div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Dependencies được inject qua function parameters</span>
-<span class="kd">func</span><span class="w"> </span><span class="nx">Login</span><span class="p">(</span><span class="nx">sql</span><span class="w"> </span><span class="o">*</span><span class="nx">gorm</span><span class="p">.</span><span class="nx">DB</span><span class="p">,</span><span class="w"> </span><span class="nx">redisToken</span><span class="w"> </span><span class="o">*</span><span class="nx">redis</span><span class="p">.</span><span class="nx">Client</span><span class="p">,</span><span class="w"> </span><span class="nx">mongo</span><span class="w"> </span><span class="o">*</span><span class="nx">mongo</span><span class="p">.</span><span class="nx">Database</span><span class="p">)</span><span class="w"> </span><span class="nx">fiber</span><span class="p">.</span><span class="nx">Handler</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">c</span><span class="w"> </span><span class="o">*</span><span class="nx">fiber</span><span class="p">.</span><span class="nx">Ctx</span><span class="p">)</span><span class="w"> </span><span class="kt">error</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="c1">// Use sql, redisToken, mongo here</span>
-<span class="w">    </span><span class="p">}</span>
-<span class="p">}</span>
-</pre></div>
-</div>
-<div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">query</span><span class="w"> </span><span class="o">*</span><span class="nx">PostgresQueries</span><span class="p">)</span><span class="w"> </span><span class="nx">LoginAccountDb</span><span class="p">(</span><span class="nx">ctx</span><span class="w"> </span><span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span><span class="w"> </span><span class="nx">req</span><span class="w"> </span><span class="o">*</span><span class="nx">models</span><span class="p">.</span><span class="nx">LoginBody</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="nx">models</span><span class="p">.</span><span class="nx">UserAccount</span><span class="p">,</span><span class="w"> </span><span class="kt">error</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="nx">ctx</span><span class="p">,</span><span class="w"> </span><span class="nx">cancel</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">context</span><span class="p">.</span><span class="nx">WithTimeout</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="o">*</span><span class="nx">time</span><span class="p">.</span><span class="nx">Second</span><span class="p">)</span>
-<span class="w">    </span><span class="k">defer</span><span class="w"> </span><span class="nx">cancel</span><span class="p">()</span>
-<span class="w">    </span><span class="c1">// Use ctx for database queries</span>
-<span class="p">}</span>
-</pre></div>
-</div>
-<div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Fire and forget (giống Promise không await)</span>
-<span class="k">go</span><span class="w"> </span><span class="nx">tokenManager</span><span class="p">.</span><span class="nx">SaveToken</span><span class="p">(</span><span class="nx">accessJti</span><span class="p">,</span><span class="w"> </span><span class="nb">int</span><span class="p">(</span><span class="nx">timeExpire</span><span class="p">),</span><span class="w"> </span><span class="nb">int</span><span class="p">(</span><span class="nx">claims</span><span class="p">.</span><span class="nx">Id</span><span class="p">),</span><span class="w"> </span><span class="o">...</span><span class="p">)</span>
-
-<span class="c1">// Channel để communicate giữa goroutines</span>
-<span class="nx">chEVLog</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nb">make</span><span class="p">(</span><span class="kd">chan</span><span class="w"> </span><span class="nx">worker</span><span class="p">.</span><span class="nx">EventLog</span><span class="p">)</span>
-<span class="k">go</span><span class="w"> </span><span class="nx">worker</span><span class="p">.</span><span class="nx">Consume</span><span class="p">(</span><span class="nx">chEVLog</span><span class="p">)</span>
-</pre></div>
-</div>
-<h1 id="phan-tich-project-structure-vtvcab-identity-api">📁 Phân Tích Project Structure - vtvcab-identity-api</h1>
-<div class="callout callout-note"><div class="callout-body"><p><strong>Dành cho:</strong> NodeJS dev muốn hiểu Go project architecture
-<strong>Mục tiêu:</strong> Hiểu cách một Go web API được tổ chức và hoạt động</p></div></div>
-
-<hr />
-<h2 id="directory-tree-overview">🗺️ Directory Tree Overview</h2>
-<hr />
-<h2 id="entry-point-analysis-maingo">🚀 Entry Point Analysis - main.go</h2>
-<h3 id="nodejs-vs-go-comparison">NodeJS vs Go Comparison</h3>
-<h3 id="key-differences-tu-nodejs">Key Differences từ NodeJS:</h3>
-<ol>
-<li><strong>Dependency Injection rõ ràng</strong> - Dependencies được inject qua function params, không phải global imports</li>
-<li><strong>Multiple Database Connections</strong> - Go quản lý nhiều DB connections cùng lúc</li>
-<li><strong>Graceful Shutdown</strong> - Go có built-in graceful shutdown pattern</li>
-</ol>
-<hr />
-<h2 id="key-architectural-patterns">🏗️ Key Architectural Patterns</h2>
-<h3 id="1-repository-pattern-data-access-layer">1. Repository Pattern (Data Access Layer)</h3>
-<p><strong>NodeJS Equivalent:</strong></p>
-<h3 id="2-controller-pattern-http-handlers">2. Controller Pattern (HTTP Handlers)</h3>
-<p><strong>NodeJS Equivalent:</strong></p>
-<h3 id="3-middleware-pattern">3. Middleware Pattern</h3>
-<hr />
-<h2 id="data-flow-request-lifecycle">🔄 Data Flow - Request Lifecycle</h2>
-<h3 id="vi-du-cu-the-login-flow">Ví dụ cụ thể: Login Flow</h3>
 <hr />
 <h2 id="external-dependencies-gomod">📦 External Dependencies (go.mod)</h2>
 <h3 id="core-framework">Core Framework</h3>
@@ -830,11 +748,83 @@ Config struct (accessible throughout app)
 <hr />
 <h2 id="config-system-viper-toml-env">⚙️ Config System - Viper + TOML + .env</h2>
 <h3 id="how-it-works">How It Works</h3>
+<div class="codeblock"><div class="codehead"><span class="lang-chip"></span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span>.env (environment variables)
+    ↓
+settings.{dev,staging,prod}.toml (app config)
+    ↓
+Viper (config loader)
+    ↓
+Config struct (accessible throughout app)
+</pre></div>
+</div>
 <h3 id="config-loading-flow">Config Loading Flow</h3>
+<div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// 1. .env auto-loaded via godotenv</span>
+<span class="nx">_</span><span class="w"> </span><span class="s">&quot;github.com/joho/godotenv/autoload&quot;</span><span class="w">  </span><span class="c1">// In main.go import</span>
+
+<span class="c1">// 2. STAGE_STATUS env var determines which TOML to load</span>
+<span class="kd">func</span><span class="w"> </span><span class="nx">LoadSetting</span><span class="p">(</span><span class="nx">env</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="nx">Config</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">switch</span><span class="w"> </span><span class="nx">env</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="s">&quot;prod&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="nx">config</span><span class="p">.</span><span class="nx">SetConfigName</span><span class="p">(</span><span class="s">&quot;settings.prod&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="s">&quot;staging&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="nx">config</span><span class="p">.</span><span class="nx">SetConfigName</span><span class="p">(</span><span class="s">&quot;settings.staging&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="k">default</span><span class="p">:</span>
+<span class="w">        </span><span class="nx">config</span><span class="p">.</span><span class="nx">SetConfigName</span><span class="p">(</span><span class="s">&quot;settings.dev&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="nx">config</span><span class="p">.</span><span class="nx">SetConfigType</span><span class="p">(</span><span class="s">&quot;toml&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="nx">config</span><span class="p">.</span><span class="nx">ReadInConfig</span><span class="p">()</span>
+<span class="p">}</span>
+
+<span class="c1">// 3. Config accessible via Viper</span>
+<span class="nx">config</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">configs</span><span class="p">.</span><span class="nx">LoadSetting</span><span class="p">(</span><span class="nx">os</span><span class="p">.</span><span class="nx">Getenv</span><span class="p">(</span><span class="s">&quot;STAGE_STATUS&quot;</span><span class="p">))</span>
+<span class="nx">jwtSecret</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">config</span><span class="p">.</span><span class="nx">GetString</span><span class="p">(</span><span class="s">&quot;JWT_SECRET_KEY&quot;</span><span class="p">)</span>
+<span class="nx">accessTokenExpiry</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">config</span><span class="p">.</span><span class="nx">GetInt</span><span class="p">(</span><span class="s">&quot;JWT_ACCESS_TOKEN_EXPIRES&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
 <h3 id="toml-file-structure-settingsdevtoml">TOML File Structure (settings.dev.toml)</h3>
+<div class="codeblock"><div class="codehead"><span class="lang-chip">toml</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="k">[database]</span>
+<span class="n">POSTGRES_URL</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;postgres://user:pass@localhost:5432/db&quot;</span>
+<span class="n">MONGODB_URL</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;mongodb://localhost:27017&quot;</span>
+<span class="n">MSSQL_URL</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;sqlserver://...&quot;</span>
+
+<span class="k">[redis]</span>
+<span class="n">REDIS_URL</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;redis://localhost:6379/0&quot;</span>
+<span class="n">REDIS_URL_TOKEN</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;redis://localhost:6379/1&quot;</span>
+<span class="n">REDIS_URL_BAN_CHAT</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;redis://localhost:6379/2&quot;</span>
+
+<span class="k">[jwt]</span>
+<span class="n">JWT_SECRET_KEY</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;your-secret-key&quot;</span>
+<span class="n">JWT_ACCESS_TOKEN_EXPIRES</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3600</span>
+<span class="n">JWT_REFRESH_TOKEN_EXPIRES</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">300</span>
+</pre></div>
+</div>
 <hr />
 <h2 id="multi-database-architecture">🗄️ Multi-Database Architecture</h2>
 <h3 id="why-3-redis-instances">Why 3 Redis Instances?</h3>
+<div class="codeblock"><div class="codehead"><span class="lang-chip"></span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span>┌─────────────────────────────────────────────────────────────┐
+│  Redis Instance 1 (REDIS_URL)                                │
+│  └── Cache Store                                             │
+│      • User info cache                                       │
+│      • Session data                                          │
+│      • Temporary data                                        │
+└─────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────┐
+│  Redis Instance 2 (REDIS_URL_TOKEN)                          │
+│  └── Token Store                                             │
+│      • JWT access tokens                                     │
+│      • JWT refresh tokens                                    │
+│      • Token blacklist                                       │
+└─────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────┐
+│  Redis Instance 3 (REDIS_URL_BAN_CHAT)                       │
+│  └── Ban Chat Store                                          │
+│      • Banned user list                                      │
+│      • Chat restrictions                                     │
+└─────────────────────────────────────────────────────────────┘
+</pre></div>
+</div>
 <h3 id="why-multiple-databases">Why Multiple Databases?</h3>
 <div class="tablewrap"><table>
 <thead>
@@ -868,13 +858,73 @@ Config struct (accessible throughout app)
 </tbody>
 </table></div>
 <h3 id="connection-setup">Connection Setup</h3>
+<div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// PostgreSQL - Connection pooling with APM</span>
+<span class="kd">func</span><span class="w"> </span><span class="nx">PostgresConnection</span><span class="p">()</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="nx">gorm</span><span class="p">.</span><span class="nx">DB</span><span class="p">,</span><span class="w"> </span><span class="kt">error</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">db</span><span class="p">,</span><span class="w"> </span><span class="nx">_</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">gorm</span><span class="p">.</span><span class="nx">Open</span><span class="p">(</span><span class="nx">postgresApm</span><span class="p">.</span><span class="nx">Open</span><span class="p">(</span><span class="nx">url</span><span class="p">),</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">gorm</span><span class="p">.</span><span class="nx">Config</span><span class="p">{</span>
+<span class="w">        </span><span class="nx">SkipDefaultTransaction</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">        </span><span class="nx">PrepareStmt</span><span class="p">:</span><span class="w">            </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">    </span><span class="p">})</span>
+<span class="w">    </span><span class="nx">sqlDB</span><span class="p">,</span><span class="w"> </span><span class="nx">_</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">db</span><span class="p">.</span><span class="nx">DB</span><span class="p">()</span>
+<span class="w">    </span><span class="nx">sqlDB</span><span class="p">.</span><span class="nx">SetMaxIdleConns</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<span class="w">    </span><span class="nx">sqlDB</span><span class="p">.</span><span class="nx">SetMaxOpenConns</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+<span class="w">    </span><span class="nx">sqlDB</span><span class="p">.</span><span class="nx">SetConnMaxLifetime</span><span class="p">(</span><span class="nx">time</span><span class="p">.</span><span class="nx">Hour</span><span class="p">)</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">db</span><span class="p">,</span><span class="w"> </span><span class="kc">nil</span>
+<span class="p">}</span>
+
+<span class="c1">// Redis - 3 separate instances</span>
+<span class="nx">redisStore</span><span class="p">,</span><span class="w"> </span><span class="nx">_</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">cache</span><span class="p">.</span><span class="nx">RedisConnection</span><span class="p">(</span><span class="nx">os</span><span class="p">.</span><span class="nx">Getenv</span><span class="p">(</span><span class="s">&quot;REDIS_URL&quot;</span><span class="p">),</span><span class="w"> </span><span class="mi">250</span><span class="p">)</span>
+<span class="nx">redisToken</span><span class="p">,</span><span class="w"> </span><span class="nx">_</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">cache</span><span class="p">.</span><span class="nx">RedisConnection</span><span class="p">(</span><span class="nx">os</span><span class="p">.</span><span class="nx">Getenv</span><span class="p">(</span><span class="s">&quot;REDIS_URL_TOKEN&quot;</span><span class="p">),</span><span class="w"> </span><span class="mi">250</span><span class="p">)</span>
+<span class="nx">redisBanChat</span><span class="p">,</span><span class="w"> </span><span class="nx">_</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">cache</span><span class="p">.</span><span class="nx">RedisConnection</span><span class="p">(</span><span class="nx">os</span><span class="p">.</span><span class="nx">Getenv</span><span class="p">(</span><span class="s">&quot;REDIS_URL_BAN_CHAT&quot;</span><span class="p">),</span><span class="w"> </span><span class="mi">150</span><span class="p">)</span>
+</pre></div>
+</div>
 <hr />
 <h2 id="key-takeaways-cho-nodejs-dev">🎯 Key Takeaways cho NodeJS Dev</h2>
 <h3 id="1-go-dung-struct-thay-vi-class">1. <strong>Go dùng Struct thay vì Class</strong></h3>
+<div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kd">type</span><span class="w"> </span><span class="nx">UserAccount</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">Id</span><span class="w">       </span><span class="kt">uint</span><span class="w">   </span><span class="s">`json:&quot;id&quot;`</span>
+<span class="w">    </span><span class="nx">Name</span><span class="w">     </span><span class="kt">string</span><span class="w"> </span><span class="s">`json:&quot;name&quot;`</span>
+<span class="w">    </span><span class="nx">Phone</span><span class="w">    </span><span class="kt">string</span><span class="w"> </span><span class="s">`json:&quot;phone&quot;`</span>
+<span class="p">}</span>
+
+<span class="c1">// Methods defined outside struct</span>
+<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">user</span><span class="w"> </span><span class="o">*</span><span class="nx">UserAccount</span><span class="p">)</span><span class="w"> </span><span class="nx">HashPassword</span><span class="p">(</span><span class="nx">password</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="kt">error</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// ...</span>
+<span class="p">}</span>
+</pre></div>
+</div>
 <h3 id="2-go-dung-error-return-thay-vi-trycatch">2. <strong>Go dùng Error Return thay vì Try/Catch</strong></h3>
+<div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="nx">user</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">connect</span><span class="p">.</span><span class="nx">LoginAccountDb</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="w"> </span><span class="nx">body</span><span class="p">)</span>
+<span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">utils</span><span class="p">.</span><span class="nx">HTTPFailResponse</span><span class="p">(</span><span class="nx">c</span><span class="p">,</span><span class="w"> </span><span class="nx">fiber</span><span class="p">.</span><span class="nx">StatusBadRequest</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</div>
 <h3 id="3-go-dung-dependency-injection-ro-rang">3. <strong>Go dùng Dependency Injection rõ ràng</strong></h3>
+<div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Dependencies được inject qua function parameters</span>
+<span class="kd">func</span><span class="w"> </span><span class="nx">Login</span><span class="p">(</span><span class="nx">sql</span><span class="w"> </span><span class="o">*</span><span class="nx">gorm</span><span class="p">.</span><span class="nx">DB</span><span class="p">,</span><span class="w"> </span><span class="nx">redisToken</span><span class="w"> </span><span class="o">*</span><span class="nx">redis</span><span class="p">.</span><span class="nx">Client</span><span class="p">,</span><span class="w"> </span><span class="nx">mongo</span><span class="w"> </span><span class="o">*</span><span class="nx">mongo</span><span class="p">.</span><span class="nx">Database</span><span class="p">)</span><span class="w"> </span><span class="nx">fiber</span><span class="p">.</span><span class="nx">Handler</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">c</span><span class="w"> </span><span class="o">*</span><span class="nx">fiber</span><span class="p">.</span><span class="nx">Ctx</span><span class="p">)</span><span class="w"> </span><span class="kt">error</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// Use sql, redisToken, mongo here</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
 <h3 id="4-go-dung-context-cho-cancellation">4. <strong>Go dùng Context cho cancellation</strong></h3>
+<div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">query</span><span class="w"> </span><span class="o">*</span><span class="nx">PostgresQueries</span><span class="p">)</span><span class="w"> </span><span class="nx">LoginAccountDb</span><span class="p">(</span><span class="nx">ctx</span><span class="w"> </span><span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span><span class="w"> </span><span class="nx">req</span><span class="w"> </span><span class="o">*</span><span class="nx">models</span><span class="p">.</span><span class="nx">LoginBody</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="nx">models</span><span class="p">.</span><span class="nx">UserAccount</span><span class="p">,</span><span class="w"> </span><span class="kt">error</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">ctx</span><span class="p">,</span><span class="w"> </span><span class="nx">cancel</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">context</span><span class="p">.</span><span class="nx">WithTimeout</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="o">*</span><span class="nx">time</span><span class="p">.</span><span class="nx">Second</span><span class="p">)</span>
+<span class="w">    </span><span class="k">defer</span><span class="w"> </span><span class="nx">cancel</span><span class="p">()</span>
+<span class="w">    </span><span class="c1">// Use ctx for database queries</span>
+<span class="p">}</span>
+</pre></div>
+</div>
 <h3 id="5-go-dung-goroutines-cho-async-operations">5. <strong>Go dùng Goroutines cho async operations</strong></h3>
+<div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Fire and forget (giống Promise không await)</span>
+<span class="k">go</span><span class="w"> </span><span class="nx">tokenManager</span><span class="p">.</span><span class="nx">SaveToken</span><span class="p">(</span><span class="nx">accessJti</span><span class="p">,</span><span class="w"> </span><span class="nb">int</span><span class="p">(</span><span class="nx">timeExpire</span><span class="p">),</span><span class="w"> </span><span class="nb">int</span><span class="p">(</span><span class="nx">claims</span><span class="p">.</span><span class="nx">Id</span><span class="p">),</span><span class="w"> </span><span class="o">...</span><span class="p">)</span>
+
+<span class="c1">// Channel để communicate giữa goroutines</span>
+<span class="nx">chEVLog</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nb">make</span><span class="p">(</span><span class="kd">chan</span><span class="w"> </span><span class="nx">worker</span><span class="p">.</span><span class="nx">EventLog</span><span class="p">)</span>
+<span class="k">go</span><span class="w"> </span><span class="nx">worker</span><span class="p">.</span><span class="nx">Consume</span><span class="p">(</span><span class="nx">chEVLog</span><span class="p">)</span>
+</pre></div>
+</div>
 <hr />
 <h2 id="tiep-theo">📚 Tiếp theo</h2>
 <ul>
@@ -885,11 +935,75 @@ Config struct (accessible throughout app)
 </ul>
 </article>
 <nav class="pager">
-
+<a href="README.html"><span class="dir">← Bài trước</span>📚 docs-node-go - Học Go cho NodeJS Developer</a>
 <a class="next" href="02-Go-vs-NodeJS-Comparison.html"><span class="dir">Bài sau →</span>🔄 Go vs NodeJS - So sánh Toàn diện cho Dev 4 năm</a>
 </nav>
 <footer>Generated from Markdown · <a href="../index.html">Về trang chủ docs</a></footer>
 </main>
+
+<button class="progress-fab" id="progress-fab" type="button">📊 Tiến độ <span class="fab-count">0/0</span></button>
+<div class="progress-modal" id="progress-modal" hidden>
+  <div class="progress-dialog" role="dialog" aria-label="Theo dõi tiến độ">
+    <div class="progress-head">
+      <h2>📊 Theo dõi tiến độ <span class="progress-count">0%</span></h2>
+      <button class="progress-close" id="progress-close" type="button" aria-label="Đóng">✕</button>
+    </div>
+    <div class="progress-bar"><i></i></div>
+    <div class="progress-body">
+<div class="callout callout-note"><div class="callout-body"><p>Đây là bảng theo dõi <strong>duy nhất</strong> cho cả bộ tài liệu. Tick vào từng mốc — tiến độ được lưu trên trình duyệt và đồng bộ ở mọi trang qua nút nổi <strong>📊 Tiến độ</strong> ở góc phải dưới. Checklist chi tiết từng ngày vẫn nằm trong bài <code>07 · Fast Track Roadmap</code>.</p></div></div>
+
+<h3>Giai đoạn 1 · Nền tảng (Ngày 1)</h3>
+<ul>
+<li class="task"><input type="checkbox"> Hiểu mental model Go vs Node.js — file <code>01</code></li>
+<li class="task"><input type="checkbox"> Nắm syntax: <code>var</code>, <code>:=</code>, <code>const</code>, slice, map, <code>for</code>, <code>if</code>, <code>switch</code> — file <code>02</code></li>
+<li class="task"><input type="checkbox"> Viết được <code>struct</code> + method + pointer cơ bản</li>
+<li class="task"><input type="checkbox"> Chạy được <code>go run</code>, <code>go fmt</code> và tạo module mới</li>
+</ul>
+<h3>Giai đoạn 2 · Struct, Interface, Error (Ngày 2)</h3>
+<ul>
+<li class="task"><input type="checkbox"> Thiết kế struct, embedding và constructor</li>
+<li class="task"><input type="checkbox"> Hiểu interface + polymorphism trong Go</li>
+<li class="task"><input type="checkbox"> Xử lý lỗi với <code>errors.Is</code>, <code>errors.As</code> và custom error — file <code>03</code></li>
+</ul>
+<h3>Giai đoạn 3 · HTTP API (Ngày 3–4)</h3>
+<ul>
+<li class="task"><input type="checkbox"> Dựng được <code>/health</code> + CRUD bằng <code>net/http</code> hoặc Fiber — file <code>05</code></li>
+<li class="task"><input type="checkbox"> Viết middleware logging + error handling</li>
+<li class="task"><input type="checkbox"> Test API bằng curl/Postman</li>
+<li class="task"><input type="checkbox"> Viết unit test table-driven + <code>httptest</code> — file <code>06</code></li>
+</ul>
+<h3>Giai đoạn 4 · Concurrency (Ngày 5)</h3>
+<ul>
+<li class="task"><input type="checkbox"> Dùng goroutine + <code>WaitGroup</code> — file <code>04</code></li>
+<li class="task"><input type="checkbox"> Dùng channel + <code>select</code></li>
+<li class="task"><input type="checkbox"> Dùng <code>context.WithTimeout</code> để cancel</li>
+<li class="task"><input type="checkbox"> Chạy <code>go run -race .</code> không báo lỗi</li>
+</ul>
+<h3>Giai đoạn 5 · Project Layout &amp; Capstone (Ngày 6–7)</h3>
+<ul>
+<li class="task"><input type="checkbox"> Tách <code>cmd/</code>, <code>internal/</code>, viết repository interface</li>
+<li class="task"><input type="checkbox"> Wire dependency trong <code>main.go</code> + graceful shutdown</li>
+<li class="task"><input type="checkbox"> Hoàn thành 1 mini project kèm test, <code>go vet ./...</code>, <code>go build ./...</code></li>
+</ul>
+<h3>🚦 Mốc sẵn sàng: Phân tích &amp; code project</h3>
+<div class="callout callout-note"><div class="callout-body"><p><strong>Đọc/phân tích project thật:</strong> xong Giai đoạn 1 → 3 (khoảng Ngày 3).
+<strong>Sửa code trong project thật:</strong> xong thêm Giai đoạn 4 (khoảng Ngày 5).
+<strong>Tự code một project hoàn chỉnh:</strong> xong Giai đoạn 5 (khoảng Ngày 6–7).</p></div></div>
+
+<ul>
+<li class="task"><input type="checkbox"> Xong Giai đoạn 1 → 3: đọc hiểu và tự dựng được REST API CRUD</li>
+<li class="task"><input type="checkbox"> Đọc hiểu một repo Go lạ trong khoảng 1 buổi, không cần dịch từng dòng</li>
+<li class="task"><input type="checkbox"> Tự viết CRUD + test table-driven mà không copy nguyên mẫu</li>
+<li class="task"><input type="checkbox"> Giải thích được khi nào dùng goroutine / channel / context</li>
+<li class="task"><input type="checkbox"> Chạy thành thạo <code>go test</code>, <code>go vet</code>, <code>go build</code> và đọc được lỗi</li>
+<li class="task"><input type="checkbox"> Đã phân tích ít nhất 1 project mẫu — vtvcab-identity-api (series Node.js → Go, bài <code>01</code>)</li>
+</ul>
+<hr />
+    </div>
+  </div>
+</div>
+
+
 <script>
 
 (function(){
@@ -939,6 +1053,88 @@ Config struct (accessible throughout app)
       navigator.clipboard.writeText(text).then(function(){ done(true); }, fallback);
     } else { fallback(); }
   });
+})();
+// ---- progress tracker: nút nổi + modal, đồng bộ mọi trang qua localStorage ----
+(function(){
+  function qsa(sel, root){ return [].slice.call((root||document).querySelectorAll(sel)); }
+  function load(key){ try{ return JSON.parse(localStorage.getItem(key)||'null'); }catch(e){ return null; } }
+  function save(key, arr){ try{ localStorage.setItem(key, JSON.stringify(arr)); }catch(e){} }
+
+  var KEY_MAIN = 'md2html:progress:docs';
+  var modal = document.getElementById('progress-modal');
+  var fab = document.getElementById('progress-fab');
+  var homeBoxes = qsa('.progress-track .task input');
+  var modalBoxes = modal ? qsa('.task input', modal) : [];
+  var N = Math.max(homeBoxes.length, modalBoxes.length);
+
+  function states(){
+    var saved = load(KEY_MAIN);
+    if (saved && saved.length === N) return saved;
+    var src = homeBoxes.length ? homeBoxes : modalBoxes;
+    return src.map(function(b){ return b.checked; });
+  }
+  function updateCounters(st){
+    var done = st.filter(Boolean).length;
+    if (fab) fab.querySelector('.fab-count').textContent = done + '/' + N;
+    if (modal){
+      modal.querySelector('.progress-bar i').style.width = (N ? done/N*100 : 0) + '%';
+      modal.querySelector('.progress-count').textContent = (N ? Math.round(done/N*100) : 0) + '%';
+    }
+  }
+  function paint(st){
+    for (var i=0;i<N;i++){
+      if (homeBoxes[i]) homeBoxes[i].checked = !!st[i];
+      if (modalBoxes[i]) modalBoxes[i].checked = !!st[i];
+    }
+    updateCounters(st);
+  }
+  if (N){
+    paint(states());
+    var bindMain = function(i){
+      return function(){
+        var st = states(); st[i] = this.checked;
+        save(KEY_MAIN, st); paint(st);
+      };
+    };
+    homeBoxes.forEach(function(b,i){ b.addEventListener('change', bindMain(i)); });
+    modalBoxes.forEach(function(b,i){ b.addEventListener('change', bindMain(i)); });
+  }
+
+  // task list thường của từng trang: lưu riêng theo URL
+  var otherBoxes = qsa('.task input').filter(function(b){
+    return !b.closest('.progress-track') && !(modal && modal.contains(b));
+  });
+  if (otherBoxes.length){
+    var key = 'md2html:page:' + location.pathname;
+    var saved = load(key);
+    if (saved && saved.length === otherBoxes.length){
+      otherBoxes.forEach(function(b,i){ b.checked = !!saved[i]; });
+    }
+    otherBoxes.forEach(function(b){
+      b.addEventListener('change', function(){
+        save(key, otherBoxes.map(function(x){ return x.checked; }));
+      });
+    });
+  }
+
+  if (fab && modal && N){
+    var openModal = function(){
+      paint(states());
+      modal.hidden = false;
+      document.body.style.overflow = 'hidden';
+    };
+    fab.addEventListener('click', openModal);
+    qsa('.progress-open').forEach(function(b){ b.addEventListener('click', openModal); });
+    var closeModal = function(){
+      modal.hidden = true;
+      document.body.style.overflow = '';
+    };
+    document.getElementById('progress-close').addEventListener('click', closeModal);
+    modal.addEventListener('click', function(e){ if (e.target === modal) closeModal(); });
+    document.addEventListener('keydown', function(e){
+      if (e.key === 'Escape' && !modal.hidden) closeModal();
+    });
+  } else if (fab){ fab.hidden = true; }
 })();
 
 </script>

@@ -97,7 +97,7 @@ body {
 }
 #progress { position: fixed; top: 0; left: 0; height: 3px; width: 0; z-index: 70;
   background: linear-gradient(90deg, var(--accent), var(--accent-2), #7c3aed); }
-#backtop { position: fixed; right: 26px; bottom: 26px; width: 44px; height: 44px;
+#backtop { position: fixed; right: 26px; bottom: 88px; width: 44px; height: 44px;
   border-radius: 50%; border: 1px solid var(--border); background: #fff;
   color: var(--accent); font-size: 1.15rem; cursor: pointer; opacity: 0;
   pointer-events: none; transition: all .25s; box-shadow: 0 8px 20px rgba(15,23,42,.14); z-index: 60; }
@@ -161,6 +161,17 @@ code {
 .callout .codeblock { box-shadow: none; }
 .callout .codeblock, .callout .codehilite, .callout code { background: #fff; }
 .callout .codehead { background: rgba(237,241,247,.6); }
+/* --- mermaid diagrams --- */
+.mermaidwrap { margin: 1.5em 0; border: 1px solid var(--border); border-radius: 12px;
+  background: #fff; overflow: hidden; box-shadow: 0 2px 6px rgba(15,23,42,.05); }
+.mermaidwrap .codehead { background: #edf1f7; }
+.mermaid-hint { font-size: .72rem; color: #94a3b8; font-weight: 600; }
+.mermaid { display: flex; justify-content: center; padding: 20px 16px; overflow-x: auto; }
+.mermaid svg { max-width: 100%; height: auto; }
+/* khi mermaid.js chưa/chưa kịp load (offline) — vẫn đọc được source dễ chịu */
+.mermaid:not([data-processed]) { font-family: "JetBrains Mono", Consolas, Menlo, monospace;
+  font-size: .8rem; color: #475569; white-space: pre; text-align: left; justify-content: flex-start; }
+.callout .mermaidwrap { box-shadow: none; }
 /* --- tables --- */
 .tablewrap { overflow-x: auto; margin: 1.2em 0; }
 table { border-collapse: collapse; width: 100%; font-size: .94em; margin: 0; }
@@ -223,7 +234,46 @@ kbd { background: #fff; border: 1px solid #cbd5e1; border-bottom-width: 2px;
 .pager .next { text-align: right; }
 .pager .dir { display: block; font-size: .78rem; color: var(--muted); font-weight: 500; }
 footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top: 34px; }
-@media print { #progress, #backtop, .toc, .pager { display: none !important; }
+/* --- floating progress button + modal --- */
+.progress-fab { position: fixed; right: 26px; bottom: 26px; z-index: 70;
+  display: inline-flex; align-items: center; gap: 9px; padding: 11px 19px;
+  border: none; border-radius: 999px; cursor: pointer; font: inherit;
+  font-size: .88rem; font-weight: 700; color: #fff;
+  background: linear-gradient(120deg, var(--accent), var(--accent-2));
+  box-shadow: 0 14px 34px -12px rgba(79,70,229,.55);
+  transition: transform .15s, box-shadow .15s; }
+.progress-fab:hover { transform: translateY(-2px); box-shadow: 0 18px 40px -12px rgba(79,70,229,.62); }
+.fab-count { background: rgba(255,255,255,.24); padding: 1px 10px; border-radius: 999px; font-size: .86em; }
+.progress-modal { position: fixed; inset: 0; z-index: 100; padding: 24px;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(51,65,85,.45); backdrop-filter: blur(3px); }
+.progress-modal[hidden] { display: none; }
+.progress-dialog { background: #fff; border-radius: 18px; width: min(780px, 100%);
+  max-height: 82vh; display: flex; flex-direction: column;
+  box-shadow: 0 40px 90px -20px rgba(51,65,85,.5); overflow: hidden; }
+.progress-head { display: flex; align-items: center; justify-content: space-between;
+  gap: 14px; padding: 20px 28px 14px; }
+.progress-head h2 { margin: 0; padding: 0; border: none; font-size: 1.2rem; }
+.progress-count { color: var(--accent); font-size: .72em; margin-left: .5em; }
+.progress-close { flex-shrink: 0; width: 34px; height: 34px; border-radius: 10px;
+  border: 1px solid var(--border); background: #fff; color: var(--muted);
+  font-size: 1rem; cursor: pointer; transition: all .15s; }
+.progress-close:hover { color: var(--accent); border-color: var(--accent); background: var(--accent-soft); }
+.progress-bar { height: 6px; background: #e2e8f0; margin: 0 28px; border-radius: 99px; overflow: hidden; }
+.progress-bar i { display: block; height: 100%; width: 0; border-radius: 99px;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2)); transition: width .25s; }
+.progress-body { padding: 8px 28px 26px; overflow-y: auto; }
+.progress-body h3 { margin-top: 1.1em; }
+/* --- trang nguồn: checklist inline thay bằng nút mở popup --- */
+.progress-hint { display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+  background: var(--accent-soft); border: 1px dashed #c7d2fe; border-radius: 14px;
+  padding: 16px 20px; color: var(--muted); font-size: .95rem; }
+.progress-open { flex-shrink: 0; border: none; border-radius: 10px; padding: 11px 20px;
+  font: inherit; font-size: .92rem; font-weight: 700; color: #fff; cursor: pointer;
+  background: linear-gradient(120deg, var(--accent), var(--accent-2));
+  box-shadow: 0 8px 18px -8px rgba(79,70,229,.5); transition: transform .15s; }
+.progress-open:hover { transform: translateY(-1px); }
+@media print { #progress, #backtop, .toc, .pager, .progress-fab, .progress-modal { display: none !important; }
   body { background: #fff; } .card { box-shadow: none; border: none; } }
 
 .wrap.wide { max-width: 1340px; }
@@ -264,6 +314,14 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <nav class="crumb"><a href="../index.html">📚 Docs</a> &nbsp;›&nbsp; go-fundamentals</nav>
 <main class="wrap">
 <article class="card">
+<h1 id="http-api-va-project-layout-trong-go">HTTP API Và Project Layout Trong Go</h1>
+<div class="callout callout-note"><div class="callout-body"><p>Mục tiêu: Hiểu sâu <code>net/http</code>, xây dựng API RESTful hoàn chỉnh, và tổ chức project đúng cách.
+Nếu bạn quen Express.js hoặc NestJS, bài này sẽ map trực tiếp kiến thức đó sang Go.</p></div></div>
+
+<hr />
+<h2 id="1-nethttp-deep-dive">1. net/http Deep Dive</h2>
+<h3 id="11-servemux-router-mac-inh">1.1 ServeMux - Router mặc định</h3>
+<p><code>http.ServeMux</code> là router built-in của Go. Nó dispatch request dựa trên pattern matching.</p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nx">main</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="p">(</span>
@@ -298,6 +356,7 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="p">}</span>
 </pre></div>
 </div>
+<p><strong>So sánh với Express.js:</strong></p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">js</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Express.js</span>
 <span class="kd">const</span><span class="w"> </span><span class="nx">express</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;express&#39;</span><span class="p">);</span>
 <span class="kd">const</span><span class="w"> </span><span class="nx">app</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">express</span><span class="p">();</span>
@@ -309,6 +368,39 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="nx">app</span><span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="mf">8080</span><span class="p">);</span>
 </pre></div>
 </div>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th>Concept</th>
+<th>Express.js</th>
+<th>Go net/http</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Router</td>
+<td><code>express.Router()</code></td>
+<td><code>http.NewServeMux()</code></td>
+</tr>
+<tr>
+<td>Route params</td>
+<td><code>req.params.id</code></td>
+<td><code>r.PathValue("id")</code></td>
+</tr>
+<tr>
+<td>Query params</td>
+<td><code>req.query.page</code></td>
+<td><code>r.URL.Query().Get("page")</code></td>
+</tr>
+<tr>
+<td>Listen</td>
+<td><code>app.listen(8080)</code></td>
+<td><code>http.ListenAndServe(":8080", mux)</code></td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="12-handler-interface-va-handlerfunc">1.2 Handler Interface và HandlerFunc</h3>
+<p>Đây là core abstraction của Go HTTP. Mọi thứ đều implement <code>Handler</code> interface:</p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Handler interface - chỉ có 1 method</span>
 <span class="kd">type</span><span class="w"> </span><span class="nx">Handler</span><span class="w"> </span><span class="kd">interface</span><span class="w"> </span><span class="p">{</span>
 <span class="w">	</span><span class="nx">ServeHTTP</span><span class="p">(</span><span class="nx">ResponseWriter</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="nx">Request</span><span class="p">)</span>
@@ -323,6 +415,7 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="p">}</span>
 </pre></div>
 </div>
+<p><strong>Ví dụ đầy đủ:</strong></p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Cách 1: Dùng function trực tiếp (với HandleFunc)</span>
 <span class="nx">mux</span><span class="p">.</span><span class="nx">HandleFunc</span><span class="p">(</span><span class="s">&quot;/api/users&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">listUsersHandler</span><span class="p">)</span>
 
@@ -354,6 +447,7 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="nx">mux</span><span class="p">.</span><span class="nx">Handle</span><span class="p">(</span><span class="s">&quot;/api/users&quot;</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">UserHandler</span><span class="p">{</span><span class="nx">service</span><span class="p">:</span><span class="w"> </span><span class="nx">userService</span><span class="p">})</span>
 </pre></div>
 </div>
+<p><strong>So sánh với Express.js:</strong></p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">js</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Express: middleware chain</span>
 <span class="nx">app</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;/users&#39;</span><span class="p">,</span><span class="w"> </span><span class="nx">authMiddleware</span><span class="p">,</span><span class="w"> </span><span class="nx">validateMiddleware</span><span class="p">,</span><span class="w"> </span><span class="nx">listUsers</span><span class="p">);</span>
 
@@ -361,6 +455,8 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="c1">// Middleware = function wrap handler (xem phần middleware bên dưới)</span>
 </pre></div>
 </div>
+<h3 id="13-request-object">1.3 Request Object</h3>
+<p><code>*http.Request</code> chứa toàn bộ thông tin về request:</p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kd">func</span><span class="w"> </span><span class="nx">handleRequest</span><span class="p">(</span><span class="nx">w</span><span class="w"> </span><span class="nx">http</span><span class="p">.</span><span class="nx">ResponseWriter</span><span class="p">,</span><span class="w"> </span><span class="nx">r</span><span class="w"> </span><span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Request</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">	</span><span class="c1">// Method và URL</span>
 <span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&quot;Method:&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">r</span><span class="p">.</span><span class="nx">Method</span><span class="p">)</span><span class="w">         </span><span class="c1">// GET, POST, PUT, DELETE</span>
@@ -419,6 +515,7 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="p">}</span>
 </pre></div>
 </div>
+<p><strong>So sánh với Express.js Request:</strong></p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">js</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Express.js                          // Go</span>
 <span class="nx">req</span><span class="p">.</span><span class="nx">method</span><span class="w">                              </span><span class="c1">// r.Method</span>
 <span class="nx">req</span><span class="p">.</span><span class="nx">path</span><span class="w">                                </span><span class="c1">// r.URL.Path</span>
@@ -430,6 +527,8 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="nx">req</span><span class="p">.</span><span class="nx">file</span><span class="w">                                </span><span class="c1">// r.FormFile(&quot;avatar&quot;)</span>
 </pre></div>
 </div>
+<h3 id="14-responsewriter">1.4 ResponseWriter</h3>
+<p><code>http.ResponseWriter</code> là interface để gửi response:</p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kd">func</span><span class="w"> </span><span class="nx">writeResponses</span><span class="p">(</span><span class="nx">w</span><span class="w"> </span><span class="nx">http</span><span class="p">.</span><span class="nx">ResponseWriter</span><span class="p">,</span><span class="w"> </span><span class="nx">r</span><span class="w"> </span><span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Request</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">	</span><span class="c1">// Set headers TRƯỚC khi write body</span>
 <span class="w">	</span><span class="nx">w</span><span class="p">.</span><span class="nx">Header</span><span class="p">().</span><span class="nx">Set</span><span class="p">(</span><span class="s">&quot;Content-Type&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;application/json&quot;</span><span class="p">)</span>
@@ -447,6 +546,11 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="p">}</span>
 </pre></div>
 </div>
+<p><strong>Lưu ý quan trọng:</strong>
+- <code>Header().Set()</code> phải gọi TRƯỚC <code>WriteHeader()</code> hoặc <code>Write()</code>
+- <code>WriteHeader()</code> chỉ gọi được 1 lần
+- Nếu không gọi <code>WriteHeader()</code>, lần đầu gọi <code>Write()</code> sẽ tự động gửi 200
+- Không thể thay đổi status code sau khi đã write body</p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// ❌ SAI - Header set sau khi đã write</span>
 <span class="nx">w</span><span class="p">.</span><span class="nx">Write</span><span class="p">([]</span><span class="nb">byte</span><span class="p">(</span><span class="s">&quot;hello&quot;</span><span class="p">))</span>
 <span class="nx">w</span><span class="p">.</span><span class="nx">Header</span><span class="p">().</span><span class="nx">Set</span><span class="p">(</span><span class="s">&quot;Content-Type&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;application/json&quot;</span><span class="p">)</span><span class="w"> </span><span class="c1">// Quá muộn!</span>
@@ -457,6 +561,8 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="nx">w</span><span class="p">.</span><span class="nx">Write</span><span class="p">([]</span><span class="nb">byte</span><span class="p">(</span><span class="s">`{&quot;status&quot;:&quot;ok&quot;}`</span><span class="p">))</span>
 </pre></div>
 </div>
+<h3 id="15-json-encodingdecoding-patterns">1.5 JSON Encoding/Decoding Patterns</h3>
+<p><strong>Decode JSON từ request body:</strong></p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kd">type</span><span class="w"> </span><span class="nx">CreateUserRequest</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
 <span class="w">	</span><span class="nx">Name</span><span class="w">     </span><span class="kt">string</span><span class="w"> </span><span class="s">`json:&quot;name&quot; validate:&quot;required&quot;`</span>
 <span class="w">	</span><span class="nx">Email</span><span class="w">    </span><span class="kt">string</span><span class="w"> </span><span class="s">`json:&quot;email&quot; validate:&quot;required,email&quot;`</span>
@@ -487,6 +593,7 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="p">}</span>
 </pre></div>
 </div>
+<p><strong>Encode JSON ra response:</strong></p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kd">type</span><span class="w"> </span><span class="nx">UserResponse</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
 <span class="w">	</span><span class="nx">ID</span><span class="w">    </span><span class="kt">int</span><span class="w">    </span><span class="s">`json:&quot;id&quot;`</span>
 <span class="w">	</span><span class="nx">Name</span><span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="s">`json:&quot;name&quot;`</span>
@@ -515,6 +622,7 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="p">}</span>
 </pre></div>
 </div>
+<p><strong>JSON Response helper tái sử dụng:</strong></p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// response.go - Helper functions</span>
 <span class="kn">package</span><span class="w"> </span><span class="nx">response</span>
 
@@ -551,6 +659,7 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="16-form-data-handling">1.6 Form Data Handling</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kd">func</span><span class="w"> </span><span class="nx">handleForm</span><span class="p">(</span><span class="nx">w</span><span class="w"> </span><span class="nx">http</span><span class="p">.</span><span class="nx">ResponseWriter</span><span class="p">,</span><span class="w"> </span><span class="nx">r</span><span class="w"> </span><span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Request</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">	</span><span class="c1">// Phải parse trước khi lấy giá trị</span>
 <span class="w">	</span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">r</span><span class="p">.</span><span class="nx">ParseForm</span><span class="p">();</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
@@ -575,6 +684,7 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="17-multipart-file-upload">1.7 Multipart File Upload</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kd">func</span><span class="w"> </span><span class="nx">uploadHandler</span><span class="p">(</span><span class="nx">w</span><span class="w"> </span><span class="nx">http</span><span class="p">.</span><span class="nx">ResponseWriter</span><span class="p">,</span><span class="w"> </span><span class="nx">r</span><span class="w"> </span><span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Request</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">	</span><span class="k">if</span><span class="w"> </span><span class="nx">r</span><span class="p">.</span><span class="nx">Method</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="nx">http</span><span class="p">.</span><span class="nx">MethodPost</span><span class="w"> </span><span class="p">{</span>
 <span class="w">		</span><span class="nx">http</span><span class="p">.</span><span class="nx">Error</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;method not allowed&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">http</span><span class="p">.</span><span class="nx">StatusMethodNotAllowed</span><span class="p">)</span>
@@ -621,11 +731,14 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="p">}</span>
 </pre></div>
 </div>
+<p><strong>Test upload với curl:</strong></p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">bash</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://localhost:8080/upload<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>-F<span class="w"> </span><span class="s2">&quot;avatar=@/path/to/photo.jpg&quot;</span><span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>-F<span class="w"> </span><span class="s2">&quot;description=My avatar&quot;</span>
 </pre></div>
 </div>
+<h3 id="18-middleware-chaining-pattern">1.8 Middleware Chaining Pattern</h3>
+<p>Middleware trong Go là function nhận <code>http.Handler</code> và trả về <code>http.Handler</code>:</p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nx">middleware</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="p">(</span>
@@ -711,6 +824,7 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="p">}</span>
 </pre></div>
 </div>
+<p><strong>Chain middleware:</strong></p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Cách 1: Wrap thủ công (đơn giản, dễ hiểu)</span>
 <span class="nx">mux</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">http</span><span class="p">.</span><span class="nx">NewServeMux</span><span class="p">()</span>
 <span class="nx">mux</span><span class="p">.</span><span class="nx">HandleFunc</span><span class="p">(</span><span class="s">&quot;/api/users&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">listUsersHandler</span><span class="p">)</span>
@@ -731,6 +845,7 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="nx">handler</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">Chain</span><span class="p">(</span><span class="nx">mux</span><span class="p">,</span><span class="w"> </span><span class="nx">Recovery</span><span class="p">,</span><span class="w"> </span><span class="nx">CORS</span><span class="p">,</span><span class="w"> </span><span class="nx">Logging</span><span class="p">,</span><span class="w"> </span><span class="nx">Auth</span><span class="p">)</span>
 </pre></div>
 </div>
+<p><strong>So sánh với Express.js:</strong></p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">js</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Express.js</span>
 <span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">cors</span><span class="p">());</span>
 <span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">express</span><span class="p">.</span><span class="nx">json</span><span class="p">());</span>
@@ -742,6 +857,8 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="c1">// Recovery chạy đầu tiên (outermost), Auth chạy cuối cùng (gần handler nhất)</span>
 </pre></div>
 </div>
+<h3 id="19-router-group-patterns">1.9 Router Group Patterns</h3>
+<p><strong>Dùng <code>net/http</code> thuần (Go 1.22+):</strong></p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kd">func</span><span class="w"> </span><span class="nx">setupRoutes</span><span class="p">()</span><span class="w"> </span><span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">ServeMux</span><span class="w"> </span><span class="p">{</span>
 <span class="w">	</span><span class="nx">mux</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">http</span><span class="p">.</span><span class="nx">NewServeMux</span><span class="p">()</span>
 
@@ -765,6 +882,7 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="p">}</span>
 </pre></div>
 </div>
+<p><strong>Dùng chi router (giống Express nhất):</strong></p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="s">&quot;github.com/go-chi/chi/v5&quot;</span>
 
 <span class="kd">func</span><span class="w"> </span><span class="nx">setupRouter</span><span class="p">()</span><span class="w"> </span><span class="o">*</span><span class="nx">chi</span><span class="p">.</span><span class="nx">Mux</span><span class="w"> </span><span class="p">{</span>
@@ -805,6 +923,7 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="p">}</span>
 </pre></div>
 </div>
+<p><strong>Dùng gorilla/mux:</strong></p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="s">&quot;github.com/gorilla/mux&quot;</span>
 
 <span class="kd">func</span><span class="w"> </span><span class="nx">setupRouter</span><span class="p">()</span><span class="w"> </span><span class="o">*</span><span class="nx">mux</span><span class="p">.</span><span class="nx">Router</span><span class="w"> </span><span class="p">{</span>
@@ -828,6 +947,9 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="p">}</span>
 </pre></div>
 </div>
+<hr />
+<h2 id="2-http-client">2. HTTP Client</h2>
+<h3 id="21-httpclient-configuration">2.1 http.Client Configuration</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nx">main</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="p">(</span>
@@ -877,6 +999,8 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="22-request-voi-context">2.2 Request với Context</h3>
+<p>Context giúp cancel request khi cần (timeout, user disconnect, etc.):</p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="p">(</span>
 <span class="w">	</span><span class="s">&quot;context&quot;</span>
 <span class="w">	</span><span class="s">&quot;net/http&quot;</span>
@@ -931,6 +1055,7 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="23-so-sanh-voi-axiosfetch">2.3 So sánh với axios/fetch</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">js</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Node.js với axios</span>
 <span class="kd">const</span><span class="w"> </span><span class="nx">axios</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;axios&#39;</span><span class="p">);</span>
 
@@ -964,6 +1089,8 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="nx">json</span><span class="p">.</span><span class="nx">NewDecoder</span><span class="p">(</span><span class="nx">resp</span><span class="p">.</span><span class="nx">Body</span><span class="p">).</span><span class="nx">Decode</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">data</span><span class="p">)</span>
 </pre></div>
 </div>
+<h3 id="24-connection-pooling">2.4 Connection Pooling</h3>
+<p>Go tự động reuse connections qua <code>http.Transport</code>. Không cần config thêm:</p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Default transport đã có connection pooling</span>
 <span class="nx">client</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">http</span><span class="p">.</span><span class="nx">Client</span><span class="p">{</span>
 <span class="w">    </span><span class="nx">Transport</span><span class="p">:</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">http</span><span class="p">.</span><span class="nx">Transport</span><span class="p">{</span>
@@ -980,6 +1107,8 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="25-retry-patterns">2.5 Retry Patterns</h3>
+<p>Go không có built-in retry. Tự implement:</p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nx">httpclient</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="p">(</span>
@@ -1023,6 +1152,9 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="p">}</span>
 </pre></div>
 </div>
+<hr />
+<h2 id="3-project-layout-patterns">3. Project Layout Patterns</h2>
+<h3 id="31-standard-layout">3.1 Standard Layout</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip"></span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span>myapp/
 ├── cmd/
 │   └── api/
@@ -1050,6 +1182,55 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 └── README.md
 </pre></div>
 </div>
+<p><strong>Ý nghĩa từng thư mục:</strong></p>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th>Thư mục</th>
+<th>Vai trò</th>
+<th>Tương đương NestJS</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>cmd/api/</code></td>
+<td>Entrypoint, bootstrap</td>
+<td><code>main.ts</code></td>
+</tr>
+<tr>
+<td><code>internal/handler/</code></td>
+<td>HTTP layer</td>
+<td><code>controllers/</code></td>
+</tr>
+<tr>
+<td><code>internal/service/</code></td>
+<td>Business logic</td>
+<td><code>services/</code></td>
+</tr>
+<tr>
+<td><code>internal/repository/</code></td>
+<td>Data access</td>
+<td><code>repositories/</code></td>
+</tr>
+<tr>
+<td><code>internal/model/</code></td>
+<td>Domain types</td>
+<td><code>entities/</code></td>
+</tr>
+<tr>
+<td><code>internal/middleware/</code></td>
+<td>Middleware</td>
+<td><code>middleware/</code></td>
+</tr>
+<tr>
+<td><code>pkg/</code></td>
+<td>Public utilities</td>
+<td><code>shared/</code></td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="32-khi-nao-dung-flat-vs-layered-layout">3.2 Khi nào dùng Flat vs Layered Layout</h3>
+<p><strong>Flat layout - App nhỏ (&lt; 10 files):</strong></p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip"></span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span>myapp/
 ├── main.go
 ├── user.go
@@ -1060,6 +1241,7 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 └── go.mod
 </pre></div>
 </div>
+<p><strong>Layered layout - App lớn:</strong></p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip"></span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span>myapp/
 ├── cmd/
 │   ├── api/main.go
@@ -1072,6 +1254,12 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 └── ...
 </pre></div>
 </div>
+<p><strong>Rule of thumb:</strong>
+- Bắt đầu flat, refactor khi cần
+- Khi file &gt; 10, tách package
+- Khi package &gt; 5, tách internal/</p>
+<h3 id="33-dependency-injection-patterns">3.3 Dependency Injection Patterns</h3>
+<p><strong>Không dùng framework - Constructor injection:</strong></p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// internal/repository/user.go</span>
 <span class="kn">package</span><span class="w"> </span><span class="nx">repository</span>
 
@@ -1118,6 +1306,7 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="p">}</span>
 </pre></div>
 </div>
+<p><strong>Bootstrap trong main.go:</strong></p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// cmd/api/main.go</span>
 <span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">	</span><span class="c1">// Tạo dependencies</span>
@@ -1137,6 +1326,8 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="34-configuration-management">3.4 Configuration Management</h3>
+<p><strong>Dùng environment variables (đơn giản nhất):</strong></p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nx">config</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="p">(</span>
@@ -1178,6 +1369,7 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="p">}</span>
 </pre></div>
 </div>
+<p><strong>Dùng config file (YAML/JSON):</strong></p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="p">(</span>
 <span class="w">	</span><span class="s">&quot;encoding/json&quot;</span>
 <span class="w">	</span><span class="s">&quot;os&quot;</span>
@@ -1212,6 +1404,7 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="35-graceful-shutdown">3.5 Graceful Shutdown</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nx">main</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="p">(</span>
@@ -1265,6 +1458,7 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="36-health-check-patterns">3.6 Health Check Patterns</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nx">handler</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="p">(</span>
@@ -1343,6 +1537,41 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="37-so-sanh-voi-nestjs-module-system">3.7 So sánh với NestJS Module System</h3>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th>NestJS</th>
+<th>Go</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>@Module({})</code> decorator</td>
+<td>Manual wiring trong main.go</td>
+</tr>
+<tr>
+<td><code>@Injectable()</code></td>
+<td>Constructor injection</td>
+</tr>
+<tr>
+<td><code>@Controller()</code></td>
+<td>Handler struct với methods</td>
+</tr>
+<tr>
+<td><code>@Service()</code></td>
+<td>Service struct</td>
+</tr>
+<tr>
+<td>Module imports</td>
+<td>Truyền dependencies qua constructor</td>
+</tr>
+<tr>
+<td><code>forRoot()</code> config</td>
+<td><code>config.Load()</code></td>
+</tr>
+</tbody>
+</table></div>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">typescript</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// NestJS</span>
 <span class="kd">@Module</span><span class="p">({</span>
 <span class="w">  </span><span class="nx">imports</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="nx">DatabaseModule</span><span class="p">],</span>
@@ -1365,6 +1594,9 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="p">}</span>
 </pre></div>
 </div>
+<hr />
+<h2 id="4-real-world-api-example-full-crud">4. Real-world API Example - Full CRUD</h2>
+<h3 id="41-user-model">4.1 User Model</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// internal/model/user.go</span>
 <span class="kn">package</span><span class="w"> </span><span class="nx">model</span>
 
@@ -1392,6 +1624,7 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="42-user-repository">4.2 User Repository</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// internal/repository/user.go</span>
 <span class="kn">package</span><span class="w"> </span><span class="nx">repository</span>
 
@@ -1518,6 +1751,7 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="43-user-service">4.3 User Service</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// internal/service/user.go</span>
 <span class="kn">package</span><span class="w"> </span><span class="nx">service</span>
 
@@ -1622,6 +1856,7 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="44-user-handler">4.4 User Handler</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// internal/handler/user.go</span>
 <span class="kn">package</span><span class="w"> </span><span class="nx">handler</span>
 
@@ -1738,6 +1973,7 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="45-router-setup-va-main">4.5 Router Setup và Main</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// cmd/api/main.go</span>
 <span class="kn">package</span><span class="w"> </span><span class="nx">main</span>
 
@@ -1819,6 +2055,7 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="46-middleware-logging-recovery-auth">4.6 Middleware (Logging, Recovery, Auth)</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// internal/middleware/middleware.go</span>
 <span class="kn">package</span><span class="w"> </span><span class="nx">middleware</span>
 
@@ -1924,6 +2161,7 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="47-api-testing-voi-curl">4.7 API Testing với curl</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">bash</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1"># Health check</span>
 curl<span class="w"> </span>http://localhost:8080/health
 
@@ -1947,194 +2185,6 @@ curl<span class="w"> </span>-X<span class="w"> </span>PUT<span class="w"> </span
 curl<span class="w"> </span>-X<span class="w"> </span>DELETE<span class="w"> </span>http://localhost:8080/api/users/1
 </pre></div>
 </div>
-<h1 id="http-api-va-project-layout-trong-go">HTTP API Và Project Layout Trong Go</h1>
-<div class="callout callout-note"><div class="callout-body"><p>Mục tiêu: Hiểu sâu <code>net/http</code>, xây dựng API RESTful hoàn chỉnh, và tổ chức project đúng cách.
-Nếu bạn quen Express.js hoặc NestJS, bài này sẽ map trực tiếp kiến thức đó sang Go.</p></div></div>
-
-<hr />
-<h2 id="1-nethttp-deep-dive">1. net/http Deep Dive</h2>
-<h3 id="11-servemux-router-mac-inh">1.1 ServeMux - Router mặc định</h3>
-<p><code>http.ServeMux</code> là router built-in của Go. Nó dispatch request dựa trên pattern matching.</p>
-<p><strong>So sánh với Express.js:</strong></p>
-<div class="tablewrap"><table>
-<thead>
-<tr>
-<th>Concept</th>
-<th>Express.js</th>
-<th>Go net/http</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Router</td>
-<td><code>express.Router()</code></td>
-<td><code>http.NewServeMux()</code></td>
-</tr>
-<tr>
-<td>Route params</td>
-<td><code>req.params.id</code></td>
-<td><code>r.PathValue("id")</code></td>
-</tr>
-<tr>
-<td>Query params</td>
-<td><code>req.query.page</code></td>
-<td><code>r.URL.Query().Get("page")</code></td>
-</tr>
-<tr>
-<td>Listen</td>
-<td><code>app.listen(8080)</code></td>
-<td><code>http.ListenAndServe(":8080", mux)</code></td>
-</tr>
-</tbody>
-</table></div>
-<h3 id="12-handler-interface-va-handlerfunc">1.2 Handler Interface và HandlerFunc</h3>
-<p>Đây là core abstraction của Go HTTP. Mọi thứ đều implement <code>Handler</code> interface:</p>
-<p><strong>Ví dụ đầy đủ:</strong></p>
-<p><strong>So sánh với Express.js:</strong></p>
-<h3 id="13-request-object">1.3 Request Object</h3>
-<p><code>*http.Request</code> chứa toàn bộ thông tin về request:</p>
-<p><strong>So sánh với Express.js Request:</strong></p>
-<h3 id="14-responsewriter">1.4 ResponseWriter</h3>
-<p><code>http.ResponseWriter</code> là interface để gửi response:</p>
-<p><strong>Lưu ý quan trọng:</strong>
-- <code>Header().Set()</code> phải gọi TRƯỚC <code>WriteHeader()</code> hoặc <code>Write()</code>
-- <code>WriteHeader()</code> chỉ gọi được 1 lần
-- Nếu không gọi <code>WriteHeader()</code>, lần đầu gọi <code>Write()</code> sẽ tự động gửi 200
-- Không thể thay đổi status code sau khi đã write body</p>
-<h3 id="15-json-encodingdecoding-patterns">1.5 JSON Encoding/Decoding Patterns</h3>
-<p><strong>Decode JSON từ request body:</strong></p>
-<p><strong>Encode JSON ra response:</strong></p>
-<p><strong>JSON Response helper tái sử dụng:</strong></p>
-<h3 id="16-form-data-handling">1.6 Form Data Handling</h3>
-<h3 id="17-multipart-file-upload">1.7 Multipart File Upload</h3>
-<p><strong>Test upload với curl:</strong></p>
-<h3 id="18-middleware-chaining-pattern">1.8 Middleware Chaining Pattern</h3>
-<p>Middleware trong Go là function nhận <code>http.Handler</code> và trả về <code>http.Handler</code>:</p>
-<p><strong>Chain middleware:</strong></p>
-<p><strong>So sánh với Express.js:</strong></p>
-<h3 id="19-router-group-patterns">1.9 Router Group Patterns</h3>
-<p><strong>Dùng <code>net/http</code> thuần (Go 1.22+):</strong></p>
-<p><strong>Dùng chi router (giống Express nhất):</strong></p>
-<p><strong>Dùng gorilla/mux:</strong></p>
-<hr />
-<h2 id="2-http-client">2. HTTP Client</h2>
-<h3 id="21-httpclient-configuration">2.1 http.Client Configuration</h3>
-<h3 id="22-request-voi-context">2.2 Request với Context</h3>
-<p>Context giúp cancel request khi cần (timeout, user disconnect, etc.):</p>
-<h3 id="23-so-sanh-voi-axiosfetch">2.3 So sánh với axios/fetch</h3>
-<h3 id="24-connection-pooling">2.4 Connection Pooling</h3>
-<p>Go tự động reuse connections qua <code>http.Transport</code>. Không cần config thêm:</p>
-<h3 id="25-retry-patterns">2.5 Retry Patterns</h3>
-<p>Go không có built-in retry. Tự implement:</p>
-<hr />
-<h2 id="3-project-layout-patterns">3. Project Layout Patterns</h2>
-<h3 id="31-standard-layout">3.1 Standard Layout</h3>
-<p><strong>Ý nghĩa từng thư mục:</strong></p>
-<div class="tablewrap"><table>
-<thead>
-<tr>
-<th>Thư mục</th>
-<th>Vai trò</th>
-<th>Tương đương NestJS</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>cmd/api/</code></td>
-<td>Entrypoint, bootstrap</td>
-<td><code>main.ts</code></td>
-</tr>
-<tr>
-<td><code>internal/handler/</code></td>
-<td>HTTP layer</td>
-<td><code>controllers/</code></td>
-</tr>
-<tr>
-<td><code>internal/service/</code></td>
-<td>Business logic</td>
-<td><code>services/</code></td>
-</tr>
-<tr>
-<td><code>internal/repository/</code></td>
-<td>Data access</td>
-<td><code>repositories/</code></td>
-</tr>
-<tr>
-<td><code>internal/model/</code></td>
-<td>Domain types</td>
-<td><code>entities/</code></td>
-</tr>
-<tr>
-<td><code>internal/middleware/</code></td>
-<td>Middleware</td>
-<td><code>middleware/</code></td>
-</tr>
-<tr>
-<td><code>pkg/</code></td>
-<td>Public utilities</td>
-<td><code>shared/</code></td>
-</tr>
-</tbody>
-</table></div>
-<h3 id="32-khi-nao-dung-flat-vs-layered-layout">3.2 Khi nào dùng Flat vs Layered Layout</h3>
-<p><strong>Flat layout - App nhỏ (&lt; 10 files):</strong></p>
-<p><strong>Layered layout - App lớn:</strong></p>
-<p><strong>Rule of thumb:</strong>
-- Bắt đầu flat, refactor khi cần
-- Khi file &gt; 10, tách package
-- Khi package &gt; 5, tách internal/</p>
-<h3 id="33-dependency-injection-patterns">3.3 Dependency Injection Patterns</h3>
-<p><strong>Không dùng framework - Constructor injection:</strong></p>
-<p><strong>Bootstrap trong main.go:</strong></p>
-<h3 id="34-configuration-management">3.4 Configuration Management</h3>
-<p><strong>Dùng environment variables (đơn giản nhất):</strong></p>
-<p><strong>Dùng config file (YAML/JSON):</strong></p>
-<h3 id="35-graceful-shutdown">3.5 Graceful Shutdown</h3>
-<h3 id="36-health-check-patterns">3.6 Health Check Patterns</h3>
-<h3 id="37-so-sanh-voi-nestjs-module-system">3.7 So sánh với NestJS Module System</h3>
-<div class="tablewrap"><table>
-<thead>
-<tr>
-<th>NestJS</th>
-<th>Go</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>@Module({})</code> decorator</td>
-<td>Manual wiring trong main.go</td>
-</tr>
-<tr>
-<td><code>@Injectable()</code></td>
-<td>Constructor injection</td>
-</tr>
-<tr>
-<td><code>@Controller()</code></td>
-<td>Handler struct với methods</td>
-</tr>
-<tr>
-<td><code>@Service()</code></td>
-<td>Service struct</td>
-</tr>
-<tr>
-<td>Module imports</td>
-<td>Truyền dependencies qua constructor</td>
-</tr>
-<tr>
-<td><code>forRoot()</code> config</td>
-<td><code>config.Load()</code></td>
-</tr>
-</tbody>
-</table></div>
-<hr />
-<h2 id="4-real-world-api-example-full-crud">4. Real-world API Example - Full CRUD</h2>
-<h3 id="41-user-model">4.1 User Model</h3>
-<h3 id="42-user-repository">4.2 User Repository</h3>
-<h3 id="43-user-service">4.3 User Service</h3>
-<h3 id="44-user-handler">4.4 User Handler</h3>
-<h3 id="45-router-setup-va-main">4.5 Router Setup và Main</h3>
-<h3 id="46-middleware-logging-recovery-auth">4.6 Middleware (Logging, Recovery, Auth)</h3>
-<h3 id="47-api-testing-voi-curl">4.7 API Testing với curl</h3>
 <hr />
 <h2 id="summary">Summary</h2>
 <div class="tablewrap"><table>
@@ -2216,6 +2266,70 @@ Nếu bạn quen Express.js hoặc NestJS, bài này sẽ map trực tiếp ki�
 </nav>
 <footer>Generated from Markdown · <a href="../index.html">Về trang chủ docs</a></footer>
 </main>
+
+<button class="progress-fab" id="progress-fab" type="button">📊 Tiến độ <span class="fab-count">0/0</span></button>
+<div class="progress-modal" id="progress-modal" hidden>
+  <div class="progress-dialog" role="dialog" aria-label="Theo dõi tiến độ">
+    <div class="progress-head">
+      <h2>📊 Theo dõi tiến độ <span class="progress-count">0%</span></h2>
+      <button class="progress-close" id="progress-close" type="button" aria-label="Đóng">✕</button>
+    </div>
+    <div class="progress-bar"><i></i></div>
+    <div class="progress-body">
+<div class="callout callout-note"><div class="callout-body"><p>Đây là bảng theo dõi <strong>duy nhất</strong> cho cả bộ tài liệu. Tick vào từng mốc — tiến độ được lưu trên trình duyệt và đồng bộ ở mọi trang qua nút nổi <strong>📊 Tiến độ</strong> ở góc phải dưới. Checklist chi tiết từng ngày vẫn nằm trong bài <code>07 · Fast Track Roadmap</code>.</p></div></div>
+
+<h3>Giai đoạn 1 · Nền tảng (Ngày 1)</h3>
+<ul>
+<li class="task"><input type="checkbox"> Hiểu mental model Go vs Node.js — file <code>01</code></li>
+<li class="task"><input type="checkbox"> Nắm syntax: <code>var</code>, <code>:=</code>, <code>const</code>, slice, map, <code>for</code>, <code>if</code>, <code>switch</code> — file <code>02</code></li>
+<li class="task"><input type="checkbox"> Viết được <code>struct</code> + method + pointer cơ bản</li>
+<li class="task"><input type="checkbox"> Chạy được <code>go run</code>, <code>go fmt</code> và tạo module mới</li>
+</ul>
+<h3>Giai đoạn 2 · Struct, Interface, Error (Ngày 2)</h3>
+<ul>
+<li class="task"><input type="checkbox"> Thiết kế struct, embedding và constructor</li>
+<li class="task"><input type="checkbox"> Hiểu interface + polymorphism trong Go</li>
+<li class="task"><input type="checkbox"> Xử lý lỗi với <code>errors.Is</code>, <code>errors.As</code> và custom error — file <code>03</code></li>
+</ul>
+<h3>Giai đoạn 3 · HTTP API (Ngày 3–4)</h3>
+<ul>
+<li class="task"><input type="checkbox"> Dựng được <code>/health</code> + CRUD bằng <code>net/http</code> hoặc Fiber — file <code>05</code></li>
+<li class="task"><input type="checkbox"> Viết middleware logging + error handling</li>
+<li class="task"><input type="checkbox"> Test API bằng curl/Postman</li>
+<li class="task"><input type="checkbox"> Viết unit test table-driven + <code>httptest</code> — file <code>06</code></li>
+</ul>
+<h3>Giai đoạn 4 · Concurrency (Ngày 5)</h3>
+<ul>
+<li class="task"><input type="checkbox"> Dùng goroutine + <code>WaitGroup</code> — file <code>04</code></li>
+<li class="task"><input type="checkbox"> Dùng channel + <code>select</code></li>
+<li class="task"><input type="checkbox"> Dùng <code>context.WithTimeout</code> để cancel</li>
+<li class="task"><input type="checkbox"> Chạy <code>go run -race .</code> không báo lỗi</li>
+</ul>
+<h3>Giai đoạn 5 · Project Layout &amp; Capstone (Ngày 6–7)</h3>
+<ul>
+<li class="task"><input type="checkbox"> Tách <code>cmd/</code>, <code>internal/</code>, viết repository interface</li>
+<li class="task"><input type="checkbox"> Wire dependency trong <code>main.go</code> + graceful shutdown</li>
+<li class="task"><input type="checkbox"> Hoàn thành 1 mini project kèm test, <code>go vet ./...</code>, <code>go build ./...</code></li>
+</ul>
+<h3>🚦 Mốc sẵn sàng: Phân tích &amp; code project</h3>
+<div class="callout callout-note"><div class="callout-body"><p><strong>Đọc/phân tích project thật:</strong> xong Giai đoạn 1 → 3 (khoảng Ngày 3).
+<strong>Sửa code trong project thật:</strong> xong thêm Giai đoạn 4 (khoảng Ngày 5).
+<strong>Tự code một project hoàn chỉnh:</strong> xong Giai đoạn 5 (khoảng Ngày 6–7).</p></div></div>
+
+<ul>
+<li class="task"><input type="checkbox"> Xong Giai đoạn 1 → 3: đọc hiểu và tự dựng được REST API CRUD</li>
+<li class="task"><input type="checkbox"> Đọc hiểu một repo Go lạ trong khoảng 1 buổi, không cần dịch từng dòng</li>
+<li class="task"><input type="checkbox"> Tự viết CRUD + test table-driven mà không copy nguyên mẫu</li>
+<li class="task"><input type="checkbox"> Giải thích được khi nào dùng goroutine / channel / context</li>
+<li class="task"><input type="checkbox"> Chạy thành thạo <code>go test</code>, <code>go vet</code>, <code>go build</code> và đọc được lỗi</li>
+<li class="task"><input type="checkbox"> Đã phân tích ít nhất 1 project mẫu — vtvcab-identity-api (series Node.js → Go, bài <code>01</code>)</li>
+</ul>
+<hr />
+    </div>
+  </div>
+</div>
+
+
 <script>
 
 (function(){
@@ -2265,6 +2379,88 @@ Nếu bạn quen Express.js hoặc NestJS, bài này sẽ map trực tiếp ki�
       navigator.clipboard.writeText(text).then(function(){ done(true); }, fallback);
     } else { fallback(); }
   });
+})();
+// ---- progress tracker: nút nổi + modal, đồng bộ mọi trang qua localStorage ----
+(function(){
+  function qsa(sel, root){ return [].slice.call((root||document).querySelectorAll(sel)); }
+  function load(key){ try{ return JSON.parse(localStorage.getItem(key)||'null'); }catch(e){ return null; } }
+  function save(key, arr){ try{ localStorage.setItem(key, JSON.stringify(arr)); }catch(e){} }
+
+  var KEY_MAIN = 'md2html:progress:docs';
+  var modal = document.getElementById('progress-modal');
+  var fab = document.getElementById('progress-fab');
+  var homeBoxes = qsa('.progress-track .task input');
+  var modalBoxes = modal ? qsa('.task input', modal) : [];
+  var N = Math.max(homeBoxes.length, modalBoxes.length);
+
+  function states(){
+    var saved = load(KEY_MAIN);
+    if (saved && saved.length === N) return saved;
+    var src = homeBoxes.length ? homeBoxes : modalBoxes;
+    return src.map(function(b){ return b.checked; });
+  }
+  function updateCounters(st){
+    var done = st.filter(Boolean).length;
+    if (fab) fab.querySelector('.fab-count').textContent = done + '/' + N;
+    if (modal){
+      modal.querySelector('.progress-bar i').style.width = (N ? done/N*100 : 0) + '%';
+      modal.querySelector('.progress-count').textContent = (N ? Math.round(done/N*100) : 0) + '%';
+    }
+  }
+  function paint(st){
+    for (var i=0;i<N;i++){
+      if (homeBoxes[i]) homeBoxes[i].checked = !!st[i];
+      if (modalBoxes[i]) modalBoxes[i].checked = !!st[i];
+    }
+    updateCounters(st);
+  }
+  if (N){
+    paint(states());
+    var bindMain = function(i){
+      return function(){
+        var st = states(); st[i] = this.checked;
+        save(KEY_MAIN, st); paint(st);
+      };
+    };
+    homeBoxes.forEach(function(b,i){ b.addEventListener('change', bindMain(i)); });
+    modalBoxes.forEach(function(b,i){ b.addEventListener('change', bindMain(i)); });
+  }
+
+  // task list thường của từng trang: lưu riêng theo URL
+  var otherBoxes = qsa('.task input').filter(function(b){
+    return !b.closest('.progress-track') && !(modal && modal.contains(b));
+  });
+  if (otherBoxes.length){
+    var key = 'md2html:page:' + location.pathname;
+    var saved = load(key);
+    if (saved && saved.length === otherBoxes.length){
+      otherBoxes.forEach(function(b,i){ b.checked = !!saved[i]; });
+    }
+    otherBoxes.forEach(function(b){
+      b.addEventListener('change', function(){
+        save(key, otherBoxes.map(function(x){ return x.checked; }));
+      });
+    });
+  }
+
+  if (fab && modal && N){
+    var openModal = function(){
+      paint(states());
+      modal.hidden = false;
+      document.body.style.overflow = 'hidden';
+    };
+    fab.addEventListener('click', openModal);
+    qsa('.progress-open').forEach(function(b){ b.addEventListener('click', openModal); });
+    var closeModal = function(){
+      modal.hidden = true;
+      document.body.style.overflow = '';
+    };
+    document.getElementById('progress-close').addEventListener('click', closeModal);
+    modal.addEventListener('click', function(e){ if (e.target === modal) closeModal(); });
+    document.addEventListener('keydown', function(e){
+      if (e.key === 'Escape' && !modal.hidden) closeModal();
+    });
+  } else if (fab){ fab.hidden = true; }
 })();
 
 </script>

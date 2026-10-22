@@ -137,6 +137,7 @@ if err != nil {
 ### V1 vs V2 Controller Pattern
 
 V2 controllers add:
+
 - Input validation via `ValidateStruct`
 - Event logging via `defer` + channel:
 ```go
@@ -196,6 +197,7 @@ func (query *PostgresQueries) GetUserByPhone(ctx context.Context, phone string) 
 ```
 
 Key conventions:
+
 - **Context timeout** on every query (2-15 seconds)
 - **Prepared statements** via `gorm.Session{PrepareStmt: true}`
 - **nil, nil** for "not found" (not an error)
@@ -220,6 +222,7 @@ func (query *RedisQueries) LoginAccountRedisDB(ctx context.Context, req *models.
 ```
 
 Redis keys follow a naming convention:
+
 - `user.:<phone_or_name>` — user cache
 - `token.<jti>` — JWT token store
 - `token.users_token.<user_id>` — set of user's tokens
@@ -733,6 +736,7 @@ func ValidateGoogleToken(token string, tokenType string) (*models.GoogleUser, er
 ```
 
 Two flows:
+
 - **ID Token:** Validated with `idtoken.Validate()`, checks audience against config
 - **Access Token:** Uses `oauth2.Service.Tokeninfo()` then fetches user info
 

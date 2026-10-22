@@ -7,7 +7,10 @@ Features:
   quotes are highlighted properly (python-markdown can't do this natively).
 - Unified code renderer: pygments + lang chip + Copy button, with
   language auto-guessing when missing.
-- Tables wrapped for horizontal scroll, task lists, wiki-links [[...]].
+- Tables wrapped for horizontal scroll, task lists (clickable, lưu localStorage),
+  wiki-links [[...]].
+- Floating "📊 Tiến độ" button + popup checklist đồng bộ mọi trang (nếu docs có
+  mục '## ... Tiến độ'), kèm % và progress bar.
 - Right-side TOC with scrollspy (wide screens), progress bar, back-to-top.
 - Generates index.html hub page. Vietnamese UI, Windows-friendly (no macOS chrome).
 
@@ -17,6 +20,7 @@ Usage:
 Requires: pip install markdown pygments
 """
 import html as html_mod
+import os
 import re
 import sys
 from pathlib import Path
@@ -51,7 +55,48 @@ def wikilink_sub(m):
         anchor = "#" + re.sub(r"[^\w\- ]", "", anchor.lstrip("#")).strip().lower().replace(" ", "-")
     return f'<a class="wikilink" href="{target}.html{anchor}">{label}</a>'
 
+
+# Wiki-link chỉ thay ngoài code fence — nếu không, [[...]] trong mermaid/code
+# bị biến thành thẻ <a> và phá vỡ cú pháp (vd: MQ[[RabbitMQ]] trong sơ đồ).
+LINE_FENCE = re.compile(r"^(\s{0,3}(?:>\s{0,3})*)(`{3,}|~{3,})\s*([\w#+-]*)")
+
+
+def sub_wiki_outside_fences(text: str) -> str:
+    """Thay [[wiki-link]] ở ngoài code fence (kể cả fence trong blockquote)."""
+    out, close_re = [], None
+    for line in text.split("\n"):
+        if close_re:  # đang trong fence — giữ nguyên từng dòng
+            out.append(line)
+            if close_re.match(line):
+                close_re = None
+            continue
+        m = LINE_FENCE.match(line)
+        if m:
+            fence = m.group(2)
+            close_re = re.compile(
+                r"^\s{0,3}(?:>\s{0,3})*" + re.escape(fence[0])
+                + "{" + str(len(fence)) + ",}\\s*$")
+            out.append(line)
+            continue
+        out.append(WIKI.sub(wikilink_sub, line))
+    return "\n".join(out)
+
+
 # ---------------------------------------------------------------- code blocks
+
+PAGE_HAS_MERMAID = False
+
+
+def render_mermaid(code: str) -> str:
+    """Fence ```mermaid -> sơ đồ thật (mermaid.js), không dùng pygments/copy."""
+    global PAGE_HAS_MERMAID
+    PAGE_HAS_MERMAID = True
+    esc = html_mod.escape(code.strip("\n"))
+    head = ('<div class="codehead"><span class="lang-chip">mermaid</span>'
+            '<span class="mermaid-hint">Sơ đồ · kéo ngang nếu rộng</span></div>')
+    return ('<div class="mermaidwrap">' + head
+            + f'<div class="mermaid">{esc}</div></div>')
+
 
 PYG_FORMATTER = HtmlFormatter(cssclass="codehilite", style="friendly", nowrap=False)
 
@@ -73,6 +118,8 @@ def guess_lang(code: str):
 
 def render_code(lang: str, code: str) -> str:
     lang = (lang or "").strip().lower() or guess_lang(code)
+    if lang == "mermaid":
+        return render_mermaid(code)
     try:
         lexer = get_lexer_by_name(lang or "text", stripnl=False)
     except ClassNotFound:
@@ -94,6 +141,9 @@ def split_fences(text: str):
     while i < n:
         m = FENCE_OPEN.match(lines[i])
         if m:
+            if buf:  # flush md trước fence để giữ đúng thứ tự tài liệu
+                parts.append(("md", "\n".join(buf)))
+                buf = []
             fence, lang = m.group(1), m.group(2)
             close = re.compile(r"^\s{0,3}" + re.escape(fence[0]) + "{" + str(len(fence)) + ",}\s*$")
             j, code_lines = i + 1, []
@@ -143,8 +193,8 @@ def render_segments(text: str, stash) -> str:
     text = hoist_fences(text, stash)
     md = markdown.Markdown(extensions=MD_EXTENSIONS, extension_configs=MD_EXT_CONFIG)
     body = md.convert(text)
-    body = re.sub(r"<li>\[ \]\s*", '<li class="task"><input type="checkbox" disabled> ', body)
-    body = re.sub(r"<li>\[[xX]\]\s*", '<li class="task"><input type="checkbox" checked disabled> ', body)
+    body = re.sub(r"<li>\[ \]\s*", '<li class="task"><input type="checkbox"> ', body)
+    body = re.sub(r"<li>\[[xX]\]\s*", '<li class="task"><input type="checkbox" checked> ', body)
     return body
 
 def transform_blockquotes(text: str, stash, depth: int = 0) -> str:
@@ -205,7 +255,9 @@ def render_blockquote(qlines, stash, depth: int) -> str:
 # ---------------------------------------------------------------- full render
 
 def md_to_body(text: str) -> str:
-    text = WIKI.sub(wikilink_sub, text)
+    global PAGE_HAS_MERMAID
+    PAGE_HAS_MERMAID = False
+    text = sub_wiki_outside_fences(text)
     tokens = []
 
     def stash(block_html: str) -> str:
@@ -217,8 +269,8 @@ def md_to_body(text: str) -> str:
     text = hoist_fences(text, stash)
     body = markdown.Markdown(
         extensions=MD_EXTENSIONS, extension_configs=MD_EXT_CONFIG).convert(text)
-    body = re.sub(r"<li>\[ \]\s*", '<li class="task"><input type="checkbox" disabled> ', body)
-    body = re.sub(r"<li>\[[xX]\]\s*", '<li class="task"><input type="checkbox" checked disabled> ', body)
+    body = re.sub(r"<li>\[ \]\s*", '<li class="task"><input type="checkbox"> ', body)
+    body = re.sub(r"<li>\[[xX]\]\s*", '<li class="task"><input type="checkbox" checked> ', body)
     body = body.replace("<table>", '<div class="tablewrap"><table>')
     body = body.replace("</table>", "</table></div>")
 
@@ -226,6 +278,94 @@ def md_to_body(text: str) -> str:
         body = body.replace(f"<p>{tok}</p>", block)
         body = body.replace(tok, block)
     return body
+
+# ---------------------------------------------------------------- link fixing
+
+def fix_links(body: str, page_path: Path) -> str:
+    """Sửa link tương đối trong HTML đã render:
+    - `x.md`      -> `x.html` (nếu đã render)
+    - thư mục `d/` -> `d/README.html` hoặc `d/index.html` (URL thư mục trần
+      không được server wsl.localhost / file:// phục vụ -> lỗi khi bấm)
+    Target không tồn tại -> giữ nguyên (không tự bịa link)."""
+
+    def repl(m):
+        href, text = m.group(1), m.group(2)
+        if href.startswith(("#", "mailto:", "data:", "http")):
+            return m.group(0)
+        path, _, frag = href.partition("#")
+        frag = f"#{frag}" if frag else ""
+        target = (page_path.parent / path).resolve()
+        if not str(target).startswith(str(ROOT)):
+            return m.group(0)
+        # thư mục -> README.html nếu có README.md (suy đoán từ nguồn),
+        # hoặc index.html ở thư mục gốc (skill chỉ sinh index.html gốc)
+        if target.is_dir():
+            if (target / "README.md").exists():
+                return f'<a href="{path.rstrip("/")}/README.html{frag}">{text}</a>'
+            if target == ROOT:
+                return f'<a href="{path.rstrip("/")}/index.html{frag}">{text}</a>'
+            return m.group(0)
+        if path.endswith(".md") and target.exists():
+            return f'<a href="{path[:-3]}.html{frag}">{text}</a>'
+        return m.group(0)
+
+    return re.sub(r'<a href="([^"]+)">(.+?)</a>', repl, body)
+
+
+# ---------------------------------------------------------------- progress modal
+
+FLOAT_HTML = """
+<button class="progress-fab" id="progress-fab" type="button">📊 Tiến độ <span class="fab-count">0/0</span></button>
+<div class="progress-modal" id="progress-modal" hidden>
+  <div class="progress-dialog" role="dialog" aria-label="Theo dõi tiến độ">
+    <div class="progress-head">
+      <h2>📊 Theo dõi tiến độ <span class="progress-count">0%</span></h2>
+      <button class="progress-close" id="progress-close" type="button" aria-label="Đóng">✕</button>
+    </div>
+    <div class="progress-bar"><i></i></div>
+    <div class="progress-body">
+__PROGRESS__
+    </div>
+  </div>
+</div>
+"""
+
+PROGRESS_HEAD = re.compile(r"^## ([^\n]*[Tt]iến độ[^\n]*)$\n(.*?)(?=^## |\Z)", re.S | re.M)
+
+
+def extract_progress_section(md_files):
+    """Tìm mục '## ... Tiến độ' trong các file .md (thường ở README gốc).
+    Trả về (source_path, html) — html dùng nhúng vào modal trên mọi trang.
+    Không có mục nào -> (None, "") và nút nổi sẽ không xuất hiện."""
+    for md in md_files:
+        m = PROGRESS_HEAD.search(md.read_text(encoding="utf-8"))
+        if m:
+            body = md_to_body(m.group(2))
+            # bản nhúng modal: bỏ id heading để tránh trùng với section inline
+            body = re.sub(r'(<h\d) id="[^"]*"', r"\1", body)
+            return md, body
+    return None, ""
+
+
+def collapse_progress_section(body: str) -> str:
+    """Trang chứa mục tiến độ: checklist inline đã có popup lo -> giữ heading
+    h2 (TOC/anchor còn dùng), thay checklist bằng nút mở popup."""
+    heads = list(re.finditer(r"<h2[^>]*>.*?</h2>", body, re.S))
+    for i, h in enumerate(heads):
+        if re.search(r"tiến độ", re.sub(r"<[^>]+>", "", h.group(0)), re.I):
+            end = heads[i + 1].start() if i + 1 < len(heads) else len(body)
+            hint = (
+                h.group(0)
+                + '<div class="progress-hint">'
+                + '<button class="progress-open" type="button">'
+                + "📊 Mở bảng theo dõi tiến độ</button>"
+                + "<span>Tiến độ được lưu &amp; đồng bộ trên mọi trang — "
+                + "bấm nút nổi <b>📊 Tiến độ</b> góc phải dưới bất cứ lúc nào.</span>"
+                + "</div>"
+            )
+            return body[: h.start()] + hint + body[end:]
+    return body
+
 
 # ---------------------------------------------------------------- template
 
@@ -248,7 +388,7 @@ body {
 }
 #progress { position: fixed; top: 0; left: 0; height: 3px; width: 0; z-index: 70;
   background: linear-gradient(90deg, var(--accent), var(--accent-2), #7c3aed); }
-#backtop { position: fixed; right: 26px; bottom: 26px; width: 44px; height: 44px;
+#backtop { position: fixed; right: 26px; bottom: 88px; width: 44px; height: 44px;
   border-radius: 50%; border: 1px solid var(--border); background: #fff;
   color: var(--accent); font-size: 1.15rem; cursor: pointer; opacity: 0;
   pointer-events: none; transition: all .25s; box-shadow: 0 8px 20px rgba(15,23,42,.14); z-index: 60; }
@@ -312,6 +452,17 @@ code {
 .callout .codeblock { box-shadow: none; }
 .callout .codeblock, .callout .codehilite, .callout code { background: #fff; }
 .callout .codehead { background: rgba(237,241,247,.6); }
+/* --- mermaid diagrams --- */
+.mermaidwrap { margin: 1.5em 0; border: 1px solid var(--border); border-radius: 12px;
+  background: #fff; overflow: hidden; box-shadow: 0 2px 6px rgba(15,23,42,.05); }
+.mermaidwrap .codehead { background: #edf1f7; }
+.mermaid-hint { font-size: .72rem; color: #94a3b8; font-weight: 600; }
+.mermaid { display: flex; justify-content: center; padding: 20px 16px; overflow-x: auto; }
+.mermaid svg { max-width: 100%; height: auto; }
+/* khi mermaid.js chưa/chưa kịp load (offline) — vẫn đọc được source dễ chịu */
+.mermaid:not([data-processed]) { font-family: "JetBrains Mono", Consolas, Menlo, monospace;
+  font-size: .8rem; color: #475569; white-space: pre; text-align: left; justify-content: flex-start; }
+.callout .mermaidwrap { box-shadow: none; }
 /* --- tables --- */
 .tablewrap { overflow-x: auto; margin: 1.2em 0; }
 table { border-collapse: collapse; width: 100%; font-size: .94em; margin: 0; }
@@ -374,7 +525,46 @@ kbd { background: #fff; border: 1px solid #cbd5e1; border-bottom-width: 2px;
 .pager .next { text-align: right; }
 .pager .dir { display: block; font-size: .78rem; color: var(--muted); font-weight: 500; }
 footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top: 34px; }
-@media print { #progress, #backtop, .toc, .pager { display: none !important; }
+/* --- floating progress button + modal --- */
+.progress-fab { position: fixed; right: 26px; bottom: 26px; z-index: 70;
+  display: inline-flex; align-items: center; gap: 9px; padding: 11px 19px;
+  border: none; border-radius: 999px; cursor: pointer; font: inherit;
+  font-size: .88rem; font-weight: 700; color: #fff;
+  background: linear-gradient(120deg, var(--accent), var(--accent-2));
+  box-shadow: 0 14px 34px -12px rgba(79,70,229,.55);
+  transition: transform .15s, box-shadow .15s; }
+.progress-fab:hover { transform: translateY(-2px); box-shadow: 0 18px 40px -12px rgba(79,70,229,.62); }
+.fab-count { background: rgba(255,255,255,.24); padding: 1px 10px; border-radius: 999px; font-size: .86em; }
+.progress-modal { position: fixed; inset: 0; z-index: 100; padding: 24px;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(51,65,85,.45); backdrop-filter: blur(3px); }
+.progress-modal[hidden] { display: none; }
+.progress-dialog { background: #fff; border-radius: 18px; width: min(780px, 100%);
+  max-height: 82vh; display: flex; flex-direction: column;
+  box-shadow: 0 40px 90px -20px rgba(51,65,85,.5); overflow: hidden; }
+.progress-head { display: flex; align-items: center; justify-content: space-between;
+  gap: 14px; padding: 20px 28px 14px; }
+.progress-head h2 { margin: 0; padding: 0; border: none; font-size: 1.2rem; }
+.progress-count { color: var(--accent); font-size: .72em; margin-left: .5em; }
+.progress-close { flex-shrink: 0; width: 34px; height: 34px; border-radius: 10px;
+  border: 1px solid var(--border); background: #fff; color: var(--muted);
+  font-size: 1rem; cursor: pointer; transition: all .15s; }
+.progress-close:hover { color: var(--accent); border-color: var(--accent); background: var(--accent-soft); }
+.progress-bar { height: 6px; background: #e2e8f0; margin: 0 28px; border-radius: 99px; overflow: hidden; }
+.progress-bar i { display: block; height: 100%; width: 0; border-radius: 99px;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2)); transition: width .25s; }
+.progress-body { padding: 8px 28px 26px; overflow-y: auto; }
+.progress-body h3 { margin-top: 1.1em; }
+/* --- trang nguồn: checklist inline thay bằng nút mở popup --- */
+.progress-hint { display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+  background: var(--accent-soft); border: 1px dashed #c7d2fe; border-radius: 14px;
+  padding: 16px 20px; color: var(--muted); font-size: .95rem; }
+.progress-open { flex-shrink: 0; border: none; border-radius: 10px; padding: 11px 20px;
+  font: inherit; font-size: .92rem; font-weight: 700; color: #fff; cursor: pointer;
+  background: linear-gradient(120deg, var(--accent), var(--accent-2));
+  box-shadow: 0 8px 18px -8px rgba(79,70,229,.5); transition: transform .15s; }
+.progress-open:hover { transform: translateY(-1px); }
+@media print { #progress, #backtop, .toc, .pager, .progress-fab, .progress-modal { display: none !important; }
   body { background: #fff; } .card { box-shadow: none; border: none; } }
 """
 
@@ -460,7 +650,108 @@ SCRIPT = """
     } else { fallback(); }
   });
 })();
+// ---- progress tracker: nút nổi + modal, đồng bộ mọi trang qua localStorage ----
+(function(){
+  function qsa(sel, root){ return [].slice.call((root||document).querySelectorAll(sel)); }
+  function load(key){ try{ return JSON.parse(localStorage.getItem(key)||'null'); }catch(e){ return null; } }
+  function save(key, arr){ try{ localStorage.setItem(key, JSON.stringify(arr)); }catch(e){} }
+
+  var KEY_MAIN = 'md2html:progress:__PROJKEY__';
+  var modal = document.getElementById('progress-modal');
+  var fab = document.getElementById('progress-fab');
+  var homeBoxes = qsa('.progress-track .task input');
+  var modalBoxes = modal ? qsa('.task input', modal) : [];
+  var N = Math.max(homeBoxes.length, modalBoxes.length);
+
+  function states(){
+    var saved = load(KEY_MAIN);
+    if (saved && saved.length === N) return saved;
+    var src = homeBoxes.length ? homeBoxes : modalBoxes;
+    return src.map(function(b){ return b.checked; });
+  }
+  function updateCounters(st){
+    var done = st.filter(Boolean).length;
+    if (fab) fab.querySelector('.fab-count').textContent = done + '/' + N;
+    if (modal){
+      modal.querySelector('.progress-bar i').style.width = (N ? done/N*100 : 0) + '%';
+      modal.querySelector('.progress-count').textContent = (N ? Math.round(done/N*100) : 0) + '%';
+    }
+  }
+  function paint(st){
+    for (var i=0;i<N;i++){
+      if (homeBoxes[i]) homeBoxes[i].checked = !!st[i];
+      if (modalBoxes[i]) modalBoxes[i].checked = !!st[i];
+    }
+    updateCounters(st);
+  }
+  if (N){
+    paint(states());
+    var bindMain = function(i){
+      return function(){
+        var st = states(); st[i] = this.checked;
+        save(KEY_MAIN, st); paint(st);
+      };
+    };
+    homeBoxes.forEach(function(b,i){ b.addEventListener('change', bindMain(i)); });
+    modalBoxes.forEach(function(b,i){ b.addEventListener('change', bindMain(i)); });
+  }
+
+  // task list thường của từng trang: lưu riêng theo URL
+  var otherBoxes = qsa('.task input').filter(function(b){
+    return !b.closest('.progress-track') && !(modal && modal.contains(b));
+  });
+  if (otherBoxes.length){
+    var key = 'md2html:page:' + location.pathname;
+    var saved = load(key);
+    if (saved && saved.length === otherBoxes.length){
+      otherBoxes.forEach(function(b,i){ b.checked = !!saved[i]; });
+    }
+    otherBoxes.forEach(function(b){
+      b.addEventListener('change', function(){
+        save(key, otherBoxes.map(function(x){ return x.checked; }));
+      });
+    });
+  }
+
+  if (fab && modal && N){
+    var openModal = function(){
+      paint(states());
+      modal.hidden = false;
+      document.body.style.overflow = 'hidden';
+    };
+    fab.addEventListener('click', openModal);
+    qsa('.progress-open').forEach(function(b){ b.addEventListener('click', openModal); });
+    var closeModal = function(){
+      modal.hidden = true;
+      document.body.style.overflow = '';
+    };
+    document.getElementById('progress-close').addEventListener('click', closeModal);
+    modal.addEventListener('click', function(e){ if (e.target === modal) closeModal(); });
+    document.addEventListener('keydown', function(e){
+      if (e.key === 'Escape' && !modal.hidden) closeModal();
+    });
+  } else if (fab){ fab.hidden = true; }
+})();
 """
+
+# Mermaid: chỉ nhúng lib khi trang thật sự có sơ đồ (trang không có thì bỏ qua)
+MERMAID_JS = """<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>
+if (window.mermaid) {
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: "base",
+    securityLevel: "loose",
+    themeVariables: {
+      primaryColor: "#eff6ff", primaryTextColor: "#0f172a", primaryBorderColor: "#93c5fd",
+      lineColor: "#64748b", secondaryColor: "#f8fafc", tertiaryColor: "#eef2f8",
+      fontSize: "15px", fontFamily: "Segoe UI, Roboto, Arial, sans-serif"
+    },
+    flowchart: { useMaxWidth: true, htmlLabels: true },
+    sequence: { useMaxWidth: true }
+  });
+}
+</script>"""
 
 TPL = """<!DOCTYPE html>
 <html lang="vi">
@@ -488,6 +779,8 @@ TPL = """<!DOCTYPE html>
 </nav>
 <footer>Generated from Markdown · <a href="{up}index.html">Về trang chủ docs</a></footer>
 </main>
+{float_html}
+{mermaid_js}
 <script>
 {script}
 </script>
@@ -526,65 +819,95 @@ SERIES_META = {
 }
 
 
+PROJECT_KEY = "docs"  # gán lại ở __main__ theo tên thư mục gốc
+
+
+def page_script() -> str:
+    return SCRIPT.replace("__PROJKEY__", PROJECT_KEY)
+
+
 def build_files():
     results = {}
     by_folder = {}
-    for f in sorted(ROOT.rglob("*.md")):
+    all_md = sorted(ROOT.rglob("*.md"))
+    progress_src, progress_html = extract_progress_section(all_md)
+    float_html = FLOAT_HTML.replace("__PROGRESS__", progress_html) if progress_html else ""
+    for f in all_md:
         by_folder.setdefault(f.parent, []).append(f)
 
-    for folder, files in by_folder.items():
+    # ---- render theo thứ tự đọc: folder sort theo tên; trong folder README
+    # đứng đầu, còn lại theo alphabet
+    pages = []  # (md, body, title, up, folder_name, has_mermaid)
+    for folder in sorted(by_folder):
         folder_name = folder.name
-        converted = []
-        for md in files:
+        for md in sorted(by_folder[folder], key=lambda p: (p.name != "README.md", p.name)):
             depth = len(md.parent.relative_to(ROOT).parts)  # 1 for docs/xxx/, 2 for docs/x/y/
             up = "../" * depth
             body = md_to_body(md.read_text(encoding="utf-8"))
-            converted.append((md, body, first_h1(body) or md.stem, up))
+            has_mermaid = PAGE_HAS_MERMAID  # cờ của TRANG NÀY (set trong md_to_body)
+            body = fix_links(body, md)
+            if md == progress_src:
+                body = collapse_progress_section(body)
+            pages.append((md, body, first_h1(body) or md.stem, up, folder_name, has_mermaid))
 
-        for i, (md, body, title, up) in enumerate(converted):
-            prev_html = next_html = ""
-            if len(converted) > 1:
-                if i > 0:
-                    pb, pt = converted[i - 1][0].stem, converted[i - 1][2]
-                    prev_html = (f'<a href="{pb}.html"><span class="dir">← Bài trước</span>'
-                                 f'{pt[:48]}</a>')
-                if i < len(converted) - 1:
-                    nb, nt = converted[i + 1][0].stem, converted[i + 1][2]
-                    next_html = (f'<a class="next" href="{nb}.html">'
-                                 f'<span class="dir">Bài sau →</span>{nt[:48]}</a>')
+    # ---- pager: chuỗi đọc LIÊN TỤC, hết folder nối sang folder kế (kèm tên
+    # folder đích trên nhãn để không nhầm) ----
+    for i, (md, body, title, up, folder_name, has_mermaid) in enumerate(pages):
+        prev_html = next_html = ""
+        if i > 0:
+            pm, _, pt, _, pf, _ = pages[i - 1]
+            href = os.path.relpath(pm.with_suffix(".html"), md.parent)
+            cue = "" if pf == folder_name else f" · {pf}"
+            prev_html = (f'<a href="{href}"><span class="dir">← Bài trước{cue}</span>'
+                         f'{pt[:48]}</a>')
+        if i < len(pages) - 1:
+            nm, _, nt, _, nf, _ = pages[i + 1]
+            href = os.path.relpath(nm.with_suffix(".html"), md.parent)
+            cue = "" if nf == folder_name else f" · {nf}"
+            next_html = (f'<a class="next" href="{href}">'
+                         f'<span class="dir">Bài sau →{cue}</span>{nt[:48]}</a>')
 
-            html_out = TPL.format(
-                title=f"{title} · {folder_name}",
-                folder=folder_name,
-                up=up,
-                body=body,
-                toc_html=build_toc(body),
-                prev=prev_html,
-                next=next_html,
-                pygments=PYGMENTS_CSS,
-                css=CSS,
-                script=SCRIPT,
-            )
-            out = md.with_suffix(".html")
-            out.write_text(html_out, encoding="utf-8")
-            print(f"  ✓ {out.relative_to(ROOT)}")
+        html_out = TPL.format(
+            title=f"{title} · {folder_name}",
+            folder=folder_name,
+            up=up,
+            body=body,
+            toc_html=build_toc(body),
+            prev=prev_html,
+            next=next_html,
+            pygments=PYGMENTS_CSS,
+            css=CSS,
+            script=page_script(),
+            float_html=float_html,
+            mermaid_js=(MERMAID_JS if has_mermaid else ""),
+        )
+        out = md.with_suffix(".html")
+        out.write_text(html_out, encoding="utf-8")
+        print(f"  ✓ {out.relative_to(ROOT)}")
 
-        results[folder_name] = [(md.stem, t) for md, _, t, _ in converted]
-    return results
+    for folder in sorted(by_folder):
+        rel = "" if folder == ROOT else folder.name
+        results[rel] = (
+            folder.name,
+            [(m.stem, t) for m, _, t, _, _, _ in pages if m.parent == folder],
+        )
+    return results, float_html
 
 
-def build_index(results):
-    total = sum(len(v) for v in results.values())
+def build_index(results, float_html=""):
+    total = sum(len(files) for _, files in results.values())
     cards = ""
-    for folder in sorted(results):
-        icon, name, desc = SERIES_META.get(folder, ("📄", folder, ""))
+    for rel in sorted(results):
+        folder_name, files = results[rel]
+        icon, name, desc = SERIES_META.get(folder_name, ("📄", folder_name, ""))
+        prefix = f"{rel}/" if rel else ""
         items = "".join(
-            f'<li><a href="{folder}/{stem}.html"><span>{title[:70]}</span></a></li>'
-            for stem, title in results[folder]
+            f'<li><a href="{prefix}{stem}.html"><span>{title[:70]}</span></a></li>'
+            for stem, title in files
         )
         cards += f"""
 <section class="series-card">
-  <h2><span class="series-icon">{icon}</span> {name} <span class="badge">{len(results[folder])} bài</span></h2>
+  <h2><span class="series-icon">{icon}</span> {name} <span class="badge">{len(files)} bài</span></h2>
   <p class="desc">{desc}</p>
   <ul class="filelist">{items}</ul>
 </section>"""
@@ -618,8 +941,10 @@ def build_index(results):
 </div>
 <footer>Generated from Markdown · Light theme 🌞</footer>
 </main>
-<script>
-{SCRIPT}
+"""
+    index += float_html
+    index += f"""<script>
+{page_script()}
 </script>
 </body>
 </html>"""
@@ -628,7 +953,8 @@ def build_index(results):
 
 
 if __name__ == "__main__":
+    PROJECT_KEY = re.sub(r"[^\w\-]+", "-", ROOT.name.lower()).strip("-") or "docs"
     print(f"Converting markdown -> HTML (light theme v2) · {ROOT}")
-    res = build_files()
-    build_index(res)
+    res, float_html = build_files()
+    build_index(res, float_html)
     print("Done.")

@@ -97,7 +97,7 @@ body {
 }
 #progress { position: fixed; top: 0; left: 0; height: 3px; width: 0; z-index: 70;
   background: linear-gradient(90deg, var(--accent), var(--accent-2), #7c3aed); }
-#backtop { position: fixed; right: 26px; bottom: 26px; width: 44px; height: 44px;
+#backtop { position: fixed; right: 26px; bottom: 88px; width: 44px; height: 44px;
   border-radius: 50%; border: 1px solid var(--border); background: #fff;
   color: var(--accent); font-size: 1.15rem; cursor: pointer; opacity: 0;
   pointer-events: none; transition: all .25s; box-shadow: 0 8px 20px rgba(15,23,42,.14); z-index: 60; }
@@ -161,6 +161,17 @@ code {
 .callout .codeblock { box-shadow: none; }
 .callout .codeblock, .callout .codehilite, .callout code { background: #fff; }
 .callout .codehead { background: rgba(237,241,247,.6); }
+/* --- mermaid diagrams --- */
+.mermaidwrap { margin: 1.5em 0; border: 1px solid var(--border); border-radius: 12px;
+  background: #fff; overflow: hidden; box-shadow: 0 2px 6px rgba(15,23,42,.05); }
+.mermaidwrap .codehead { background: #edf1f7; }
+.mermaid-hint { font-size: .72rem; color: #94a3b8; font-weight: 600; }
+.mermaid { display: flex; justify-content: center; padding: 20px 16px; overflow-x: auto; }
+.mermaid svg { max-width: 100%; height: auto; }
+/* khi mermaid.js chưa/chưa kịp load (offline) — vẫn đọc được source dễ chịu */
+.mermaid:not([data-processed]) { font-family: "JetBrains Mono", Consolas, Menlo, monospace;
+  font-size: .8rem; color: #475569; white-space: pre; text-align: left; justify-content: flex-start; }
+.callout .mermaidwrap { box-shadow: none; }
 /* --- tables --- */
 .tablewrap { overflow-x: auto; margin: 1.2em 0; }
 table { border-collapse: collapse; width: 100%; font-size: .94em; margin: 0; }
@@ -223,7 +234,46 @@ kbd { background: #fff; border: 1px solid #cbd5e1; border-bottom-width: 2px;
 .pager .next { text-align: right; }
 .pager .dir { display: block; font-size: .78rem; color: var(--muted); font-weight: 500; }
 footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top: 34px; }
-@media print { #progress, #backtop, .toc, .pager { display: none !important; }
+/* --- floating progress button + modal --- */
+.progress-fab { position: fixed; right: 26px; bottom: 26px; z-index: 70;
+  display: inline-flex; align-items: center; gap: 9px; padding: 11px 19px;
+  border: none; border-radius: 999px; cursor: pointer; font: inherit;
+  font-size: .88rem; font-weight: 700; color: #fff;
+  background: linear-gradient(120deg, var(--accent), var(--accent-2));
+  box-shadow: 0 14px 34px -12px rgba(79,70,229,.55);
+  transition: transform .15s, box-shadow .15s; }
+.progress-fab:hover { transform: translateY(-2px); box-shadow: 0 18px 40px -12px rgba(79,70,229,.62); }
+.fab-count { background: rgba(255,255,255,.24); padding: 1px 10px; border-radius: 999px; font-size: .86em; }
+.progress-modal { position: fixed; inset: 0; z-index: 100; padding: 24px;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(51,65,85,.45); backdrop-filter: blur(3px); }
+.progress-modal[hidden] { display: none; }
+.progress-dialog { background: #fff; border-radius: 18px; width: min(780px, 100%);
+  max-height: 82vh; display: flex; flex-direction: column;
+  box-shadow: 0 40px 90px -20px rgba(51,65,85,.5); overflow: hidden; }
+.progress-head { display: flex; align-items: center; justify-content: space-between;
+  gap: 14px; padding: 20px 28px 14px; }
+.progress-head h2 { margin: 0; padding: 0; border: none; font-size: 1.2rem; }
+.progress-count { color: var(--accent); font-size: .72em; margin-left: .5em; }
+.progress-close { flex-shrink: 0; width: 34px; height: 34px; border-radius: 10px;
+  border: 1px solid var(--border); background: #fff; color: var(--muted);
+  font-size: 1rem; cursor: pointer; transition: all .15s; }
+.progress-close:hover { color: var(--accent); border-color: var(--accent); background: var(--accent-soft); }
+.progress-bar { height: 6px; background: #e2e8f0; margin: 0 28px; border-radius: 99px; overflow: hidden; }
+.progress-bar i { display: block; height: 100%; width: 0; border-radius: 99px;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2)); transition: width .25s; }
+.progress-body { padding: 8px 28px 26px; overflow-y: auto; }
+.progress-body h3 { margin-top: 1.1em; }
+/* --- trang nguồn: checklist inline thay bằng nút mở popup --- */
+.progress-hint { display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+  background: var(--accent-soft); border: 1px dashed #c7d2fe; border-radius: 14px;
+  padding: 16px 20px; color: var(--muted); font-size: .95rem; }
+.progress-open { flex-shrink: 0; border: none; border-radius: 10px; padding: 11px 20px;
+  font: inherit; font-size: .92rem; font-weight: 700; color: #fff; cursor: pointer;
+  background: linear-gradient(120deg, var(--accent), var(--accent-2));
+  box-shadow: 0 8px 18px -8px rgba(79,70,229,.5); transition: transform .15s; }
+.progress-open:hover { transform: translateY(-1px); }
+@media print { #progress, #backtop, .toc, .pager, .progress-fab, .progress-modal { display: none !important; }
   body { background: #fff; } .card { box-shadow: none; border: none; } }
 
 .wrap.wide { max-width: 1340px; }
@@ -264,6 +314,11 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <nav class="crumb"><a href="../index.html">📚 Docs</a> &nbsp;›&nbsp; nodejs-to-go</nav>
 <main class="wrap">
 <article class="card">
+<h1 id="go-quick-reference-cheat-sheet-vtvcab-identity-api">Go Quick Reference Cheat Sheet — vtvcab-identity-api</h1>
+<div class="callout callout-note"><div class="callout-body"><p><strong>Module:</strong> <code>vtvcab-identity-api</code> | <strong>Go version:</strong> 1.21 | <strong>Framework:</strong> Fiber v2</p></div></div>
+
+<hr />
+<h2 id="1-essential-go-commands">1. Essential Go Commands</h2>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">bash</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1"># Build &amp; Run</span>
 go<span class="w"> </span>build<span class="w"> </span>.<span class="w">                        </span><span class="c1"># Compile binary</span>
 go<span class="w"> </span>run<span class="w"> </span>.<span class="w">                          </span><span class="c1"># Run locally (needs .env + infra)</span>
@@ -283,6 +338,10 @@ go<span class="w"> </span>list<span class="w"> </span>-m<span class="w"> </span>
 go<span class="w"> </span>doc<span class="w"> </span>fiber.Ctx<span class="w">                  </span><span class="c1"># View docs for a symbol</span>
 </pre></div>
 </div>
+<hr />
+<h2 id="2-project-specific-commands">2. Project-Specific Commands</h2>
+<h3 id="run-locally">Run Locally</h3>
+<p>You need all infrastructure running + <code>.env</code> configured. Required env vars (see <code>.env.example</code>):</p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">bash</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1"># Database</span>
 <span class="nv">POSTGRES_URL</span><span class="o">=</span>postgres://user:pass@host:5432/dbname
 <span class="nv">MONGODB_URL</span><span class="o">=</span>mongodb://user:pass@host/dbname
@@ -310,14 +369,21 @@ cp<span class="w"> </span>.env.example<span class="w"> </span>.env
 <span class="nv">STAGE_STATUS</span><span class="o">=</span>dev<span class="w"> </span>go<span class="w"> </span>run<span class="w"> </span>.
 </pre></div>
 </div>
+<h3 id="run-tests">Run Tests</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">bash</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1"># Tests require live Redis, MongoDB, Postgres — no mocks</span>
 <span class="nv">STAGE_STATUS</span><span class="o">=</span>dev<span class="w"> </span>go<span class="w"> </span><span class="nb">test</span><span class="w"> </span>./app/testing/<span class="w"> </span>-v
 </pre></div>
 </div>
+<h3 id="build-docker-image">Build Docker Image</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">bash</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span>docker<span class="w"> </span>build<span class="w"> </span>-t<span class="w"> </span>vtvcab-identity-api<span class="w"> </span>.
 docker<span class="w"> </span>run<span class="w"> </span>-p<span class="w"> </span><span class="m">5000</span>:5000<span class="w"> </span>--env-file<span class="w"> </span>.env<span class="w"> </span>vtvcab-identity-api
 </pre></div>
 </div>
+<div class="callout callout-note"><div class="callout-body"><p><strong>Note:</strong> Dockerfile uses <code>golang:1.19-buster</code> but <code>go.mod</code> says <code>go 1.21</code>. Config TOML files and PEM keys are copied into the image.</p></div></div>
+
+<hr />
+<h2 id="3-common-go-syntax-quick-reference">3. Common Go Syntax Quick Reference</h2>
+<h3 id="variable-declaration">Variable Declaration</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Short declaration (inside functions)</span>
 <span class="nx">name</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="s">&quot;hello&quot;</span>
 <span class="nx">count</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="mi">42</span>
@@ -335,6 +401,7 @@ docker<span class="w"> </span>run<span class="w"> </span>-p<span class="w"> </sp
 <span class="c1">// Zero values: string=&quot;&quot;, int=0, bool=false, pointer/slice/map=nil</span>
 </pre></div>
 </div>
+<h3 id="function-signatures">Function Signatures</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Basic function</span>
 <span class="kd">func</span><span class="w"> </span><span class="nx">DoSomething</span><span class="p">(</span><span class="nx">name</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="kt">error</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="kc">nil</span>
@@ -357,6 +424,7 @@ docker<span class="w"> </span>run<span class="w"> </span>-p<span class="w"> </sp
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="struct-definition">Struct Definition</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kd">type</span><span class="w"> </span><span class="nx">UserAccount</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nx">Id</span><span class="w">           </span><span class="kt">uint</span><span class="w">      </span><span class="s">`gorm:&quot;primaryKey;autoIncrement:true;unique&quot; json:&quot;id&quot;`</span>
 <span class="w">    </span><span class="nx">Name</span><span class="w">         </span><span class="o">*</span><span class="kt">string</span><span class="w">   </span><span class="s">`gorm:&quot;index:idx_user_name,unique&quot; json:&quot;name&quot;`</span>
@@ -372,12 +440,14 @@ docker<span class="w"> </span>run<span class="w"> </span>-p<span class="w"> </sp
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="interface-definition">Interface Definition</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kd">type</span><span class="w"> </span><span class="nx">Repository</span><span class="w"> </span><span class="kd">interface</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nx">GetUser</span><span class="p">(</span><span class="nx">ctx</span><span class="w"> </span><span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span><span class="w"> </span><span class="nx">id</span><span class="w"> </span><span class="kt">uint</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="nx">UserAccount</span><span class="p">,</span><span class="w"> </span><span class="kt">error</span><span class="p">)</span>
 <span class="w">    </span><span class="nx">CreateUser</span><span class="p">(</span><span class="nx">ctx</span><span class="w"> </span><span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span><span class="w"> </span><span class="nx">user</span><span class="w"> </span><span class="o">*</span><span class="nx">UserAccount</span><span class="p">)</span><span class="w"> </span><span class="kt">error</span>
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="error-handling-pattern-this-projects-convention">Error Handling Pattern (this project's convention)</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Standard pattern in this codebase</span>
 <span class="nx">result</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">someOperation</span><span class="p">()</span>
 <span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
@@ -386,6 +456,7 @@ docker<span class="w"> </span>run<span class="w"> </span>-p<span class="w"> </sp
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="goroutine-syntax">Goroutine Syntax</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="k">go</span><span class="w"> </span><span class="kd">func</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="c1">// runs concurrently</span>
 <span class="w">    </span><span class="nx">worker</span><span class="p">.</span><span class="nx">DoWork</span><span class="p">()</span>
@@ -399,6 +470,7 @@ docker<span class="w"> </span>run<span class="w"> </span>-p<span class="w"> </sp
 <span class="p">}(</span><span class="nx">chEVLog</span><span class="p">)</span>
 </pre></div>
 </div>
+<h3 id="channel-syntax">Channel Syntax</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Create channel</span>
 <span class="nx">ch</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nb">make</span><span class="p">(</span><span class="kd">chan</span><span class="w"> </span><span class="nx">EventLog</span><span class="p">)</span><span class="w">        </span><span class="c1">// unbuffered</span>
 <span class="nx">ch</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nb">make</span><span class="p">(</span><span class="kd">chan</span><span class="w"> </span><span class="nx">EventLog</span><span class="p">,</span><span class="w"> </span><span class="mi">100</span><span class="p">)</span><span class="w">   </span><span class="c1">// buffered</span>
@@ -415,6 +487,7 @@ docker<span class="w"> </span>run<span class="w"> </span>-p<span class="w"> </sp
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="slice-map-operations">Slice &amp; Map Operations</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Slice</span>
 <span class="nx">roles</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">&quot;admin&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;user&quot;</span><span class="p">}</span>
 <span class="nx">roles</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nb">append</span><span class="p">(</span><span class="nx">roles</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;moderator&quot;</span><span class="p">)</span>
@@ -429,6 +502,8 @@ docker<span class="w"> </span>run<span class="w"> </span>-p<span class="w"> </sp
 <span class="nb">delete</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;key&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
+<hr />
+<h2 id="4-http-status-codes-in-fiber">4. HTTP Status Codes in Fiber</h2>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Success</span>
 <span class="nx">fiber</span><span class="p">.</span><span class="nx">StatusOK</span><span class="w">                  </span><span class="c1">// 200</span>
 <span class="nx">fiber</span><span class="p">.</span><span class="nx">StatusCreated</span><span class="w">             </span><span class="c1">// 201</span>
@@ -448,6 +523,9 @@ docker<span class="w"> </span>run<span class="w"> </span>-p<span class="w"> </sp
 <span class="nx">fiber</span><span class="p">.</span><span class="nx">StatusServiceUnavailable</span><span class="w">  </span><span class="c1">// 503</span>
 </pre></div>
 </div>
+<hr />
+<h2 id="5-common-pattern-snippets">5. Common Pattern Snippets</h2>
+<h3 id="parse-json-request-body">Parse JSON Request Body</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kd">func</span><span class="w"> </span><span class="nx">Login</span><span class="p">(</span><span class="nx">c</span><span class="w"> </span><span class="o">*</span><span class="nx">fiber</span><span class="p">.</span><span class="nx">Ctx</span><span class="p">)</span><span class="w"> </span><span class="kt">error</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nx">body</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">models</span><span class="p">.</span><span class="nx">LoginBody</span><span class="p">{}</span>
 <span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">c</span><span class="p">.</span><span class="nx">BodyParser</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">body</span><span class="p">);</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
@@ -458,11 +536,13 @@ docker<span class="w"> </span>run<span class="w"> </span>-p<span class="w"> </sp
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="validate-request-body">Validate Request Body</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">utils</span><span class="p">.</span><span class="nx">ValidateStruct</span><span class="p">(</span><span class="nx">body</span><span class="p">);</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">utils</span><span class="p">.</span><span class="nx">HTTPFailResponse</span><span class="p">(</span><span class="nx">c</span><span class="p">,</span><span class="w"> </span><span class="nx">fiber</span><span class="p">.</span><span class="nx">StatusBadRequest</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">)</span>
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="return-json-response">Return JSON Response</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Success response (standard pattern)</span>
 <span class="k">return</span><span class="w"> </span><span class="nx">utils</span><span class="p">.</span><span class="nx">HTTPSuccessResponse</span><span class="p">(</span><span class="nx">c</span><span class="p">,</span><span class="w"> </span><span class="nx">fiber</span><span class="p">.</span><span class="nx">StatusOK</span><span class="p">,</span><span class="w"> </span><span class="nx">data</span><span class="p">)</span>
 
@@ -476,6 +556,7 @@ docker<span class="w"> </span>run<span class="w"> </span>-p<span class="w"> </sp
 <span class="p">})</span>
 </pre></div>
 </div>
+<h3 id="get-url-params">Get URL Params</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Route: /api/user/:id</span>
 <span class="nx">id</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">c</span><span class="p">.</span><span class="nx">Params</span><span class="p">(</span><span class="s">&quot;id&quot;</span><span class="p">)</span>
 
@@ -484,6 +565,7 @@ docker<span class="w"> </span>run<span class="w"> </span>-p<span class="w"> </sp
 <span class="nx">action</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">c</span><span class="p">.</span><span class="nx">Params</span><span class="p">(</span><span class="s">&quot;action&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
+<h3 id="get-query-params">Get Query Params</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// URL: /api/users?search=john&amp;phone=090</span>
 <span class="nx">search</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">c</span><span class="p">.</span><span class="nx">Query</span><span class="p">(</span><span class="s">&quot;search&quot;</span><span class="p">)</span>
 <span class="nx">phone</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">c</span><span class="p">.</span><span class="nx">Query</span><span class="p">(</span><span class="s">&quot;phone&quot;</span><span class="p">)</span>
@@ -496,6 +578,7 @@ docker<span class="w"> </span>run<span class="w"> </span>-p<span class="w"> </sp
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="set-headers">Set Headers</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Read header</span>
 <span class="nx">auth</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">c</span><span class="p">.</span><span class="nx">Get</span><span class="p">(</span><span class="s">&quot;Authorization&quot;</span><span class="p">)</span>
 <span class="nx">contentType</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">c</span><span class="p">.</span><span class="nx">Get</span><span class="p">(</span><span class="s">&quot;Content-Type&quot;</span><span class="p">)</span>
@@ -504,6 +587,7 @@ docker<span class="w"> </span>run<span class="w"> </span>-p<span class="w"> </sp
 <span class="nx">c</span><span class="p">.</span><span class="nx">Set</span><span class="p">(</span><span class="s">&quot;X-Custom-Header&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;value&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
+<h3 id="read-from-redis">Read from Redis</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Get</span>
 <span class="nx">val</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">redisClient</span><span class="p">.</span><span class="nx">Get</span><span class="p">(</span><span class="nx">c</span><span class="p">.</span><span class="nx">Context</span><span class="p">(),</span><span class="w"> </span><span class="s">&quot;key&quot;</span><span class="p">).</span><span class="nx">Result</span><span class="p">()</span>
 <span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="nx">redis</span><span class="p">.</span><span class="nx">Nil</span><span class="w"> </span><span class="p">{</span>
@@ -516,6 +600,7 @@ docker<span class="w"> </span>run<span class="w"> </span>-p<span class="w"> </sp
 <span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">redisClient</span><span class="p">.</span><span class="nx">Set</span><span class="p">(</span><span class="nx">c</span><span class="p">.</span><span class="nx">Context</span><span class="p">(),</span><span class="w"> </span><span class="s">&quot;key&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;value&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="o">*</span><span class="nx">time</span><span class="p">.</span><span class="nx">Minute</span><span class="p">).</span><span class="nx">Err</span><span class="p">()</span>
 </pre></div>
 </div>
+<h3 id="write-to-postgres-gorm">Write to Postgres (GORM)</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Inject DB: sql *gorm.DB (passed through handler closure)</span>
 <span class="nx">connect</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">service</span><span class="p">.</span><span class="nx">PostgresQueries</span><span class="p">{</span><span class="nx">Conn</span><span class="p">:</span><span class="w"> </span><span class="nx">sql</span><span class="p">.</span><span class="nx">WithContext</span><span class="p">(</span><span class="nx">c</span><span class="p">.</span><span class="nx">Context</span><span class="p">())}</span>
 
@@ -543,6 +628,7 @@ docker<span class="w"> </span>run<span class="w"> </span>-p<span class="w"> </sp
 <span class="nx">tx</span><span class="p">.</span><span class="nx">Commit</span><span class="p">()</span>
 </pre></div>
 </div>
+<h3 id="mongodb-operations">MongoDB Operations</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Inject: mongo *mongo.Database (passed through handler)</span>
 
 <span class="c1">// Find one</span>
@@ -571,6 +657,7 @@ docker<span class="w"> </span>run<span class="w"> </span>-p<span class="w"> </sp
 <span class="nx">_</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">collection</span><span class="p">.</span><span class="nx">DeleteOne</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="w"> </span><span class="nx">bson</span><span class="p">.</span><span class="nx">M</span><span class="p">{</span><span class="s">&quot;jti&quot;</span><span class="p">:</span><span class="w"> </span><span class="nx">jti</span><span class="p">})</span>
 </pre></div>
 </div>
+<h3 id="extract-jwt-claims">Extract JWT Claims</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="nx">userClaims</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">middleware</span><span class="p">.</span><span class="nx">ExtractTokenMetadata</span><span class="p">(</span><span class="nx">c</span><span class="p">)</span>
 <span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">utils</span><span class="p">.</span><span class="nx">HTTPFailResponse</span><span class="p">(</span><span class="nx">c</span><span class="p">,</span><span class="w"> </span><span class="nx">fiber</span><span class="p">.</span><span class="nx">StatusUnauthorized</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">)</span>
@@ -580,6 +667,7 @@ docker<span class="w"> </span>run<span class="w"> </span>-p<span class="w"> </sp
 <span class="nx">roles</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">userClaims</span><span class="p">.</span><span class="nx">Roles</span>
 </pre></div>
 </div>
+<h3 id="make-http-request-external-api">Make HTTP Request (external API)</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="nx">client</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">http</span><span class="p">.</span><span class="nx">Client</span><span class="p">{}</span>
 <span class="nx">HTTPClient</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">apmhttp</span><span class="p">.</span><span class="nx">WrapClient</span><span class="p">(</span><span class="nx">client</span><span class="p">)</span><span class="w">  </span><span class="c1">// with APM tracing</span>
 <span class="nx">req</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">http</span><span class="p">.</span><span class="nx">NewRequest</span><span class="p">(</span><span class="s">&quot;GET&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">url</span><span class="p">,</span><span class="w"> </span><span class="kc">nil</span><span class="p">)</span>
@@ -593,6 +681,9 @@ docker<span class="w"> </span>run<span class="w"> </span>-p<span class="w"> </sp
 <span class="nx">json</span><span class="p">.</span><span class="nx">Unmarshal</span><span class="p">(</span><span class="nx">body</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">result</span><span class="p">)</span>
 </pre></div>
 </div>
+<hr />
+<h2 id="6-debugging-tips">6. Debugging Tips</h2>
+<h3 id="logging-with-logrus-this-projects-logger">Logging with Logrus (this project's logger)</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nx">log</span><span class="w"> </span><span class="s">&quot;github.com/sirupsen/logrus&quot;</span>
 
 <span class="c1">// Structured fields</span>
@@ -614,113 +705,12 @@ docker<span class="w"> </span>run<span class="w"> </span>-p<span class="w"> </sp
 <span class="nx">log</span><span class="p">.</span><span class="nx">SetFormatter</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">log</span><span class="p">.</span><span class="nx">JSONFormatter</span><span class="p">{})</span>
 </pre></div>
 </div>
+<h3 id="print-debugging">Print Debugging</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;DEBUG: %+v\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">myStruct</span><span class="p">)</span><span class="w">    </span><span class="c1">// print with field names</span>
 <span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;DEBUG: %#v\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">myStruct</span><span class="p">)</span><span class="w">    </span><span class="c1">// Go syntax representation</span>
 <span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&quot;DEBUG:&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">someVar</span><span class="p">)</span><span class="w">           </span><span class="c1">// simple print</span>
 </pre></div>
 </div>
-<div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Errors sent to Sentry automatically via utils.SendErrorApm()</span>
-<span class="c1">// Manual capture:</span>
-<span class="nx">sentry</span><span class="p">.</span><span class="nx">CaptureException</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
-</pre></div>
-</div>
-<div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Standard library</span>
-<span class="kn">import</span><span class="w"> </span><span class="p">(</span>
-<span class="w">    </span><span class="s">&quot;context&quot;</span>
-<span class="w">    </span><span class="s">&quot;encoding/json&quot;</span>
-<span class="w">    </span><span class="s">&quot;errors&quot;</span>
-<span class="w">    </span><span class="s">&quot;fmt&quot;</span>
-<span class="w">    </span><span class="s">&quot;os&quot;</span>
-<span class="w">    </span><span class="s">&quot;time&quot;</span>
-<span class="p">)</span>
-
-<span class="c1">// Project internal (module: vtvcab-identity-api)</span>
-<span class="kn">import</span><span class="w"> </span><span class="p">(</span>
-<span class="w">    </span><span class="s">&quot;vtvcab-identity-api/app/models&quot;</span>
-<span class="w">    </span><span class="s">&quot;vtvcab-identity-api/app/repository&quot;</span>
-<span class="w">    </span><span class="s">&quot;vtvcab-identity-api/app/service&quot;</span>
-<span class="w">    </span><span class="s">&quot;vtvcab-identity-api/app/worker&quot;</span>
-<span class="w">    </span><span class="s">&quot;vtvcab-identity-api/platform/cache&quot;</span>
-<span class="w">    </span><span class="s">&quot;vtvcab-identity-api/platform/database&quot;</span>
-<span class="w">    </span><span class="nx">configs</span><span class="w"> </span><span class="s">&quot;vtvcab-identity-api/settings/config&quot;</span>
-<span class="w">    </span><span class="s">&quot;vtvcab-identity-api/settings/middleware&quot;</span>
-<span class="w">    </span><span class="s">&quot;vtvcab-identity-api/settings/utils&quot;</span>
-<span class="p">)</span>
-
-<span class="c1">// Third-party (common in this project)</span>
-<span class="kn">import</span><span class="w"> </span><span class="p">(</span>
-<span class="w">    </span><span class="s">&quot;github.com/go-redis/redis/v8&quot;</span><span class="w">           </span><span class="c1">// Redis client</span>
-<span class="w">    </span><span class="s">&quot;github.com/gofiber/fiber/v2&quot;</span><span class="w">             </span><span class="c1">// HTTP framework</span>
-<span class="w">    </span><span class="s">&quot;github.com/sirupsen/logrus&quot;</span><span class="w">              </span><span class="c1">// Structured logging</span>
-<span class="w">    </span><span class="s">&quot;go.mongodb.org/mongo-driver/bson&quot;</span><span class="w">        </span><span class="c1">// MongoDB BSON (use bson.M)</span>
-<span class="w">    </span><span class="s">&quot;go.mongodb.org/mongo-driver/mongo&quot;</span><span class="w">       </span><span class="c1">// MongoDB driver</span>
-<span class="w">    </span><span class="s">&quot;gorm.io/gorm&quot;</span><span class="w">                            </span><span class="c1">// ORM for Postgres/MSSQL</span>
-<span class="w">    </span><span class="s">&quot;github.com/go-playground/validator/v10&quot;</span><span class="w">  </span><span class="c1">// Struct validation</span>
-<span class="w">    </span><span class="s">&quot;github.com/golang-jwt/jwt/v4&quot;</span><span class="w">            </span><span class="c1">// JWT tokens</span>
-<span class="p">)</span>
-</pre></div>
-</div>
-<div class="codeblock"><div class="codehead"><span class="lang-chip"></span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span>app/
-  controllers/          → HTTP handlers (login.go, user.go)
-  repository/           → Data access (postgres queries, redis, sms, social)
-  service/              → Business logic (create_user, deactive_user, device_session)
-  models/               → Request/response structs, DB entities
-  helpers/              → OAuth helpers (Apple, Facebook, Google)
-  producer/             → RabbitMQ publisher
-  worker/               → RabbitMQ consumer (event logging)
-  testing/              → Integration tests
-platform/
-  database/             → DB connections (postgres.go, mongodb.go, mssql.go)
-  cache/                → Redis connection
-settings/
-  config/               → Viper config loader
-  router/versioned/     → Route registration (v1/api.go, v2/api.go)
-  middleware/           → JWT auth, device sessions, Sentry
-  utils/                → Response helpers, validators
-</pre></div>
-</div>
-<h1 id="go-quick-reference-cheat-sheet-vtvcab-identity-api">Go Quick Reference Cheat Sheet — vtvcab-identity-api</h1>
-<div class="callout callout-note"><div class="callout-body"><p><strong>Module:</strong> <code>vtvcab-identity-api</code> | <strong>Go version:</strong> 1.21 | <strong>Framework:</strong> Fiber v2</p></div></div>
-
-<hr />
-<h2 id="1-essential-go-commands">1. Essential Go Commands</h2>
-<hr />
-<h2 id="2-project-specific-commands">2. Project-Specific Commands</h2>
-<h3 id="run-locally">Run Locally</h3>
-<p>You need all infrastructure running + <code>.env</code> configured. Required env vars (see <code>.env.example</code>):</p>
-<h3 id="run-tests">Run Tests</h3>
-<h3 id="build-docker-image">Build Docker Image</h3>
-<div class="callout callout-note"><div class="callout-body"><p><strong>Note:</strong> Dockerfile uses <code>golang:1.19-buster</code> but <code>go.mod</code> says <code>go 1.21</code>. Config TOML files and PEM keys are copied into the image.</p></div></div>
-
-<hr />
-<h2 id="3-common-go-syntax-quick-reference">3. Common Go Syntax Quick Reference</h2>
-<h3 id="variable-declaration">Variable Declaration</h3>
-<h3 id="function-signatures">Function Signatures</h3>
-<h3 id="struct-definition">Struct Definition</h3>
-<h3 id="interface-definition">Interface Definition</h3>
-<h3 id="error-handling-pattern-this-projects-convention">Error Handling Pattern (this project's convention)</h3>
-<h3 id="goroutine-syntax">Goroutine Syntax</h3>
-<h3 id="channel-syntax">Channel Syntax</h3>
-<h3 id="slice-map-operations">Slice &amp; Map Operations</h3>
-<hr />
-<h2 id="4-http-status-codes-in-fiber">4. HTTP Status Codes in Fiber</h2>
-<hr />
-<h2 id="5-common-pattern-snippets">5. Common Pattern Snippets</h2>
-<h3 id="parse-json-request-body">Parse JSON Request Body</h3>
-<h3 id="validate-request-body">Validate Request Body</h3>
-<h3 id="return-json-response">Return JSON Response</h3>
-<h3 id="get-url-params">Get URL Params</h3>
-<h3 id="get-query-params">Get Query Params</h3>
-<h3 id="set-headers">Set Headers</h3>
-<h3 id="read-from-redis">Read from Redis</h3>
-<h3 id="write-to-postgres-gorm">Write to Postgres (GORM)</h3>
-<h3 id="mongodb-operations">MongoDB Operations</h3>
-<h3 id="extract-jwt-claims">Extract JWT Claims</h3>
-<h3 id="make-http-request-external-api">Make HTTP Request (external API)</h3>
-<hr />
-<h2 id="6-debugging-tips">6. Debugging Tips</h2>
-<h3 id="logging-with-logrus-this-projects-logger">Logging with Logrus (this project's logger)</h3>
-<h3 id="print-debugging">Print Debugging</h3>
 <h3 id="common-error-messages-solutions">Common Error Messages &amp; Solutions</h3>
 <div class="tablewrap"><table>
 <thead>
@@ -759,8 +749,49 @@ settings/
 </tbody>
 </table></div>
 <h3 id="adding-sentry-error-tracking">Adding Sentry Error Tracking</h3>
+<div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Errors sent to Sentry automatically via utils.SendErrorApm()</span>
+<span class="c1">// Manual capture:</span>
+<span class="nx">sentry</span><span class="p">.</span><span class="nx">CaptureException</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+</pre></div>
+</div>
 <hr />
 <h2 id="7-frequently-used-imports">7. Frequently Used Imports</h2>
+<div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Standard library</span>
+<span class="kn">import</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="s">&quot;context&quot;</span>
+<span class="w">    </span><span class="s">&quot;encoding/json&quot;</span>
+<span class="w">    </span><span class="s">&quot;errors&quot;</span>
+<span class="w">    </span><span class="s">&quot;fmt&quot;</span>
+<span class="w">    </span><span class="s">&quot;os&quot;</span>
+<span class="w">    </span><span class="s">&quot;time&quot;</span>
+<span class="p">)</span>
+
+<span class="c1">// Project internal (module: vtvcab-identity-api)</span>
+<span class="kn">import</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="s">&quot;vtvcab-identity-api/app/models&quot;</span>
+<span class="w">    </span><span class="s">&quot;vtvcab-identity-api/app/repository&quot;</span>
+<span class="w">    </span><span class="s">&quot;vtvcab-identity-api/app/service&quot;</span>
+<span class="w">    </span><span class="s">&quot;vtvcab-identity-api/app/worker&quot;</span>
+<span class="w">    </span><span class="s">&quot;vtvcab-identity-api/platform/cache&quot;</span>
+<span class="w">    </span><span class="s">&quot;vtvcab-identity-api/platform/database&quot;</span>
+<span class="w">    </span><span class="nx">configs</span><span class="w"> </span><span class="s">&quot;vtvcab-identity-api/settings/config&quot;</span>
+<span class="w">    </span><span class="s">&quot;vtvcab-identity-api/settings/middleware&quot;</span>
+<span class="w">    </span><span class="s">&quot;vtvcab-identity-api/settings/utils&quot;</span>
+<span class="p">)</span>
+
+<span class="c1">// Third-party (common in this project)</span>
+<span class="kn">import</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="s">&quot;github.com/go-redis/redis/v8&quot;</span><span class="w">           </span><span class="c1">// Redis client</span>
+<span class="w">    </span><span class="s">&quot;github.com/gofiber/fiber/v2&quot;</span><span class="w">             </span><span class="c1">// HTTP framework</span>
+<span class="w">    </span><span class="s">&quot;github.com/sirupsen/logrus&quot;</span><span class="w">              </span><span class="c1">// Structured logging</span>
+<span class="w">    </span><span class="s">&quot;go.mongodb.org/mongo-driver/bson&quot;</span><span class="w">        </span><span class="c1">// MongoDB BSON (use bson.M)</span>
+<span class="w">    </span><span class="s">&quot;go.mongodb.org/mongo-driver/mongo&quot;</span><span class="w">       </span><span class="c1">// MongoDB driver</span>
+<span class="w">    </span><span class="s">&quot;gorm.io/gorm&quot;</span><span class="w">                            </span><span class="c1">// ORM for Postgres/MSSQL</span>
+<span class="w">    </span><span class="s">&quot;github.com/go-playground/validator/v10&quot;</span><span class="w">  </span><span class="c1">// Struct validation</span>
+<span class="w">    </span><span class="s">&quot;github.com/golang-jwt/jwt/v4&quot;</span><span class="w">            </span><span class="c1">// JWT tokens</span>
+<span class="p">)</span>
+</pre></div>
+</div>
 <hr />
 <h2 id="8-file-naming-conventions">8. File &amp; Naming Conventions</h2>
 <div class="tablewrap"><table>
@@ -810,6 +841,25 @@ settings/
 </tbody>
 </table></div>
 <h3 id="project-directory-structure">Project Directory Structure</h3>
+<div class="codeblock"><div class="codehead"><span class="lang-chip"></span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span>app/
+  controllers/          → HTTP handlers (login.go, user.go)
+  repository/           → Data access (postgres queries, redis, sms, social)
+  service/              → Business logic (create_user, deactive_user, device_session)
+  models/               → Request/response structs, DB entities
+  helpers/              → OAuth helpers (Apple, Facebook, Google)
+  producer/             → RabbitMQ publisher
+  worker/               → RabbitMQ consumer (event logging)
+  testing/              → Integration tests
+platform/
+  database/             → DB connections (postgres.go, mongodb.go, mssql.go)
+  cache/                → Redis connection
+settings/
+  config/               → Viper config loader
+  router/versioned/     → Route registration (v1/api.go, v2/api.go)
+  middleware/           → JWT auth, device sessions, Sentry
+  utils/                → Response helpers, validators
+</pre></div>
+</div>
 <hr />
 <h2 id="9-key-gotchas-quick-reference">9. Key Gotchas Quick Reference</h2>
 <ol>
@@ -830,6 +880,70 @@ settings/
 </nav>
 <footer>Generated from Markdown · <a href="../index.html">Về trang chủ docs</a></footer>
 </main>
+
+<button class="progress-fab" id="progress-fab" type="button">📊 Tiến độ <span class="fab-count">0/0</span></button>
+<div class="progress-modal" id="progress-modal" hidden>
+  <div class="progress-dialog" role="dialog" aria-label="Theo dõi tiến độ">
+    <div class="progress-head">
+      <h2>📊 Theo dõi tiến độ <span class="progress-count">0%</span></h2>
+      <button class="progress-close" id="progress-close" type="button" aria-label="Đóng">✕</button>
+    </div>
+    <div class="progress-bar"><i></i></div>
+    <div class="progress-body">
+<div class="callout callout-note"><div class="callout-body"><p>Đây là bảng theo dõi <strong>duy nhất</strong> cho cả bộ tài liệu. Tick vào từng mốc — tiến độ được lưu trên trình duyệt và đồng bộ ở mọi trang qua nút nổi <strong>📊 Tiến độ</strong> ở góc phải dưới. Checklist chi tiết từng ngày vẫn nằm trong bài <code>07 · Fast Track Roadmap</code>.</p></div></div>
+
+<h3>Giai đoạn 1 · Nền tảng (Ngày 1)</h3>
+<ul>
+<li class="task"><input type="checkbox"> Hiểu mental model Go vs Node.js — file <code>01</code></li>
+<li class="task"><input type="checkbox"> Nắm syntax: <code>var</code>, <code>:=</code>, <code>const</code>, slice, map, <code>for</code>, <code>if</code>, <code>switch</code> — file <code>02</code></li>
+<li class="task"><input type="checkbox"> Viết được <code>struct</code> + method + pointer cơ bản</li>
+<li class="task"><input type="checkbox"> Chạy được <code>go run</code>, <code>go fmt</code> và tạo module mới</li>
+</ul>
+<h3>Giai đoạn 2 · Struct, Interface, Error (Ngày 2)</h3>
+<ul>
+<li class="task"><input type="checkbox"> Thiết kế struct, embedding và constructor</li>
+<li class="task"><input type="checkbox"> Hiểu interface + polymorphism trong Go</li>
+<li class="task"><input type="checkbox"> Xử lý lỗi với <code>errors.Is</code>, <code>errors.As</code> và custom error — file <code>03</code></li>
+</ul>
+<h3>Giai đoạn 3 · HTTP API (Ngày 3–4)</h3>
+<ul>
+<li class="task"><input type="checkbox"> Dựng được <code>/health</code> + CRUD bằng <code>net/http</code> hoặc Fiber — file <code>05</code></li>
+<li class="task"><input type="checkbox"> Viết middleware logging + error handling</li>
+<li class="task"><input type="checkbox"> Test API bằng curl/Postman</li>
+<li class="task"><input type="checkbox"> Viết unit test table-driven + <code>httptest</code> — file <code>06</code></li>
+</ul>
+<h3>Giai đoạn 4 · Concurrency (Ngày 5)</h3>
+<ul>
+<li class="task"><input type="checkbox"> Dùng goroutine + <code>WaitGroup</code> — file <code>04</code></li>
+<li class="task"><input type="checkbox"> Dùng channel + <code>select</code></li>
+<li class="task"><input type="checkbox"> Dùng <code>context.WithTimeout</code> để cancel</li>
+<li class="task"><input type="checkbox"> Chạy <code>go run -race .</code> không báo lỗi</li>
+</ul>
+<h3>Giai đoạn 5 · Project Layout &amp; Capstone (Ngày 6–7)</h3>
+<ul>
+<li class="task"><input type="checkbox"> Tách <code>cmd/</code>, <code>internal/</code>, viết repository interface</li>
+<li class="task"><input type="checkbox"> Wire dependency trong <code>main.go</code> + graceful shutdown</li>
+<li class="task"><input type="checkbox"> Hoàn thành 1 mini project kèm test, <code>go vet ./...</code>, <code>go build ./...</code></li>
+</ul>
+<h3>🚦 Mốc sẵn sàng: Phân tích &amp; code project</h3>
+<div class="callout callout-note"><div class="callout-body"><p><strong>Đọc/phân tích project thật:</strong> xong Giai đoạn 1 → 3 (khoảng Ngày 3).
+<strong>Sửa code trong project thật:</strong> xong thêm Giai đoạn 4 (khoảng Ngày 5).
+<strong>Tự code một project hoàn chỉnh:</strong> xong Giai đoạn 5 (khoảng Ngày 6–7).</p></div></div>
+
+<ul>
+<li class="task"><input type="checkbox"> Xong Giai đoạn 1 → 3: đọc hiểu và tự dựng được REST API CRUD</li>
+<li class="task"><input type="checkbox"> Đọc hiểu một repo Go lạ trong khoảng 1 buổi, không cần dịch từng dòng</li>
+<li class="task"><input type="checkbox"> Tự viết CRUD + test table-driven mà không copy nguyên mẫu</li>
+<li class="task"><input type="checkbox"> Giải thích được khi nào dùng goroutine / channel / context</li>
+<li class="task"><input type="checkbox"> Chạy thành thạo <code>go test</code>, <code>go vet</code>, <code>go build</code> và đọc được lỗi</li>
+<li class="task"><input type="checkbox"> Đã phân tích ít nhất 1 project mẫu — vtvcab-identity-api (series Node.js → Go, bài <code>01</code>)</li>
+</ul>
+<hr />
+    </div>
+  </div>
+</div>
+
+
 <script>
 
 (function(){
@@ -879,6 +993,88 @@ settings/
       navigator.clipboard.writeText(text).then(function(){ done(true); }, fallback);
     } else { fallback(); }
   });
+})();
+// ---- progress tracker: nút nổi + modal, đồng bộ mọi trang qua localStorage ----
+(function(){
+  function qsa(sel, root){ return [].slice.call((root||document).querySelectorAll(sel)); }
+  function load(key){ try{ return JSON.parse(localStorage.getItem(key)||'null'); }catch(e){ return null; } }
+  function save(key, arr){ try{ localStorage.setItem(key, JSON.stringify(arr)); }catch(e){} }
+
+  var KEY_MAIN = 'md2html:progress:docs';
+  var modal = document.getElementById('progress-modal');
+  var fab = document.getElementById('progress-fab');
+  var homeBoxes = qsa('.progress-track .task input');
+  var modalBoxes = modal ? qsa('.task input', modal) : [];
+  var N = Math.max(homeBoxes.length, modalBoxes.length);
+
+  function states(){
+    var saved = load(KEY_MAIN);
+    if (saved && saved.length === N) return saved;
+    var src = homeBoxes.length ? homeBoxes : modalBoxes;
+    return src.map(function(b){ return b.checked; });
+  }
+  function updateCounters(st){
+    var done = st.filter(Boolean).length;
+    if (fab) fab.querySelector('.fab-count').textContent = done + '/' + N;
+    if (modal){
+      modal.querySelector('.progress-bar i').style.width = (N ? done/N*100 : 0) + '%';
+      modal.querySelector('.progress-count').textContent = (N ? Math.round(done/N*100) : 0) + '%';
+    }
+  }
+  function paint(st){
+    for (var i=0;i<N;i++){
+      if (homeBoxes[i]) homeBoxes[i].checked = !!st[i];
+      if (modalBoxes[i]) modalBoxes[i].checked = !!st[i];
+    }
+    updateCounters(st);
+  }
+  if (N){
+    paint(states());
+    var bindMain = function(i){
+      return function(){
+        var st = states(); st[i] = this.checked;
+        save(KEY_MAIN, st); paint(st);
+      };
+    };
+    homeBoxes.forEach(function(b,i){ b.addEventListener('change', bindMain(i)); });
+    modalBoxes.forEach(function(b,i){ b.addEventListener('change', bindMain(i)); });
+  }
+
+  // task list thường của từng trang: lưu riêng theo URL
+  var otherBoxes = qsa('.task input').filter(function(b){
+    return !b.closest('.progress-track') && !(modal && modal.contains(b));
+  });
+  if (otherBoxes.length){
+    var key = 'md2html:page:' + location.pathname;
+    var saved = load(key);
+    if (saved && saved.length === otherBoxes.length){
+      otherBoxes.forEach(function(b,i){ b.checked = !!saved[i]; });
+    }
+    otherBoxes.forEach(function(b){
+      b.addEventListener('change', function(){
+        save(key, otherBoxes.map(function(x){ return x.checked; }));
+      });
+    });
+  }
+
+  if (fab && modal && N){
+    var openModal = function(){
+      paint(states());
+      modal.hidden = false;
+      document.body.style.overflow = 'hidden';
+    };
+    fab.addEventListener('click', openModal);
+    qsa('.progress-open').forEach(function(b){ b.addEventListener('click', openModal); });
+    var closeModal = function(){
+      modal.hidden = true;
+      document.body.style.overflow = '';
+    };
+    document.getElementById('progress-close').addEventListener('click', closeModal);
+    modal.addEventListener('click', function(e){ if (e.target === modal) closeModal(); });
+    document.addEventListener('keydown', function(e){
+      if (e.key === 'Escape' && !modal.hidden) closeModal();
+    });
+  } else if (fab){ fab.hidden = true; }
 })();
 
 </script>

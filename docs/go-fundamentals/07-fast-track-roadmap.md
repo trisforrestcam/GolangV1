@@ -22,6 +22,8 @@ go env GOPATH
 go env GOROOT
 ```
 
+> 💡 **Quen dùng nvm để switch version Node?** Go 1.21+ không cần tool thứ ba: ghi `go 1.22` trong `go.mod` là mọi lệnh `go` tự chạy đúng toolchain đó (`GOTOOLCHAIN=auto`). Thích shim kiểu nvm thì dùng goenv/g — xem đủ 4 cách ở [[06-tooling-testing]] mục 1.9.
+
 ```bash
 # 3. Tạo project đầu tiên
 mkdir hello-go && cd hello-go
@@ -624,6 +626,42 @@ Học được: ticker, semaphore, retry pattern, error handling
 - [ ] Chạy `go test ./...`
 - [ ] Chạy `go vet ./...`
 - [ ] Chạy `go build ./...`
+
+---
+
+## 🚦 Khi Nào Bắt Đầu Phân Tích & Code Project?
+
+Không cần học hết 7 ngày mới được chạm vào project thật. Có **3 mốc chuyển tiếp**, mỗi mốc mở khoá một mức độ tham gia khác nhau:
+
+| Mốc | Điều kiện | Bạn được phép làm gì |
+|-----|-----------|----------------------|
+| **1. Đọc & phân tích** | Xong Ngày 1–3 (Giai đoạn 1 → 3) | Clone project, chạy thử, đọc code, vẽ luồng request → handler → service → repository. **Chưa sửa code.** |
+| **2. Sửa code nhỏ** | Xong thêm Ngày 4–5 (testing + concurrency) | Thêm endpoint CRUD, sửa bug, viết test cho đúng phần mình chạm vào. |
+| **3. Code feature / project mới** | Xong Ngày 6–7 (layout + tooling) | Tự tách layer, wire dependency, code + test + `go vet` + `go build` một project hoàn chỉnh. |
+
+### Vì sao mốc phân tích nằm ở Ngày 3?
+
+Đến hết Ngày 3 bạn đã có đủ vốn tối thiểu để đọc hiểu một backend Go:
+
+- ✅ Đọc được syntax, struct, interface, error handling
+- ✅ Hiểu một request đi qua handler → service → repository như thế nào
+- ✅ Biết cách chạy project và gọi thử API bằng curl/Postman
+
+Lúc này hãy **đọc project mẫu trước, sửa code sau**. Mục tiêu của giai đoạn phân tích là trả lời được 4 câu:
+
+1. Request đi vào ở đâu và đi ra ở đâu?
+2. Business logic nằm ở layer nào?
+3. Dữ liệu được truy cập qua interface/repository nào?
+4. Config, logging, error handling được wire ở đâu?
+
+### Hai cách đi
+
+- **Tuần tự (an toàn):** học hết Ngày 3 → phân tích project → học tiếp Ngày 4–7 → quay lại sửa code.
+- **Song song (nhanh):** từ Ngày 2–3 vừa học vừa **chỉ đọc** project mẫu; khi đã tick đủ mốc sẵn sàng trong **📊 Tiến độ** thì bắt đầu sửa code.
+
+> Mốc "sẵn sàng" được theo dõi trong popup **📊 Tiến độ** (nút nổi góc phải dưới). Khi tick đủ 6 mục của mục **🚦 Mốc sẵn sàng**, bạn có thể tự tin bước vào phần phân tích và code project.
+
+Xem ngay: [Phân tích Project Structure — vtvcab-identity-api](../nodejs-to-go/01-Project-Structure-Analysis.md)
 
 ---
 

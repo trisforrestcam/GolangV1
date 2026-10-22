@@ -86,6 +86,7 @@ require (
 - Go **không có registry central** như npm. Dependencies được fetch trực tiếp từ source (GitHub, GitLab, etc.) và cache local.
 - **Không có `node_modules`**. Dependencies được download vào `$GOPATH/pkg/mod`. Binary compile xong chứa tất cả code cần thiết.
 - `go mod tidy` tự động thêm dependencies thiếu và xóa dependencies không dùng. Không có equivalent npm script nào tiện bằng.
+- **Version runtime:** Node cần `nvm` + `.nvmrc`; từ Go 1.21 bạn chỉ cần ghi `go 1.22` trong `go.mod` là mọi lệnh `go` **tự tải và switch đúng toolchain** (`GOTOOLCHAIN=auto`). Chi tiết 4 cách (goenv, g, asdf/mise): [[06-tooling-testing]] mục 1.9.
 
 ```bash
 # Node equivalent workflow

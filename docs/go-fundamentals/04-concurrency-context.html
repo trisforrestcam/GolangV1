@@ -97,7 +97,7 @@ body {
 }
 #progress { position: fixed; top: 0; left: 0; height: 3px; width: 0; z-index: 70;
   background: linear-gradient(90deg, var(--accent), var(--accent-2), #7c3aed); }
-#backtop { position: fixed; right: 26px; bottom: 26px; width: 44px; height: 44px;
+#backtop { position: fixed; right: 26px; bottom: 88px; width: 44px; height: 44px;
   border-radius: 50%; border: 1px solid var(--border); background: #fff;
   color: var(--accent); font-size: 1.15rem; cursor: pointer; opacity: 0;
   pointer-events: none; transition: all .25s; box-shadow: 0 8px 20px rgba(15,23,42,.14); z-index: 60; }
@@ -161,6 +161,17 @@ code {
 .callout .codeblock { box-shadow: none; }
 .callout .codeblock, .callout .codehilite, .callout code { background: #fff; }
 .callout .codehead { background: rgba(237,241,247,.6); }
+/* --- mermaid diagrams --- */
+.mermaidwrap { margin: 1.5em 0; border: 1px solid var(--border); border-radius: 12px;
+  background: #fff; overflow: hidden; box-shadow: 0 2px 6px rgba(15,23,42,.05); }
+.mermaidwrap .codehead { background: #edf1f7; }
+.mermaid-hint { font-size: .72rem; color: #94a3b8; font-weight: 600; }
+.mermaid { display: flex; justify-content: center; padding: 20px 16px; overflow-x: auto; }
+.mermaid svg { max-width: 100%; height: auto; }
+/* khi mermaid.js chưa/chưa kịp load (offline) — vẫn đọc được source dễ chịu */
+.mermaid:not([data-processed]) { font-family: "JetBrains Mono", Consolas, Menlo, monospace;
+  font-size: .8rem; color: #475569; white-space: pre; text-align: left; justify-content: flex-start; }
+.callout .mermaidwrap { box-shadow: none; }
 /* --- tables --- */
 .tablewrap { overflow-x: auto; margin: 1.2em 0; }
 table { border-collapse: collapse; width: 100%; font-size: .94em; margin: 0; }
@@ -223,7 +234,46 @@ kbd { background: #fff; border: 1px solid #cbd5e1; border-bottom-width: 2px;
 .pager .next { text-align: right; }
 .pager .dir { display: block; font-size: .78rem; color: var(--muted); font-weight: 500; }
 footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top: 34px; }
-@media print { #progress, #backtop, .toc, .pager { display: none !important; }
+/* --- floating progress button + modal --- */
+.progress-fab { position: fixed; right: 26px; bottom: 26px; z-index: 70;
+  display: inline-flex; align-items: center; gap: 9px; padding: 11px 19px;
+  border: none; border-radius: 999px; cursor: pointer; font: inherit;
+  font-size: .88rem; font-weight: 700; color: #fff;
+  background: linear-gradient(120deg, var(--accent), var(--accent-2));
+  box-shadow: 0 14px 34px -12px rgba(79,70,229,.55);
+  transition: transform .15s, box-shadow .15s; }
+.progress-fab:hover { transform: translateY(-2px); box-shadow: 0 18px 40px -12px rgba(79,70,229,.62); }
+.fab-count { background: rgba(255,255,255,.24); padding: 1px 10px; border-radius: 999px; font-size: .86em; }
+.progress-modal { position: fixed; inset: 0; z-index: 100; padding: 24px;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(51,65,85,.45); backdrop-filter: blur(3px); }
+.progress-modal[hidden] { display: none; }
+.progress-dialog { background: #fff; border-radius: 18px; width: min(780px, 100%);
+  max-height: 82vh; display: flex; flex-direction: column;
+  box-shadow: 0 40px 90px -20px rgba(51,65,85,.5); overflow: hidden; }
+.progress-head { display: flex; align-items: center; justify-content: space-between;
+  gap: 14px; padding: 20px 28px 14px; }
+.progress-head h2 { margin: 0; padding: 0; border: none; font-size: 1.2rem; }
+.progress-count { color: var(--accent); font-size: .72em; margin-left: .5em; }
+.progress-close { flex-shrink: 0; width: 34px; height: 34px; border-radius: 10px;
+  border: 1px solid var(--border); background: #fff; color: var(--muted);
+  font-size: 1rem; cursor: pointer; transition: all .15s; }
+.progress-close:hover { color: var(--accent); border-color: var(--accent); background: var(--accent-soft); }
+.progress-bar { height: 6px; background: #e2e8f0; margin: 0 28px; border-radius: 99px; overflow: hidden; }
+.progress-bar i { display: block; height: 100%; width: 0; border-radius: 99px;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2)); transition: width .25s; }
+.progress-body { padding: 8px 28px 26px; overflow-y: auto; }
+.progress-body h3 { margin-top: 1.1em; }
+/* --- trang nguồn: checklist inline thay bằng nút mở popup --- */
+.progress-hint { display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+  background: var(--accent-soft); border: 1px dashed #c7d2fe; border-radius: 14px;
+  padding: 16px 20px; color: var(--muted); font-size: .95rem; }
+.progress-open { flex-shrink: 0; border: none; border-radius: 10px; padding: 11px 20px;
+  font: inherit; font-size: .92rem; font-weight: 700; color: #fff; cursor: pointer;
+  background: linear-gradient(120deg, var(--accent), var(--accent-2));
+  box-shadow: 0 8px 18px -8px rgba(79,70,229,.5); transition: transform .15s; }
+.progress-open:hover { transform: translateY(-1px); }
+@media print { #progress, #backtop, .toc, .pager, .progress-fab, .progress-modal { display: none !important; }
   body { background: #fff; } .card { box-shadow: none; border: none; } }
 
 .wrap.wide { max-width: 1340px; }
@@ -264,6 +314,14 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <nav class="crumb"><a href="../index.html">📚 Docs</a> &nbsp;›&nbsp; go-fundamentals</nav>
 <main class="wrap">
 <article class="card">
+<h1 id="concurrency-trong-go-huong-dan-toan-tap">Concurrency trong Go - Hướng Dẫn Toàn Tập</h1>
+<div class="callout callout-note"><div class="callout-body"><p><strong>Mục tiêu:</strong> Hiểu sâu concurrency model của Go, tại sao nó mạnh hơn Node.js trong nhiều scenarios, và cách sử dụng hiệu quả.</p>
+<p><strong>Yêu cầu:</strong> Đã đọc <code>01-fundamentals.md</code> và <code>02-advanced.md</code>.</p></div></div>
+
+<hr />
+<h2 id="1-concurrency-vs-parallelism-phan-biet-co-ban">1. Concurrency vs Parallelism - Phân biệt cơ bản</h2>
+<p>Đây là 2 khái niệm <strong>hoàn toàn khác nhau</strong> mà nhiều người hay nhầm lẫn.</p>
+<h3 id="concurrency-xu-ly-nhieu-thu-cung-luc-dealing-with-multiple-things">Concurrency = Xử lý nhiều thứ cùng lúc (dealing with multiple things)</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip"></span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span>Timeline (1 core):
 Task A: ██░░██░░██░░
 Task B: ░░██░░██░░██
@@ -272,6 +330,7 @@ Task B: ░░██░░██░░██
 Luân phiên giữa các task - mỗi thời điểm chỉ 1 task chạy
 </pre></div>
 </div>
+<h3 id="parallelism-thuc-hien-nhieu-thu-cung-luc-doing-multiple-things">Parallelism = Thực hiện nhiều thứ cùng lúc (doing multiple things)</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip"></span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span>Timeline (2 cores):
 Core 1 - Task A: ████████████
 Core 2 - Task B: ████████████
@@ -280,6 +339,7 @@ Core 2 - Task B: ████████████
 Thực sự chạy đồng thời trên nhiều core
 </pre></div>
 </div>
+<h3 id="so-sanh-nodejs-vs-go">So sánh Node.js vs Go</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip"></span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span>┌─────────────────────────────────────────────────────────┐
 │                    Node.js Model                         │
 │                                                         │
@@ -314,6 +374,7 @@ Thực sự chạy đồng thời trên nhiều core
 └─────────────────────────────────────────────────────────┘
 </pre></div>
 </div>
+<h3 id="tai-sao-ieu-nay-quan-trong">Tại sao điều này quan trọng?</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Go: CPU-bound task chạy PARALLEL - nhanh gấp N lần (N = số core)</span>
 <span class="c1">// Mỗi goroutine chạy trên 1 core khác nhau</span>
 
@@ -336,6 +397,9 @@ Thực sự chạy đồng thời trên nhiều core
 <span class="kd">const</span><span class="w"> </span><span class="nx">worker</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">Worker</span><span class="p">(</span><span class="s1">&#39;./heavy-task.js&#39;</span><span class="p">);</span>
 </pre></div>
 </div>
+<hr />
+<h2 id="2-nodejs-event-loop-model-on-tap-e-so-sanh">2. Node.js Event Loop Model - Ôn tập để so sánh</h2>
+<p>Trước khi hiểu Go, hãy ôn lại Node.js:</p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip"></span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span>Node.js Event Loop (đơn giản hóa):
 
    ┌───────────────────────────┐
@@ -360,6 +424,7 @@ Thực sự chạy đồng thời trên nhiều core
 └────────────────┘
 </pre></div>
 </div>
+<h3 id="nodejs-xu-ly-io-nhu-the-nao">Node.js xử lý I/O như thế nào?</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">javascript</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Node.js: Non-blocking I/O nhờ event loop</span>
 <span class="kd">const</span><span class="w"> </span><span class="nx">fs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;fs&#39;</span><span class="p">);</span>
 
@@ -376,6 +441,7 @@ Thực sự chạy đồng thời trên nhiều core
 <span class="c1">// Nhưng chỉ 1 callback chạy tại 1 thời điểm</span>
 </pre></div>
 </div>
+<h3 id="nodejs-worker-threads-cong-ken">Node.js Worker Threads (cồng kén)</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">javascript</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Node.js Worker Threads - rất cồng kềnh</span>
 <span class="kd">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">Worker</span><span class="p">,</span><span class="w"> </span><span class="nx">isMainThread</span><span class="p">,</span><span class="w"> </span><span class="nx">parentPort</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;worker_threads&#39;</span><span class="p">);</span>
 
@@ -399,6 +465,7 @@ Thực sự chạy đồng thời trên nhiều core
 <span class="p">}()</span>
 </pre></div>
 </div>
+<h3 id="nodejs-cluster-multi-process">Node.js Cluster (multi-process)</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">javascript</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Node.js Cluster - mỗi process có 1 event loop riêng</span>
 <span class="kd">const</span><span class="w"> </span><span class="nx">cluster</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;cluster&#39;</span><span class="p">);</span>
 <span class="kd">const</span><span class="w"> </span><span class="nx">http</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;http&#39;</span><span class="p">);</span>
@@ -421,6 +488,7 @@ Thực sự chạy đồng thời trên nhiều core
 <span class="c1">// Và tự động chạy parallel trên nhiều core</span>
 </pre></div>
 </div>
+<h3 id="nodejs-cham-tuong-khi-nao">Node.js chạm tường khi nào?</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">javascript</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// ❌ BLOCK event loop - toàn bộ server bị đơ</span>
 <span class="nx">app</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;/heavy&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="nx">req</span><span class="p">,</span><span class="w"> </span><span class="nx">res</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="nx">sum</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0</span><span class="p">;</span>
@@ -445,6 +513,10 @@ Thực sự chạy đồng thời trên nhiều core
 <span class="c1">// Request khác vẫn chạy bình thường trên core khác</span>
 </pre></div>
 </div>
+<hr />
+<h2 id="3-goroutines-huong-dan-toan-tap">3. Goroutines - Hướng dẫn toàn tập</h2>
+<h3 id="goroutine-la-gi">Goroutine là gì?</h3>
+<p>Goroutine là lightweight thread được quản lý bởi Go runtime, không phải OS thread.</p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip"></span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span>So sánh kích thước:
 
 OS Thread:     ~1MB stack (cố định)
@@ -455,6 +527,7 @@ Goroutine:     ~2KB stack (ban đầu, có thể grow/shrink)
 → Node.js: mỗi Promise chỉ là object trong event loop, không phải thread
 </pre></div>
 </div>
+<h3 id="syntax-co-ban">Syntax cơ bản</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Chạy function như goroutine</span>
 <span class="k">go</span><span class="w"> </span><span class="nx">myFunction</span><span class="p">()</span>
 
@@ -479,6 +552,7 @@ Goroutine:     ~2KB stack (ban đầu, có thể grow/shrink)
 <span class="c1">// Nếu muốn parallel thực sự → Worker Threads (cồng kềnh)</span>
 </pre></div>
 </div>
+<h3 id="goroutine-lifecycle">Goroutine Lifecycle</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">javascript</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="nx">Goroutine</span><span class="w"> </span><span class="nx">Lifecycle</span><span class="o">:</span>
 
 <span class="w">  </span><span class="nx">Created</span><span class="w"> </span><span class="err">──►</span><span class="w"> </span><span class="nx">Runnable</span><span class="w"> </span><span class="err">──►</span><span class="w"> </span><span class="nx">Running</span><span class="w"> </span><span class="err">──►</span><span class="w"> </span><span class="nx">Terminated</span>
@@ -493,6 +567,7 @@ Goroutine:     ~2KB stack (ban đầu, có thể grow/shrink)
 <span class="o">-</span><span class="w"> </span><span class="nx">Terminated</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="nx">kết</span><span class="w"> </span><span class="nx">thúc</span><span class="w"> </span><span class="nx">hoặc</span><span class="w"> </span><span class="nx">gọi</span><span class="w"> </span><span class="nx">runtime</span><span class="p">.</span><span class="nx">Goexit</span><span class="p">()</span>
 </pre></div>
 </div>
+<h3 id="goroutine-vs-os-thread-vs-nodejs-promise">Goroutine vs OS Thread vs Node.js Promise</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip"></span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span>┌──────────────────┬──────────────┬──────────────┬─────────────────┐
 │                  │ OS Thread    │ Goroutine    │ Node.js Promise │
 ├──────────────────┼──────────────┼──────────────┼─────────────────┤
@@ -507,6 +582,8 @@ Goroutine:     ~2KB stack (ban đầu, có thể grow/shrink)
 └──────────────────┴──────────────┴──────────────┴─────────────────┘
 </pre></div>
 </div>
+<h3 id="go-scheduler-gmp-model">Go Scheduler - GMP Model</h3>
+<p>Go sử dụng mô hình <strong>GMP</strong> để schedule goroutines:</p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip"></span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span>GMP Model:
 
 G = Goroutine (logic thread)
@@ -547,6 +624,7 @@ Cách hoạt động:
 <span class="nx">runtime</span><span class="p">.</span><span class="nx">GOMAXPROCS</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="w">              </span><span class="c1">// Đặt số P = 4</span>
 </pre></div>
 </div>
+<h3 id="stack-growth-va-shrinking">Stack Growth và Shrinking</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Goroutine stack bắt đầu nhỏ (2-8KB) và tự động grow khi cần</span>
 <span class="kd">func</span><span class="w"> </span><span class="nx">recursive</span><span class="p">(</span><span class="nx">n</span><span class="w"> </span><span class="kt">int</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">n</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">{</span>
@@ -560,6 +638,7 @@ Cách hoạt động:
 <span class="c1">// → Tiết kiệm memory cho hàng triệu goroutine</span>
 </pre></div>
 </div>
+<h3 id="cost-comparison-chi-tiet">Cost Comparison chi tiết</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Benchmark: tạo 100,000 goroutines</span>
 <span class="kd">func</span><span class="w"> </span><span class="nx">BenchmarkGoroutines</span><span class="p">(</span><span class="nx">b</span><span class="w"> </span><span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">B</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="nx">i</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="nx">i</span><span class="w"> </span><span class="p">&lt;</span><span class="w"> </span><span class="nx">b</span><span class="p">.</span><span class="nx">N</span><span class="p">;</span><span class="w"> </span><span class="nx">i</span><span class="o">++</span><span class="w"> </span><span class="p">{</span>
@@ -585,6 +664,7 @@ Cách hoạt động:
 <span class="c1">// Nếu tạo 100K Worker Threads → hết memory ngay (~100GB)</span>
 </pre></div>
 </div>
+<h3 id="khi-nao-goroutine-uoc-tao">Khi nào goroutine được tạo?</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// 1. Explicit: dùng `go` keyword</span>
 <span class="k">go</span><span class="w"> </span><span class="nx">myFunction</span><span class="p">()</span>
 
@@ -600,6 +680,7 @@ Cách hoạt động:
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="common-mistake-goroutine-leaks">Common Mistake: Goroutine Leaks</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// ❌ BAD: Goroutine leak - goroutine永远不会完成</span>
 <span class="kd">func</span><span class="w"> </span><span class="nx">leakyFunction</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nx">ch</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nb">make</span><span class="p">(</span><span class="kd">chan</span><span class="w"> </span><span class="kt">int</span><span class="p">)</span>
@@ -637,6 +718,7 @@ Cách hoạt động:
 <span class="c1">// EventEmitter có maxListeners warning</span>
 </pre></div>
 </div>
+<h3 id="detect-goroutine-leaks">Detect Goroutine Leaks</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Dùng runtime.NumGoroutine() để kiểm tra</span>
 <span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&quot;Before:&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">runtime</span><span class="p">.</span><span class="nx">NumGoroutine</span><span class="p">())</span><span class="w"> </span><span class="c1">// ~2</span>
@@ -655,6 +737,10 @@ Cách hoạt động:
 <span class="c1">// Hoặc dùng package: go.uber.org/goleak</span>
 </pre></div>
 </div>
+<hr />
+<h2 id="4-channels-huong-dan-hoan-chinh">4. Channels - Hướng dẫn hoàn chỉnh</h2>
+<p>Channel là cách Go goroutines giao tiếp với nhau. Đây là <strong>trung tâm</strong> của Go concurrency.</p>
+<h3 id="unbuffered-channel-ong-bo">Unbuffered Channel (đồng bộ)</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Tạo unbuffered channel</span>
 <span class="nx">ch</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nb">make</span><span class="p">(</span><span class="kd">chan</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span>
 
@@ -697,6 +783,7 @@ Sender                    Channel                    Receiver
 <span class="kd">const</span><span class="w"> </span><span class="nx">msg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">promise</span><span class="p">;</span>
 </pre></div>
 </div>
+<h3 id="buffered-channel-bat-ong-bo">Buffered Channel (bất đồng bộ)</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Tạo buffered channel với capacity = 3</span>
 <span class="nx">ch</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nb">make</span><span class="p">(</span><span class="kd">chan</span><span class="w"> </span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">)</span>
 
@@ -747,6 +834,7 @@ Sender          Buffer              Receiver
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="channel-direction-kieu-direction">Channel Direction (kiểu direction)</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Bidirectional channel (default)</span>
 <span class="nx">ch</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nb">make</span><span class="p">(</span><span class="kd">chan</span><span class="w"> </span><span class="kt">int</span><span class="p">)</span>
 
@@ -781,6 +869,7 @@ Sender          Buffer              Receiver
 <span class="o">-</span><span class="w"> </span><span class="nx">Prevents</span><span class="w"> </span><span class="nx">accidental</span><span class="w"> </span><span class="nx">send</span><span class="o">/</span><span class="nx">receive</span><span class="w"> </span><span class="nx">ở</span><span class="w"> </span><span class="nx">sai</span><span class="w"> </span><span class="nx">vị</span><span class="w"> </span><span class="nx">trí</span>
 </pre></div>
 </div>
+<h3 id="closing-channels">Closing Channels</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="nx">ch</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nb">make</span><span class="p">(</span><span class="kd">chan</span><span class="w"> </span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">)</span>
 
 <span class="c1">// Gửi dữ liệu</span>
@@ -828,6 +917,7 @@ Sender          Buffer              Receiver
 <span class="err">✅</span><span class="w"> </span><span class="nx">Receive</span><span class="w"> </span><span class="nx">từ</span><span class="w"> </span><span class="nx">closed</span><span class="w"> </span><span class="nx">channel</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="nx">zero</span><span class="w"> </span><span class="nx">value</span><span class="p">,</span><span class="w"> </span><span class="nx">ok</span><span class="p">=</span><span class="kc">false</span>
 </pre></div>
 </div>
+<h3 id="nil-channel-behavior">nil Channel Behavior</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kd">var</span><span class="w"> </span><span class="nx">ch</span><span class="w"> </span><span class="kd">chan</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="c1">// nil channel</span>
 
 <span class="c1">// Gửi vào nil channel → BLOCK forever</span>
@@ -867,6 +957,7 @@ Sender          Buffer              Receiver
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="channel-as-synchronization-primitive">Channel as Synchronization Primitive</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Unbuffered channel dùng như synchronization point</span>
 <span class="nx">done</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nb">make</span><span class="p">(</span><span class="kd">chan</span><span class="w"> </span><span class="kd">struct</span><span class="p">{})</span>
 
@@ -893,6 +984,7 @@ Sender          Buffer              Receiver
 <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Done!&quot;</span><span class="p">);</span>
 </pre></div>
 </div>
+<h3 id="select-statement-multi-way-multiplexing">select Statement (Multi-way Multiplexing)</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// select giống như switch, nhưng cho channels</span>
 <span class="nx">ch1</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nb">make</span><span class="p">(</span><span class="kd">chan</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span>
 <span class="nx">ch2</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nb">make</span><span class="p">(</span><span class="kd">chan</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span>
@@ -927,6 +1019,7 @@ Sender          Buffer              Receiver
 <span class="n">Quan</span><span class="w"> </span><span class="n">trọng</span><span class="p">:</span><span class="w"> </span><span class="k">select</span><span class="w"> </span><span class="n">KHÔNG</span><span class="w"> </span><span class="n">có</span><span class="w"> </span><span class="n">fallthrough</span>
 </pre></div>
 </div>
+<h3 id="select-with-default-non-blocking">select with Default (Non-blocking)</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="nx">ch</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nb">make</span><span class="p">(</span><span class="kd">chan</span><span class="w"> </span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span>
 
 <span class="k">select</span><span class="w"> </span><span class="p">{</span>
@@ -960,6 +1053,7 @@ Sender          Buffer              Receiver
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="select-with-timeout">select with Timeout</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="nx">ch</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nb">make</span><span class="p">(</span><span class="kd">chan</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span>
 
 <span class="k">go</span><span class="w"> </span><span class="kd">func</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
@@ -991,6 +1085,7 @@ Sender          Buffer              Receiver
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="fan-out-fan-in-pattern">Fan-out, Fan-in Pattern</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Fan-out: 1 input → nhiều workers</span>
 <span class="c1">// Fan-in: nhiều workers → 1 output</span>
 
@@ -1050,6 +1145,7 @@ Fan-out: 1 source → N workers (parallel processing)
 Fan-in:  N workers → 1 destination (collect results)
 </pre></div>
 </div>
+<h3 id="pipeline-pattern">Pipeline Pattern</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Pipeline: nhiều stage nối tiếp nhau</span>
 <span class="c1">// Stage 1 → Stage 2 → Stage 3 → Output</span>
 
@@ -1125,6 +1221,7 @@ Dữ liệu chảy qua channels
 <span class="p">});</span>
 </pre></div>
 </div>
+<h3 id="worker-pool-pattern">Worker Pool Pattern</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kd">func</span><span class="w"> </span><span class="nx">workerPool</span><span class="p">(</span><span class="nx">numWorkers</span><span class="w"> </span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="nx">jobs</span><span class="w"> </span><span class="o">&lt;-</span><span class="kd">chan</span><span class="w"> </span><span class="kt">int</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;-</span><span class="kd">chan</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nx">results</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nb">make</span><span class="p">(</span><span class="kd">chan</span><span class="w"> </span><span class="kt">int</span><span class="p">)</span>
 
@@ -1226,6 +1323,7 @@ Dữ liệu chảy qua channels
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="quit-channel-pattern">Quit Channel Pattern</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kd">func</span><span class="w"> </span><span class="nx">worker</span><span class="p">(</span><span class="nx">quit</span><span class="w"> </span><span class="o">&lt;-</span><span class="kd">chan</span><span class="w"> </span><span class="kd">struct</span><span class="p">{})</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="k">select</span><span class="w"> </span><span class="p">{</span>
@@ -1251,6 +1349,7 @@ Dữ liệu chảy qua channels
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="done-channel-pattern">Done Channel Pattern</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kd">func</span><span class="w"> </span><span class="nx">worker</span><span class="p">(</span><span class="nx">done</span><span class="w"> </span><span class="kd">chan</span><span class="o">&lt;-</span><span class="w"> </span><span class="kd">struct</span><span class="p">{})</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="c1">// Do work</span>
 <span class="w">    </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&quot;Working...&quot;</span><span class="p">)</span>
@@ -1268,6 +1367,9 @@ Dữ liệu chảy qua channels
 <span class="p">}</span>
 </pre></div>
 </div>
+<hr />
+<h2 id="5-sync-package-hoan-chinh">5. sync Package - Hoàn chỉnh</h2>
+<h3 id="syncmutex-va-syncrwmutex">sync.Mutex và sync.RWMutex</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Mutex (Mutual Exclusion) - lock khi ghi/đọc shared state</span>
 <span class="kd">type</span><span class="w"> </span><span class="nx">SafeCounter</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nx">mu</span><span class="w">    </span><span class="nx">sync</span><span class="p">.</span><span class="nx">Mutex</span>
@@ -1349,6 +1451,7 @@ Khi nào dùng RWMutex?
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="syncwaitgroup">sync.WaitGroup</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kd">var</span><span class="w"> </span><span class="nx">wg</span><span class="w"> </span><span class="nx">sync</span><span class="p">.</span><span class="nx">WaitGroup</span>
 
 <span class="k">for</span><span class="w"> </span><span class="nx">i</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="nx">i</span><span class="w"> </span><span class="p">&lt;</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span><span class="w"> </span><span class="nx">i</span><span class="o">++</span><span class="w"> </span><span class="p">{</span>
@@ -1378,6 +1481,7 @@ Khi nào dùng RWMutex?
 <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;All workers done!&quot;</span><span class="p">);</span>
 </pre></div>
 </div>
+<h3 id="synconce">sync.Once</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kd">var</span><span class="w"> </span><span class="nx">once</span><span class="w"> </span><span class="nx">sync</span><span class="p">.</span><span class="nx">Once</span>
 <span class="kd">var</span><span class="w"> </span><span class="nx">config</span><span class="w"> </span><span class="o">*</span><span class="nx">Config</span>
 
@@ -1411,6 +1515,7 @@ Khi nào dùng RWMutex?
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="syncmap">sync.Map</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// sync.Map - concurrent-safe map</span>
 <span class="c1">// Dùng khi: nhiều goroutine đọc/ghi, keys ít thay đổi</span>
 <span class="kd">var</span><span class="w"> </span><span class="nx">m</span><span class="w"> </span><span class="nx">sync</span><span class="p">.</span><span class="nx">Map</span>
@@ -1455,6 +1560,7 @@ map + mutex:
   ❌ Phải tự quản lý lock
 </pre></div>
 </div>
+<h3 id="syncpool">sync.Pool</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// sync.Pool - object reuse pool</span>
 <span class="c1">// Giảm garbage collection pressure</span>
 
@@ -1502,6 +1608,7 @@ map + mutex:
 <span class="kd">const</span><span class="w"> </span><span class="nx">bufferPool</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">Pool</span><span class="p">(()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">Buffer</span><span class="p">.</span><span class="nx">alloc</span><span class="p">(</span><span class="mf">1024</span><span class="p">));</span>
 </pre></div>
 </div>
+<h3 id="synccond">sync.Cond</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// sync.Cond - condition variable</span>
 <span class="c1">// Dùng để signal/broadcast giữa goroutines</span>
 
@@ -1557,6 +1664,7 @@ Lưu ý: Luôn dùng Wait() trong loop (for), không dùng if
 → Vì spurious wakeup (có thể wakeup mà không có signal)
 </pre></div>
 </div>
+<h3 id="atomic-operations-syncatomic">Atomic Operations (sync/atomic)</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="s">&quot;sync/atomic&quot;</span>
 
 <span class="kd">var</span><span class="w"> </span><span class="nx">counter</span><span class="w"> </span><span class="kt">int64</span>
@@ -1597,6 +1705,7 @@ Khi nào dùng atomic?
 → Khi operation chỉ là read-modify-write đơn giản
 </pre></div>
 </div>
+<h3 id="khi-nao-dung-channels-vs-mutex">Khi nào dùng Channels vs Mutex?</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip"></span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span>Channels:
   ✅ Truyền dữ liệu giữa goroutines
   ✅ Synchronization (rendezvous point)
@@ -1613,6 +1722,13 @@ Rule of thumb:
   → Ưu tiên channels, dùng mutex khi channels quá cồng kềnh
 </pre></div>
 </div>
+<hr />
+<h2 id="6-context-deep-dive">6. Context - Deep Dive</h2>
+<h3 id="contextcontext-la-gi">context.Context là gì?</h3>
+<p>Context là đối tượng mang theo:
+1. <strong>Cancellation signal</strong> - hủy operation
+2. <strong>Deadline/Timeout</strong> - thời gian tối đa
+3. <strong>Request-scoped values</strong> - metadata theo request</p>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kd">type</span><span class="w"> </span><span class="nx">Context</span><span class="w"> </span><span class="kd">interface</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nx">Deadline</span><span class="p">()</span><span class="w"> </span><span class="p">(</span><span class="nx">deadline</span><span class="w"> </span><span class="nx">time</span><span class="p">.</span><span class="nx">Time</span><span class="p">,</span><span class="w"> </span><span class="nx">ok</span><span class="w"> </span><span class="kt">bool</span><span class="p">)</span>
 <span class="w">    </span><span class="nx">Done</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;-</span><span class="kd">chan</span><span class="w"> </span><span class="kd">struct</span><span class="p">{}</span>
@@ -1621,6 +1737,7 @@ Rule of thumb:
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="contextbackground-va-contexttodo">context.Background() và context.TODO()</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// context.Background() - root context, không bao giờ bị cancel</span>
 <span class="nx">ctx</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">context</span><span class="p">.</span><span class="nx">Background</span><span class="p">()</span>
 
@@ -1633,6 +1750,7 @@ Rule of thumb:
 <span class="c1">// TODO: dùng khi bạn chưa implement context propagation</span>
 </pre></div>
 </div>
+<h3 id="contextwithcancel">context.WithCancel</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nx">ctx</span><span class="p">,</span><span class="w"> </span><span class="nx">cancel</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">context</span><span class="p">.</span><span class="nx">WithCancel</span><span class="p">(</span><span class="nx">context</span><span class="p">.</span><span class="nx">Background</span><span class="p">())</span>
 
@@ -1691,6 +1809,7 @@ Rule of thumb:
 <span class="nx">setTimeout</span><span class="p">(()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">controller</span><span class="p">.</span><span class="nx">abort</span><span class="p">(),</span><span class="w"> </span><span class="mf">2000</span><span class="p">);</span>
 </pre></div>
 </div>
+<h3 id="contextwithtimeout">context.WithTimeout</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kd">func</span><span class="w"> </span><span class="nx">fetchData</span><span class="p">(</span><span class="nx">ctx</span><span class="w"> </span><span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="kt">error</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nx">ctx</span><span class="p">,</span><span class="w"> </span><span class="nx">cancel</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">context</span><span class="p">.</span><span class="nx">WithTimeout</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="o">*</span><span class="nx">time</span><span class="p">.</span><span class="nx">Second</span><span class="p">)</span>
 <span class="w">    </span><span class="k">defer</span><span class="w"> </span><span class="nx">cancel</span><span class="p">()</span><span class="w"> </span><span class="c1">// Luôn gọi defer cancel()</span>
@@ -1733,6 +1852,7 @@ Rule of thumb:
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="contextwithdeadline">context.WithDeadline</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Deadline = thời điểm cụ thể (absolute time)</span>
 <span class="c1">// Timeout = khoảng thời gian (relative)</span>
 
@@ -1745,6 +1865,7 @@ Rule of thumb:
 <span class="k">defer</span><span class="w"> </span><span class="nx">cancel</span><span class="p">()</span>
 </pre></div>
 </div>
+<h3 id="contextwithvalue-va-khi-khong-nen-dung">context.WithValue (và khi KHÔNG nên dùng)</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// context.WithValue - gắn metadata vào context</span>
 <span class="nx">ctx</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">context</span><span class="p">.</span><span class="nx">WithValue</span><span class="p">(</span><span class="nx">context</span><span class="p">.</span><span class="nx">Background</span><span class="p">(),</span><span class="w"> </span><span class="s">&quot;userID&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;12345&quot;</span><span class="p">)</span>
 <span class="nx">ctx</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">context</span><span class="p">.</span><span class="nx">WithValue</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;requestID&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;abc-123&quot;</span><span class="p">)</span>
@@ -1769,6 +1890,7 @@ Rule of thumb:
 <span class="nx">Rule</span><span class="o">:</span><span class="w"> </span><span class="nx">Values</span><span class="w"> </span><span class="nx">phải</span><span class="w"> </span><span class="nx">là</span><span class="w"> </span><span class="nx">request</span><span class="o">-</span><span class="nx">scoped</span><span class="w"> </span><span class="nx">và</span><span class="w"> </span><span class="nx">immutable</span>
 </pre></div>
 </div>
+<h3 id="context-propagation-trong-http-handlers">Context Propagation trong HTTP Handlers</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nx">http</span><span class="p">.</span><span class="nx">HandleFunc</span><span class="p">(</span><span class="s">&quot;/api/data&quot;</span><span class="p">,</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">w</span><span class="w"> </span><span class="nx">http</span><span class="p">.</span><span class="nx">ResponseWriter</span><span class="p">,</span><span class="w"> </span><span class="nx">r</span><span class="w"> </span><span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Request</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="c1">// r.Context() - context từ HTTP request</span>
@@ -1829,6 +1951,7 @@ Rule of thumb:
 <span class="p">});</span>
 </pre></div>
 </div>
+<h3 id="context-trong-database-queries">Context trong Database Queries</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kd">func</span><span class="w"> </span><span class="nx">getUser</span><span class="p">(</span><span class="nx">ctx</span><span class="w"> </span><span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span><span class="w"> </span><span class="nx">userID</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="nx">User</span><span class="p">,</span><span class="w"> </span><span class="kt">error</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nx">ctx</span><span class="p">,</span><span class="w"> </span><span class="nx">cancel</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">context</span><span class="p">.</span><span class="nx">WithTimeout</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="o">*</span><span class="nx">time</span><span class="p">.</span><span class="nx">Second</span><span class="p">)</span>
 <span class="w">    </span><span class="k">defer</span><span class="w"> </span><span class="nx">cancel</span><span class="p">()</span>
@@ -1849,6 +1972,7 @@ Rule of thumb:
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="context-trong-goroutines">Context trong Goroutines</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kd">func</span><span class="w"> </span><span class="nx">processRequest</span><span class="p">(</span><span class="nx">ctx</span><span class="w"> </span><span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span><span class="w"> </span><span class="kt">error</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nx">ctx</span><span class="p">,</span><span class="w"> </span><span class="nx">cancel</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">context</span><span class="p">.</span><span class="nx">WithTimeout</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="o">*</span><span class="nx">time</span><span class="p">.</span><span class="nx">Second</span><span class="p">)</span>
 <span class="w">    </span><span class="k">defer</span><span class="w"> </span><span class="nx">cancel</span><span class="p">()</span>
@@ -1875,6 +1999,7 @@ Rule of thumb:
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="cancellation-propagation-tree">Cancellation Propagation Tree</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip"></span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span>Context Propagation Tree:
 
 main context (Background)
@@ -1898,6 +2023,7 @@ main context (Background)
 Khi parent context bị cancel → tất cả child contexts cũng bị cancel
 </pre></div>
 </div>
+<h3 id="context-vs-abortcontroller-nodejs">Context vs AbortController (Node.js)</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip"></span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span>┌─────────────────────┬─────────────────────┬─────────────────────┐
 │ Feature             │ Go context.Context  │ Node.js AbortController│
 ├─────────────────────┼─────────────────────┼─────────────────────┤
@@ -1912,6 +2038,9 @@ Khi parent context bị cancel → tất cả child contexts cũng bị cancel
 └─────────────────────┴─────────────────────┴─────────────────────┘
 </pre></div>
 </div>
+<hr />
+<h2 id="7-common-concurrency-patterns">7. Common Concurrency Patterns</h2>
+<h3 id="fan-outfan-in-pattern">Fan-out/Fan-in Pattern</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Fan-out: phân phối work cho nhiều workers</span>
 <span class="c1">// Fan-in: kết hợp kết quả từ nhiều workers</span>
 
@@ -1972,6 +2101,7 @@ Khi parent context bị cancel → tất cả child contexts cũng bị cancel
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="pipeline-pattern_1">Pipeline Pattern</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Pipeline: dữ liệu chảy qua nhiều stages</span>
 <span class="c1">// Mỗi stage là 1 goroutine, connected bằng channels</span>
 
@@ -2044,6 +2174,7 @@ Khi parent context bị cancel → tất cả child contexts cũng bị cancel
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="worker-pool-pattern-detailed">Worker Pool Pattern (detailed)</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kd">type</span><span class="w"> </span><span class="nx">Pool</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nx">jobs</span><span class="w">    </span><span class="kd">chan</span><span class="w"> </span><span class="nx">Job</span>
 <span class="w">    </span><span class="nx">results</span><span class="w"> </span><span class="kd">chan</span><span class="w"> </span><span class="nx">Result</span>
@@ -2115,6 +2246,7 @@ Khi parent context bị cancel → tất cả child contexts cũng bị cancel
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="rate-limiting-pattern">Rate Limiting Pattern</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Rate limiter sử dụng ticker</span>
 <span class="kd">func</span><span class="w"> </span><span class="nx">rateLimitedWorker</span><span class="p">(</span><span class="nx">requests</span><span class="w"> </span><span class="o">&lt;-</span><span class="kd">chan</span><span class="w"> </span><span class="nx">Request</span><span class="p">,</span><span class="w"> </span><span class="nx">rate</span><span class="w"> </span><span class="kt">int</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nx">ticker</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">time</span><span class="p">.</span><span class="nx">NewTicker</span><span class="p">(</span><span class="nx">time</span><span class="p">.</span><span class="nx">Second</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nx">time</span><span class="p">.</span><span class="nx">Duration</span><span class="p">(</span><span class="nx">rate</span><span class="p">))</span>
@@ -2182,6 +2314,7 @@ Khi parent context bị cancel → tất cả child contexts cũng bị cancel
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="debounce-pattern">Debounce Pattern</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kd">func</span><span class="w"> </span><span class="nx">debounce</span><span class="p">(</span><span class="nx">interval</span><span class="w"> </span><span class="nx">time</span><span class="p">.</span><span class="nx">Duration</span><span class="p">,</span><span class="w"> </span><span class="nx">f</span><span class="w"> </span><span class="kd">func</span><span class="p">())</span><span class="w"> </span><span class="kd">func</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="nx">timer</span><span class="w"> </span><span class="o">*</span><span class="nx">time</span><span class="p">.</span><span class="nx">Timer</span>
 <span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="nx">mu</span><span class="w"> </span><span class="nx">sync</span><span class="p">.</span><span class="nx">Mutex</span>
@@ -2228,6 +2361,7 @@ Khi parent context bị cancel → tất cả child contexts cũng bị cancel
 <span class="c1">// &quot;Searching...&quot; in ra 1 lần sau 300ms</span>
 </pre></div>
 </div>
+<h3 id="timeout-pattern">Timeout Pattern</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kd">func</span><span class="w"> </span><span class="nx">withTimeout</span><span class="p">(</span><span class="nx">timeout</span><span class="w"> </span><span class="nx">time</span><span class="p">.</span><span class="nx">Duration</span><span class="p">,</span><span class="w"> </span><span class="nx">f</span><span class="w"> </span><span class="kd">func</span><span class="p">()</span><span class="w"> </span><span class="kt">error</span><span class="p">)</span><span class="w"> </span><span class="kt">error</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nx">done</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nb">make</span><span class="p">(</span><span class="kd">chan</span><span class="w"> </span><span class="kt">error</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span>
 
@@ -2249,6 +2383,7 @@ Khi parent context bị cancel → tất cả child contexts cũng bị cancel
 <span class="p">})</span>
 </pre></div>
 </div>
+<h3 id="heartbeat-pattern">Heartbeat Pattern</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kd">func</span><span class="w"> </span><span class="nx">workerWithHeartbeat</span><span class="p">(</span><span class="nx">ctx</span><span class="w"> </span><span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span><span class="w"> </span><span class="nx">heartbeatInterval</span><span class="w"> </span><span class="nx">time</span><span class="p">.</span><span class="nx">Duration</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nx">heartbeat</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">time</span><span class="p">.</span><span class="nx">NewTicker</span><span class="p">(</span><span class="nx">heartbeatInterval</span><span class="p">)</span>
 <span class="w">    </span><span class="k">defer</span><span class="w"> </span><span class="nx">heartbeat</span><span class="p">.</span><span class="nx">Stop</span><span class="p">()</span>
@@ -2268,6 +2403,7 @@ Khi parent context bị cancel → tất cả child contexts cũng bị cancel
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="graceful-shutdown-pattern">Graceful Shutdown Pattern</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nx">srv</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">http</span><span class="p">.</span><span class="nx">Server</span><span class="p">{</span><span class="nx">Addr</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;:8080&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">Handler</span><span class="p">:</span><span class="w"> </span><span class="nx">handler</span><span class="p">}</span>
 
@@ -2299,6 +2435,7 @@ Khi parent context bị cancel → tất cả child contexts cũng bị cancel
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="errgroup-pattern">errGroup Pattern</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="s">&quot;golang.org/x/sync/errgroup&quot;</span>
 
 <span class="kd">func</span><span class="w"> </span><span class="nx">fetchData</span><span class="p">(</span><span class="nx">ctx</span><span class="w"> </span><span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="nx">Data</span><span class="p">,</span><span class="w"> </span><span class="kt">error</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
@@ -2360,6 +2497,9 @@ Khi parent context bị cancel → tất cả child contexts cũng bị cancel
 <span class="p">}</span>
 </pre></div>
 </div>
+<hr />
+<h2 id="8-concurrency-anti-patterns-va-pitfalls">8. Concurrency Anti-patterns và Pitfalls</h2>
+<h3 id="goroutine-leaks">Goroutine Leaks</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// ❌ BAD: Goroutine leak - goroutine bị block mãi</span>
 <span class="kd">func</span><span class="w"> </span><span class="nx">leakyRequest</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nx">ch</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nb">make</span><span class="p">(</span><span class="kd">chan</span><span class="w"> </span><span class="nx">Response</span><span class="p">)</span>
@@ -2392,6 +2532,7 @@ Khi parent context bị cancel → tất cả child contexts cũng bị cancel
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="race-conditions">Race Conditions</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// ❌ BAD: Race condition</span>
 <span class="kd">var</span><span class="w"> </span><span class="nx">counter</span><span class="w"> </span><span class="kt">int</span>
 
@@ -2434,6 +2575,7 @@ go<span class="w"> </span><span class="nb">test</span><span class="w"> </span>-r
 <span class="c1">#       /path/to/main.go:10 +0x50</span>
 </pre></div>
 </div>
+<h3 id="deadlocks">Deadlocks</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// ❌ BAD: Deadlock - 2 goroutines chờ nhau</span>
 <span class="kd">func</span><span class="w"> </span><span class="nx">deadlock</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nx">ch1</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nb">make</span><span class="p">(</span><span class="kd">chan</span><span class="w"> </span><span class="kt">int</span><span class="p">)</span>
@@ -2469,6 +2611,7 @@ go<span class="w"> </span><span class="nb">test</span><span class="w"> </span>-r
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="for-loop-variable-capture">For-loop Variable Capture</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// ❌ BAD: Capture loop variable</span>
 <span class="k">for</span><span class="w"> </span><span class="nx">i</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="nx">i</span><span class="w"> </span><span class="p">&lt;</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span><span class="w"> </span><span class="nx">i</span><span class="o">++</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="k">go</span><span class="w"> </span><span class="kd">func</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
@@ -2493,6 +2636,7 @@ go<span class="w"> </span><span class="nb">test</span><span class="w"> </span>-r
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="closing-channel-tu-receiver-side">Closing Channel từ Receiver Side</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// ❌ BAD: Close channel từ receiver</span>
 <span class="kd">func</span><span class="w"> </span><span class="nx">badClose</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nx">ch</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nb">make</span><span class="p">(</span><span class="kd">chan</span><span class="w"> </span><span class="kt">int</span><span class="p">)</span>
@@ -2521,6 +2665,7 @@ go<span class="w"> </span><span class="nb">test</span><span class="w"> </span>-r
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="sending-to-closed-channel">Sending to Closed Channel</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// ❌ BAD: Send vào closed channel → PANIC</span>
 <span class="kd">func</span><span class="w"> </span><span class="nx">sendToClosed</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nx">ch</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nb">make</span><span class="p">(</span><span class="kd">chan</span><span class="w"> </span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span>
@@ -2541,6 +2686,7 @@ go<span class="w"> </span><span class="nb">test</span><span class="w"> </span>-r
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="select-with-nil-channel">Select with nil Channel</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// ❌ BAD: Select với nil channel → block forever</span>
 <span class="kd">func</span><span class="w"> </span><span class="nx">selectNil</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="nx">ch</span><span class="w"> </span><span class="kd">chan</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="c1">// nil channel</span>
@@ -2574,6 +2720,9 @@ go<span class="w"> </span><span class="nb">test</span><span class="w"> </span>-r
 <span class="p">}</span>
 </pre></div>
 </div>
+<hr />
+<h2 id="9-go-concurrency-vs-nodejs-patterns-so-sanh-song-song">9. Go Concurrency vs Node.js Patterns - So sánh song song</h2>
+<h3 id="promiseall-vs-waitgroup">Promise.all vs WaitGroup</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">javascript</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Node.js: Promise.all</span>
 <span class="kd">const</span><span class="w"> </span><span class="p">[</span><span class="nx">user</span><span class="p">,</span><span class="w"> </span><span class="nx">posts</span><span class="p">,</span><span class="w"> </span><span class="nx">comments</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nb">Promise</span><span class="p">.</span><span class="nx">all</span><span class="p">([</span>
 <span class="w">    </span><span class="nx">fetchUser</span><span class="p">(</span><span class="nx">userId</span><span class="p">),</span>
@@ -2605,6 +2754,7 @@ go<span class="w"> </span><span class="nb">test</span><span class="w"> </span>-r
 <span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">g</span><span class="p">.</span><span class="nx">Wait</span><span class="p">();</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="cm">/* handle error */</span><span class="w"> </span><span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="promiserace-vs-select">Promise.race vs select</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">javascript</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Node.js: Promise.race</span>
 <span class="kd">const</span><span class="w"> </span><span class="nx">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nb">Promise</span><span class="p">.</span><span class="nx">race</span><span class="p">([</span>
 <span class="w">    </span><span class="nx">fetchFromAPI1</span><span class="p">(),</span>
@@ -2632,6 +2782,7 @@ go<span class="w"> </span><span class="nb">test</span><span class="w"> </span>-r
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="asyncawait-vs-goroutinechannel">async/await vs goroutine+channel</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">javascript</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Node.js: async/await</span>
 <span class="k">async</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="nx">processData</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">fetchData</span><span class="p">();</span>
@@ -2668,6 +2819,7 @@ go<span class="w"> </span><span class="nb">test</span><span class="w"> </span>-r
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="eventemitter-vs-channel">EventEmitter vs channel</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">javascript</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Node.js: EventEmitter</span>
 <span class="kd">const</span><span class="w"> </span><span class="nx">EventEmitter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;events&#39;</span><span class="p">);</span>
 <span class="kd">const</span><span class="w"> </span><span class="nx">emitter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">EventEmitter</span><span class="p">();</span>
@@ -2696,6 +2848,7 @@ go<span class="w"> </span><span class="nb">test</span><span class="w"> </span>-r
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="worker-threads-vs-goroutines">Worker Threads vs goroutines</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">javascript</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Node.js: Worker Threads</span>
 <span class="kd">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">Worker</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;worker_threads&#39;</span><span class="p">);</span>
 
@@ -2740,6 +2893,7 @@ go<span class="w"> </span><span class="nb">test</span><span class="w"> </span>-r
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="cluster-vs-gomaxprocs">Cluster vs GOMAXPROCS</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">javascript</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Node.js: Cluster</span>
 <span class="kd">const</span><span class="w"> </span><span class="nx">cluster</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;cluster&#39;</span><span class="p">);</span>
 <span class="kd">const</span><span class="w"> </span><span class="nx">numCPUs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;os&#39;</span><span class="p">).</span><span class="nx">cpus</span><span class="p">().</span><span class="nx">length</span><span class="p">;</span>
@@ -2773,6 +2927,9 @@ go<span class="w"> </span><span class="nb">test</span><span class="w"> </span>-r
 <span class="p">}</span>
 </pre></div>
 </div>
+<hr />
+<h2 id="10-real-world-examples">10. Real-world Examples</h2>
+<h3 id="concurrent-http-client">Concurrent HTTP Client</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kd">type</span><span class="w"> </span><span class="nx">HTTPClient</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nx">client</span><span class="w">    </span><span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Client</span>
 <span class="w">    </span><span class="nx">semaphore</span><span class="w"> </span><span class="kd">chan</span><span class="w"> </span><span class="kd">struct</span><span class="p">{}</span><span class="w"> </span><span class="c1">// Rate limiting</span>
@@ -2857,6 +3014,7 @@ go<span class="w"> </span><span class="nb">test</span><span class="w"> </span>-r
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="rate-limited-api-caller">Rate-limited API Caller</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kd">type</span><span class="w"> </span><span class="nx">RateLimitedCaller</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nx">limiter</span><span class="w"> </span><span class="o">*</span><span class="nx">time</span><span class="p">.</span><span class="nx">Ticker</span>
 <span class="w">    </span><span class="nx">client</span><span class="w">  </span><span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Client</span>
@@ -2932,6 +3090,7 @@ go<span class="w"> </span><span class="nb">test</span><span class="w"> </span>-r
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="log-processor-pipeline">Log Processor Pipeline</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kd">type</span><span class="w"> </span><span class="nx">LogEntry</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nx">Timestamp</span><span class="w"> </span><span class="nx">time</span><span class="p">.</span><span class="nx">Time</span>
 <span class="w">    </span><span class="nx">Level</span><span class="w">     </span><span class="kt">string</span>
@@ -3031,6 +3190,7 @@ go<span class="w"> </span><span class="nb">test</span><span class="w"> </span>-r
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="concurrent-file-processor">Concurrent File Processor</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kd">type</span><span class="w"> </span><span class="nx">FileProcessor</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nx">numWorkers</span><span class="w"> </span><span class="kt">int</span>
 <span class="w">    </span><span class="nx">bufferSize</span><span class="w"> </span><span class="kt">int</span>
@@ -3120,6 +3280,7 @@ go<span class="w"> </span><span class="nb">test</span><span class="w"> </span>-r
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="web-scraper-with-worker-pool">Web Scraper with Worker Pool</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="kd">type</span><span class="w"> </span><span class="nx">Scraper</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nx">client</span><span class="w">      </span><span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Client</span>
 <span class="w">    </span><span class="nx">maxWorkers</span><span class="w">  </span><span class="kt">int</span>
@@ -3256,6 +3417,8 @@ go<span class="w"> </span><span class="nb">test</span><span class="w"> </span>-r
 <span class="p">}</span>
 </pre></div>
 </div>
+<hr />
+<h2 id="tom-tat">Tóm tắt</h2>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="err">┌─────────────────────────────────────────────────────────────────┐</span>
 <span class="err">│</span><span class="w">                    </span><span class="nx">Go</span><span class="w"> </span><span class="nx">Concurrency</span><span class="w"> </span><span class="nx">Cheat</span><span class="w"> </span><span class="nx">Sheet</span><span class="w">                    </span><span class="err">│</span>
 <span class="err">├─────────────────────────────────────────────────────────────────┤</span>
@@ -3302,119 +3465,6 @@ go<span class="w"> </span><span class="nb">test</span><span class="w"> </span>-r
 <span class="err">└─────────────────────────────────────────────────────────────────┘</span>
 </pre></div>
 </div>
-<h1 id="concurrency-trong-go-huong-dan-toan-tap">Concurrency trong Go - Hướng Dẫn Toàn Tập</h1>
-<div class="callout callout-note"><div class="callout-body"><p><strong>Mục tiêu:</strong> Hiểu sâu concurrency model của Go, tại sao nó mạnh hơn Node.js trong nhiều scenarios, và cách sử dụng hiệu quả.</p>
-<p><strong>Yêu cầu:</strong> Đã đọc <code>01-fundamentals.md</code> và <code>02-advanced.md</code>.</p></div></div>
-
-<hr />
-<h2 id="1-concurrency-vs-parallelism-phan-biet-co-ban">1. Concurrency vs Parallelism - Phân biệt cơ bản</h2>
-<p>Đây là 2 khái niệm <strong>hoàn toàn khác nhau</strong> mà nhiều người hay nhầm lẫn.</p>
-<h3 id="concurrency-xu-ly-nhieu-thu-cung-luc-dealing-with-multiple-things">Concurrency = Xử lý nhiều thứ cùng lúc (dealing with multiple things)</h3>
-<h3 id="parallelism-thuc-hien-nhieu-thu-cung-luc-doing-multiple-things">Parallelism = Thực hiện nhiều thứ cùng lúc (doing multiple things)</h3>
-<h3 id="so-sanh-nodejs-vs-go">So sánh Node.js vs Go</h3>
-<h3 id="tai-sao-ieu-nay-quan-trong">Tại sao điều này quan trọng?</h3>
-<hr />
-<h2 id="2-nodejs-event-loop-model-on-tap-e-so-sanh">2. Node.js Event Loop Model - Ôn tập để so sánh</h2>
-<p>Trước khi hiểu Go, hãy ôn lại Node.js:</p>
-<h3 id="nodejs-xu-ly-io-nhu-the-nao">Node.js xử lý I/O như thế nào?</h3>
-<h3 id="nodejs-worker-threads-cong-ken">Node.js Worker Threads (cồng kén)</h3>
-<h3 id="nodejs-cluster-multi-process">Node.js Cluster (multi-process)</h3>
-<h3 id="nodejs-cham-tuong-khi-nao">Node.js chạm tường khi nào?</h3>
-<hr />
-<h2 id="3-goroutines-huong-dan-toan-tap">3. Goroutines - Hướng dẫn toàn tập</h2>
-<h3 id="goroutine-la-gi">Goroutine là gì?</h3>
-<p>Goroutine là lightweight thread được quản lý bởi Go runtime, không phải OS thread.</p>
-<h3 id="syntax-co-ban">Syntax cơ bản</h3>
-<h3 id="goroutine-lifecycle">Goroutine Lifecycle</h3>
-<h3 id="goroutine-vs-os-thread-vs-nodejs-promise">Goroutine vs OS Thread vs Node.js Promise</h3>
-<h3 id="go-scheduler-gmp-model">Go Scheduler - GMP Model</h3>
-<p>Go sử dụng mô hình <strong>GMP</strong> để schedule goroutines:</p>
-<h3 id="stack-growth-va-shrinking">Stack Growth và Shrinking</h3>
-<h3 id="cost-comparison-chi-tiet">Cost Comparison chi tiết</h3>
-<h3 id="khi-nao-goroutine-uoc-tao">Khi nào goroutine được tạo?</h3>
-<h3 id="common-mistake-goroutine-leaks">Common Mistake: Goroutine Leaks</h3>
-<h3 id="detect-goroutine-leaks">Detect Goroutine Leaks</h3>
-<hr />
-<h2 id="4-channels-huong-dan-hoan-chinh">4. Channels - Hướng dẫn hoàn chỉnh</h2>
-<p>Channel là cách Go goroutines giao tiếp với nhau. Đây là <strong>trung tâm</strong> của Go concurrency.</p>
-<h3 id="unbuffered-channel-ong-bo">Unbuffered Channel (đồng bộ)</h3>
-<h3 id="buffered-channel-bat-ong-bo">Buffered Channel (bất đồng bộ)</h3>
-<h3 id="channel-direction-kieu-direction">Channel Direction (kiểu direction)</h3>
-<h3 id="closing-channels">Closing Channels</h3>
-<h3 id="nil-channel-behavior">nil Channel Behavior</h3>
-<h3 id="channel-as-synchronization-primitive">Channel as Synchronization Primitive</h3>
-<h3 id="select-statement-multi-way-multiplexing">select Statement (Multi-way Multiplexing)</h3>
-<h3 id="select-with-default-non-blocking">select with Default (Non-blocking)</h3>
-<h3 id="select-with-timeout">select with Timeout</h3>
-<h3 id="fan-out-fan-in-pattern">Fan-out, Fan-in Pattern</h3>
-<h3 id="pipeline-pattern">Pipeline Pattern</h3>
-<h3 id="worker-pool-pattern">Worker Pool Pattern</h3>
-<h3 id="quit-channel-pattern">Quit Channel Pattern</h3>
-<h3 id="done-channel-pattern">Done Channel Pattern</h3>
-<hr />
-<h2 id="5-sync-package-hoan-chinh">5. sync Package - Hoàn chỉnh</h2>
-<h3 id="syncmutex-va-syncrwmutex">sync.Mutex và sync.RWMutex</h3>
-<h3 id="syncwaitgroup">sync.WaitGroup</h3>
-<h3 id="synconce">sync.Once</h3>
-<h3 id="syncmap">sync.Map</h3>
-<h3 id="syncpool">sync.Pool</h3>
-<h3 id="synccond">sync.Cond</h3>
-<h3 id="atomic-operations-syncatomic">Atomic Operations (sync/atomic)</h3>
-<h3 id="khi-nao-dung-channels-vs-mutex">Khi nào dùng Channels vs Mutex?</h3>
-<hr />
-<h2 id="6-context-deep-dive">6. Context - Deep Dive</h2>
-<h3 id="contextcontext-la-gi">context.Context là gì?</h3>
-<p>Context là đối tượng mang theo:
-1. <strong>Cancellation signal</strong> - hủy operation
-2. <strong>Deadline/Timeout</strong> - thời gian tối đa
-3. <strong>Request-scoped values</strong> - metadata theo request</p>
-<h3 id="contextbackground-va-contexttodo">context.Background() và context.TODO()</h3>
-<h3 id="contextwithcancel">context.WithCancel</h3>
-<h3 id="contextwithtimeout">context.WithTimeout</h3>
-<h3 id="contextwithdeadline">context.WithDeadline</h3>
-<h3 id="contextwithvalue-va-khi-khong-nen-dung">context.WithValue (và khi KHÔNG nên dùng)</h3>
-<h3 id="context-propagation-trong-http-handlers">Context Propagation trong HTTP Handlers</h3>
-<h3 id="context-trong-database-queries">Context trong Database Queries</h3>
-<h3 id="context-trong-goroutines">Context trong Goroutines</h3>
-<h3 id="cancellation-propagation-tree">Cancellation Propagation Tree</h3>
-<h3 id="context-vs-abortcontroller-nodejs">Context vs AbortController (Node.js)</h3>
-<hr />
-<h2 id="7-common-concurrency-patterns">7. Common Concurrency Patterns</h2>
-<h3 id="fan-outfan-in-pattern">Fan-out/Fan-in Pattern</h3>
-<h3 id="pipeline-pattern_1">Pipeline Pattern</h3>
-<h3 id="worker-pool-pattern-detailed">Worker Pool Pattern (detailed)</h3>
-<h3 id="rate-limiting-pattern">Rate Limiting Pattern</h3>
-<h3 id="debounce-pattern">Debounce Pattern</h3>
-<h3 id="timeout-pattern">Timeout Pattern</h3>
-<h3 id="heartbeat-pattern">Heartbeat Pattern</h3>
-<h3 id="graceful-shutdown-pattern">Graceful Shutdown Pattern</h3>
-<h3 id="errgroup-pattern">errGroup Pattern</h3>
-<hr />
-<h2 id="8-concurrency-anti-patterns-va-pitfalls">8. Concurrency Anti-patterns và Pitfalls</h2>
-<h3 id="goroutine-leaks">Goroutine Leaks</h3>
-<h3 id="race-conditions">Race Conditions</h3>
-<h3 id="deadlocks">Deadlocks</h3>
-<h3 id="for-loop-variable-capture">For-loop Variable Capture</h3>
-<h3 id="closing-channel-tu-receiver-side">Closing Channel từ Receiver Side</h3>
-<h3 id="sending-to-closed-channel">Sending to Closed Channel</h3>
-<h3 id="select-with-nil-channel">Select with nil Channel</h3>
-<hr />
-<h2 id="9-go-concurrency-vs-nodejs-patterns-so-sanh-song-song">9. Go Concurrency vs Node.js Patterns - So sánh song song</h2>
-<h3 id="promiseall-vs-waitgroup">Promise.all vs WaitGroup</h3>
-<h3 id="promiserace-vs-select">Promise.race vs select</h3>
-<h3 id="asyncawait-vs-goroutinechannel">async/await vs goroutine+channel</h3>
-<h3 id="eventemitter-vs-channel">EventEmitter vs channel</h3>
-<h3 id="worker-threads-vs-goroutines">Worker Threads vs goroutines</h3>
-<h3 id="cluster-vs-gomaxprocs">Cluster vs GOMAXPROCS</h3>
-<hr />
-<h2 id="10-real-world-examples">10. Real-world Examples</h2>
-<h3 id="concurrent-http-client">Concurrent HTTP Client</h3>
-<h3 id="rate-limited-api-caller">Rate-limited API Caller</h3>
-<h3 id="log-processor-pipeline">Log Processor Pipeline</h3>
-<h3 id="concurrent-file-processor">Concurrent File Processor</h3>
-<h3 id="web-scraper-with-worker-pool">Web Scraper with Worker Pool</h3>
-<hr />
-<h2 id="tom-tat">Tóm tắt</h2>
 <hr />
 <div class="callout callout-note"><div class="callout-body"><p><strong>Tiếp theo:</strong> Đọc <code>05-stdlib-packages.md</code> để tìm hiểu về standard library packages quan trọng.</p></div></div>
 </article>
@@ -3424,6 +3474,70 @@ go<span class="w"> </span><span class="nb">test</span><span class="w"> </span>-r
 </nav>
 <footer>Generated from Markdown · <a href="../index.html">Về trang chủ docs</a></footer>
 </main>
+
+<button class="progress-fab" id="progress-fab" type="button">📊 Tiến độ <span class="fab-count">0/0</span></button>
+<div class="progress-modal" id="progress-modal" hidden>
+  <div class="progress-dialog" role="dialog" aria-label="Theo dõi tiến độ">
+    <div class="progress-head">
+      <h2>📊 Theo dõi tiến độ <span class="progress-count">0%</span></h2>
+      <button class="progress-close" id="progress-close" type="button" aria-label="Đóng">✕</button>
+    </div>
+    <div class="progress-bar"><i></i></div>
+    <div class="progress-body">
+<div class="callout callout-note"><div class="callout-body"><p>Đây là bảng theo dõi <strong>duy nhất</strong> cho cả bộ tài liệu. Tick vào từng mốc — tiến độ được lưu trên trình duyệt và đồng bộ ở mọi trang qua nút nổi <strong>📊 Tiến độ</strong> ở góc phải dưới. Checklist chi tiết từng ngày vẫn nằm trong bài <code>07 · Fast Track Roadmap</code>.</p></div></div>
+
+<h3>Giai đoạn 1 · Nền tảng (Ngày 1)</h3>
+<ul>
+<li class="task"><input type="checkbox"> Hiểu mental model Go vs Node.js — file <code>01</code></li>
+<li class="task"><input type="checkbox"> Nắm syntax: <code>var</code>, <code>:=</code>, <code>const</code>, slice, map, <code>for</code>, <code>if</code>, <code>switch</code> — file <code>02</code></li>
+<li class="task"><input type="checkbox"> Viết được <code>struct</code> + method + pointer cơ bản</li>
+<li class="task"><input type="checkbox"> Chạy được <code>go run</code>, <code>go fmt</code> và tạo module mới</li>
+</ul>
+<h3>Giai đoạn 2 · Struct, Interface, Error (Ngày 2)</h3>
+<ul>
+<li class="task"><input type="checkbox"> Thiết kế struct, embedding và constructor</li>
+<li class="task"><input type="checkbox"> Hiểu interface + polymorphism trong Go</li>
+<li class="task"><input type="checkbox"> Xử lý lỗi với <code>errors.Is</code>, <code>errors.As</code> và custom error — file <code>03</code></li>
+</ul>
+<h3>Giai đoạn 3 · HTTP API (Ngày 3–4)</h3>
+<ul>
+<li class="task"><input type="checkbox"> Dựng được <code>/health</code> + CRUD bằng <code>net/http</code> hoặc Fiber — file <code>05</code></li>
+<li class="task"><input type="checkbox"> Viết middleware logging + error handling</li>
+<li class="task"><input type="checkbox"> Test API bằng curl/Postman</li>
+<li class="task"><input type="checkbox"> Viết unit test table-driven + <code>httptest</code> — file <code>06</code></li>
+</ul>
+<h3>Giai đoạn 4 · Concurrency (Ngày 5)</h3>
+<ul>
+<li class="task"><input type="checkbox"> Dùng goroutine + <code>WaitGroup</code> — file <code>04</code></li>
+<li class="task"><input type="checkbox"> Dùng channel + <code>select</code></li>
+<li class="task"><input type="checkbox"> Dùng <code>context.WithTimeout</code> để cancel</li>
+<li class="task"><input type="checkbox"> Chạy <code>go run -race .</code> không báo lỗi</li>
+</ul>
+<h3>Giai đoạn 5 · Project Layout &amp; Capstone (Ngày 6–7)</h3>
+<ul>
+<li class="task"><input type="checkbox"> Tách <code>cmd/</code>, <code>internal/</code>, viết repository interface</li>
+<li class="task"><input type="checkbox"> Wire dependency trong <code>main.go</code> + graceful shutdown</li>
+<li class="task"><input type="checkbox"> Hoàn thành 1 mini project kèm test, <code>go vet ./...</code>, <code>go build ./...</code></li>
+</ul>
+<h3>🚦 Mốc sẵn sàng: Phân tích &amp; code project</h3>
+<div class="callout callout-note"><div class="callout-body"><p><strong>Đọc/phân tích project thật:</strong> xong Giai đoạn 1 → 3 (khoảng Ngày 3).
+<strong>Sửa code trong project thật:</strong> xong thêm Giai đoạn 4 (khoảng Ngày 5).
+<strong>Tự code một project hoàn chỉnh:</strong> xong Giai đoạn 5 (khoảng Ngày 6–7).</p></div></div>
+
+<ul>
+<li class="task"><input type="checkbox"> Xong Giai đoạn 1 → 3: đọc hiểu và tự dựng được REST API CRUD</li>
+<li class="task"><input type="checkbox"> Đọc hiểu một repo Go lạ trong khoảng 1 buổi, không cần dịch từng dòng</li>
+<li class="task"><input type="checkbox"> Tự viết CRUD + test table-driven mà không copy nguyên mẫu</li>
+<li class="task"><input type="checkbox"> Giải thích được khi nào dùng goroutine / channel / context</li>
+<li class="task"><input type="checkbox"> Chạy thành thạo <code>go test</code>, <code>go vet</code>, <code>go build</code> và đọc được lỗi</li>
+<li class="task"><input type="checkbox"> Đã phân tích ít nhất 1 project mẫu — vtvcab-identity-api (series Node.js → Go, bài <code>01</code>)</li>
+</ul>
+<hr />
+    </div>
+  </div>
+</div>
+
+
 <script>
 
 (function(){
@@ -3473,6 +3587,88 @@ go<span class="w"> </span><span class="nb">test</span><span class="w"> </span>-r
       navigator.clipboard.writeText(text).then(function(){ done(true); }, fallback);
     } else { fallback(); }
   });
+})();
+// ---- progress tracker: nút nổi + modal, đồng bộ mọi trang qua localStorage ----
+(function(){
+  function qsa(sel, root){ return [].slice.call((root||document).querySelectorAll(sel)); }
+  function load(key){ try{ return JSON.parse(localStorage.getItem(key)||'null'); }catch(e){ return null; } }
+  function save(key, arr){ try{ localStorage.setItem(key, JSON.stringify(arr)); }catch(e){} }
+
+  var KEY_MAIN = 'md2html:progress:docs';
+  var modal = document.getElementById('progress-modal');
+  var fab = document.getElementById('progress-fab');
+  var homeBoxes = qsa('.progress-track .task input');
+  var modalBoxes = modal ? qsa('.task input', modal) : [];
+  var N = Math.max(homeBoxes.length, modalBoxes.length);
+
+  function states(){
+    var saved = load(KEY_MAIN);
+    if (saved && saved.length === N) return saved;
+    var src = homeBoxes.length ? homeBoxes : modalBoxes;
+    return src.map(function(b){ return b.checked; });
+  }
+  function updateCounters(st){
+    var done = st.filter(Boolean).length;
+    if (fab) fab.querySelector('.fab-count').textContent = done + '/' + N;
+    if (modal){
+      modal.querySelector('.progress-bar i').style.width = (N ? done/N*100 : 0) + '%';
+      modal.querySelector('.progress-count').textContent = (N ? Math.round(done/N*100) : 0) + '%';
+    }
+  }
+  function paint(st){
+    for (var i=0;i<N;i++){
+      if (homeBoxes[i]) homeBoxes[i].checked = !!st[i];
+      if (modalBoxes[i]) modalBoxes[i].checked = !!st[i];
+    }
+    updateCounters(st);
+  }
+  if (N){
+    paint(states());
+    var bindMain = function(i){
+      return function(){
+        var st = states(); st[i] = this.checked;
+        save(KEY_MAIN, st); paint(st);
+      };
+    };
+    homeBoxes.forEach(function(b,i){ b.addEventListener('change', bindMain(i)); });
+    modalBoxes.forEach(function(b,i){ b.addEventListener('change', bindMain(i)); });
+  }
+
+  // task list thường của từng trang: lưu riêng theo URL
+  var otherBoxes = qsa('.task input').filter(function(b){
+    return !b.closest('.progress-track') && !(modal && modal.contains(b));
+  });
+  if (otherBoxes.length){
+    var key = 'md2html:page:' + location.pathname;
+    var saved = load(key);
+    if (saved && saved.length === otherBoxes.length){
+      otherBoxes.forEach(function(b,i){ b.checked = !!saved[i]; });
+    }
+    otherBoxes.forEach(function(b){
+      b.addEventListener('change', function(){
+        save(key, otherBoxes.map(function(x){ return x.checked; }));
+      });
+    });
+  }
+
+  if (fab && modal && N){
+    var openModal = function(){
+      paint(states());
+      modal.hidden = false;
+      document.body.style.overflow = 'hidden';
+    };
+    fab.addEventListener('click', openModal);
+    qsa('.progress-open').forEach(function(b){ b.addEventListener('click', openModal); });
+    var closeModal = function(){
+      modal.hidden = true;
+      document.body.style.overflow = '';
+    };
+    document.getElementById('progress-close').addEventListener('click', closeModal);
+    modal.addEventListener('click', function(e){ if (e.target === modal) closeModal(); });
+    document.addEventListener('keydown', function(e){
+      if (e.key === 'Escape' && !modal.hidden) closeModal();
+    });
+  } else if (fab){ fab.hidden = true; }
 })();
 
 </script>

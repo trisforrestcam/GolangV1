@@ -620,6 +620,7 @@ app.get('/profile', (req, res) => {
 - Fiber: `c.Locals("user", data)` (dùng method)
 
 Tại sao Fiber dùng method?
+
 - Tránh namespace pollution (không biết `req.user` có bị ghi đè không)
 - Type-safe hơn (dùng generics)
 

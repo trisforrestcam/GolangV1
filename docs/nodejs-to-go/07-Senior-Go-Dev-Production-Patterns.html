@@ -97,7 +97,7 @@ body {
 }
 #progress { position: fixed; top: 0; left: 0; height: 3px; width: 0; z-index: 70;
   background: linear-gradient(90deg, var(--accent), var(--accent-2), #7c3aed); }
-#backtop { position: fixed; right: 26px; bottom: 26px; width: 44px; height: 44px;
+#backtop { position: fixed; right: 26px; bottom: 88px; width: 44px; height: 44px;
   border-radius: 50%; border: 1px solid var(--border); background: #fff;
   color: var(--accent); font-size: 1.15rem; cursor: pointer; opacity: 0;
   pointer-events: none; transition: all .25s; box-shadow: 0 8px 20px rgba(15,23,42,.14); z-index: 60; }
@@ -161,6 +161,17 @@ code {
 .callout .codeblock { box-shadow: none; }
 .callout .codeblock, .callout .codehilite, .callout code { background: #fff; }
 .callout .codehead { background: rgba(237,241,247,.6); }
+/* --- mermaid diagrams --- */
+.mermaidwrap { margin: 1.5em 0; border: 1px solid var(--border); border-radius: 12px;
+  background: #fff; overflow: hidden; box-shadow: 0 2px 6px rgba(15,23,42,.05); }
+.mermaidwrap .codehead { background: #edf1f7; }
+.mermaid-hint { font-size: .72rem; color: #94a3b8; font-weight: 600; }
+.mermaid { display: flex; justify-content: center; padding: 20px 16px; overflow-x: auto; }
+.mermaid svg { max-width: 100%; height: auto; }
+/* khi mermaid.js chưa/chưa kịp load (offline) — vẫn đọc được source dễ chịu */
+.mermaid:not([data-processed]) { font-family: "JetBrains Mono", Consolas, Menlo, monospace;
+  font-size: .8rem; color: #475569; white-space: pre; text-align: left; justify-content: flex-start; }
+.callout .mermaidwrap { box-shadow: none; }
 /* --- tables --- */
 .tablewrap { overflow-x: auto; margin: 1.2em 0; }
 table { border-collapse: collapse; width: 100%; font-size: .94em; margin: 0; }
@@ -223,7 +234,46 @@ kbd { background: #fff; border: 1px solid #cbd5e1; border-bottom-width: 2px;
 .pager .next { text-align: right; }
 .pager .dir { display: block; font-size: .78rem; color: var(--muted); font-weight: 500; }
 footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top: 34px; }
-@media print { #progress, #backtop, .toc, .pager { display: none !important; }
+/* --- floating progress button + modal --- */
+.progress-fab { position: fixed; right: 26px; bottom: 26px; z-index: 70;
+  display: inline-flex; align-items: center; gap: 9px; padding: 11px 19px;
+  border: none; border-radius: 999px; cursor: pointer; font: inherit;
+  font-size: .88rem; font-weight: 700; color: #fff;
+  background: linear-gradient(120deg, var(--accent), var(--accent-2));
+  box-shadow: 0 14px 34px -12px rgba(79,70,229,.55);
+  transition: transform .15s, box-shadow .15s; }
+.progress-fab:hover { transform: translateY(-2px); box-shadow: 0 18px 40px -12px rgba(79,70,229,.62); }
+.fab-count { background: rgba(255,255,255,.24); padding: 1px 10px; border-radius: 999px; font-size: .86em; }
+.progress-modal { position: fixed; inset: 0; z-index: 100; padding: 24px;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(51,65,85,.45); backdrop-filter: blur(3px); }
+.progress-modal[hidden] { display: none; }
+.progress-dialog { background: #fff; border-radius: 18px; width: min(780px, 100%);
+  max-height: 82vh; display: flex; flex-direction: column;
+  box-shadow: 0 40px 90px -20px rgba(51,65,85,.5); overflow: hidden; }
+.progress-head { display: flex; align-items: center; justify-content: space-between;
+  gap: 14px; padding: 20px 28px 14px; }
+.progress-head h2 { margin: 0; padding: 0; border: none; font-size: 1.2rem; }
+.progress-count { color: var(--accent); font-size: .72em; margin-left: .5em; }
+.progress-close { flex-shrink: 0; width: 34px; height: 34px; border-radius: 10px;
+  border: 1px solid var(--border); background: #fff; color: var(--muted);
+  font-size: 1rem; cursor: pointer; transition: all .15s; }
+.progress-close:hover { color: var(--accent); border-color: var(--accent); background: var(--accent-soft); }
+.progress-bar { height: 6px; background: #e2e8f0; margin: 0 28px; border-radius: 99px; overflow: hidden; }
+.progress-bar i { display: block; height: 100%; width: 0; border-radius: 99px;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2)); transition: width .25s; }
+.progress-body { padding: 8px 28px 26px; overflow-y: auto; }
+.progress-body h3 { margin-top: 1.1em; }
+/* --- trang nguồn: checklist inline thay bằng nút mở popup --- */
+.progress-hint { display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+  background: var(--accent-soft); border: 1px dashed #c7d2fe; border-radius: 14px;
+  padding: 16px 20px; color: var(--muted); font-size: .95rem; }
+.progress-open { flex-shrink: 0; border: none; border-radius: 10px; padding: 11px 20px;
+  font: inherit; font-size: .92rem; font-weight: 700; color: #fff; cursor: pointer;
+  background: linear-gradient(120deg, var(--accent), var(--accent-2));
+  box-shadow: 0 8px 18px -8px rgba(79,70,229,.5); transition: transform .15s; }
+.progress-open:hover { transform: translateY(-1px); }
+@media print { #progress, #backtop, .toc, .pager, .progress-fab, .progress-modal { display: none !important; }
   body { background: #fff; } .card { box-shadow: none; border: none; } }
 
 .wrap.wide { max-width: 1340px; }
@@ -264,6 +314,13 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <nav class="crumb"><a href="../index.html">📚 Docs</a> &nbsp;›&nbsp; nodejs-to-go</nav>
 <main class="wrap">
 <article class="card">
+<h1 id="senior-nodejs-dev-senior-go-dev-production-ready-patterns">🎖️ Senior NodeJS Dev → Senior Go Dev: Production-Ready Patterns</h1>
+<div class="callout callout-note"><div class="callout-body"><p><strong>Mục tiêu:</strong> Giúp bạn code Go như một Senior Dev, không phải Junior mới học
+<strong>Dành cho:</strong> NodeJS dev 4+ năm kinh nghiệm muốn code Go production-ready ngay</p></div></div>
+
+<hr />
+<h2 id="phan-1-senior-mindset-cach-suy-nghi-khac-nhau">🧠 Phần 1: Senior Mindset - Cách suy nghĩ khác nhau</h2>
+<h3 id="11-junior-vs-senior-trong-nodejs">1.1 Junior vs Senior trong NodeJS</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">javascript</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Junior: Code chạy được là được</span>
 <span class="nx">app</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="s1">&#39;/login&#39;</span><span class="p">,</span><span class="w"> </span><span class="k">async</span><span class="w"> </span><span class="p">(</span><span class="nx">req</span><span class="p">,</span><span class="w"> </span><span class="nx">res</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">user</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">await</span><span class="w"> </span><span class="nx">db</span><span class="p">.</span><span class="nx">findUser</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">username</span><span class="p">);</span>
@@ -307,6 +364,7 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="p">});</span>
 </pre></div>
 </div>
+<h3 id="12-junior-vs-senior-trong-go">1.2 Junior vs Senior trong Go</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Junior: Code chạy được là được</span>
 <span class="nx">app</span><span class="p">.</span><span class="nx">Post</span><span class="p">(</span><span class="s">&quot;/login&quot;</span><span class="p">,</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">c</span><span class="w"> </span><span class="o">*</span><span class="nx">fiber</span><span class="p">.</span><span class="nx">Ctx</span><span class="p">)</span><span class="w"> </span><span class="kt">error</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nx">body</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nb">new</span><span class="p">(</span><span class="nx">LoginBody</span><span class="p">)</span>
@@ -383,6 +441,15 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="p">)</span>
 </pre></div>
 </div>
+<p><strong>Khác biệt chính:</strong>
+1. <strong>Error handling</strong> - Junior bỏ qua, Senior handle từng loại lỗi
+2. <strong>Logging</strong> - Junior không log, Senior log structured
+3. <strong>Validation</strong> - Junior tin tưởng input, Senior validate mọi thứ
+4. <strong>Security</strong> - Junior không nghĩ đến, Senior nghĩ đến đầu tiên
+5. <strong>Observability</strong> - Junior không monitor, Senior instrument mọi thứ</p>
+<hr />
+<h2 id="phan-2-production-ready-architecture">🏗️ Phần 2: Production-Ready Architecture</h2>
+<h3 id="21-dependency-injection-pattern">2.1 Dependency Injection Pattern</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// ❌ Junior: Global variables</span>
 <span class="kd">var</span><span class="w"> </span><span class="nx">db</span><span class="w"> </span><span class="o">*</span><span class="nx">gorm</span><span class="p">.</span><span class="nx">DB</span>
 <span class="kd">var</span><span class="w"> </span><span class="nx">redis</span><span class="w"> </span><span class="o">*</span><span class="nx">redis</span><span class="p">.</span><span class="nx">Client</span>
@@ -450,6 +517,7 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="22-service-layer-pattern">2.2 Service Layer Pattern</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// ❌ Junior: Business logic trong controller</span>
 <span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">app</span><span class="w"> </span><span class="o">*</span><span class="nx">App</span><span class="p">)</span><span class="w"> </span><span class="nx">LoginHandler</span><span class="p">()</span><span class="w"> </span><span class="nx">fiber</span><span class="p">.</span><span class="nx">Handler</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">c</span><span class="w"> </span><span class="o">*</span><span class="nx">fiber</span><span class="p">.</span><span class="nx">Ctx</span><span class="p">)</span><span class="w"> </span><span class="kt">error</span><span class="w"> </span><span class="p">{</span>
@@ -535,6 +603,7 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="23-repository-pattern">2.3 Repository Pattern</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// ❌ Junior: Query trực tiếp trong service</span>
 <span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">s</span><span class="w"> </span><span class="o">*</span><span class="nx">UserService</span><span class="p">)</span><span class="w"> </span><span class="nx">FindByUsername</span><span class="p">(</span><span class="nx">ctx</span><span class="w"> </span><span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span><span class="w"> </span><span class="nx">username</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="nx">User</span><span class="p">,</span><span class="w"> </span><span class="kt">error</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nx">user</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">User</span><span class="p">{}</span>
@@ -598,6 +667,7 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="24-error-handling-patterns">2.4 Error Handling Patterns</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// ❌ Junior: Error handling không nhất quán</span>
 <span class="kd">func</span><span class="w"> </span><span class="nx">handler</span><span class="p">(</span><span class="nx">c</span><span class="w"> </span><span class="o">*</span><span class="nx">fiber</span><span class="p">.</span><span class="nx">Ctx</span><span class="p">)</span><span class="w"> </span><span class="kt">error</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nx">user</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">db</span><span class="p">.</span><span class="nx">FindById</span><span class="p">(</span><span class="nx">id</span><span class="p">)</span>
@@ -668,6 +738,7 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="25-middleware-patterns">2.5 Middleware Patterns</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// ❌ Junior: Middleware không có dependencies</span>
 <span class="kd">func</span><span class="w"> </span><span class="nx">AuthMiddleware</span><span class="p">(</span><span class="nx">c</span><span class="w"> </span><span class="o">*</span><span class="nx">fiber</span><span class="p">.</span><span class="nx">Ctx</span><span class="p">)</span><span class="w"> </span><span class="kt">error</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nx">token</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">c</span><span class="p">.</span><span class="nx">Get</span><span class="p">(</span><span class="s">&quot;Authorization&quot;</span><span class="p">)</span>
@@ -730,6 +801,9 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="p">}</span>
 </pre></div>
 </div>
+<hr />
+<h2 id="phan-3-performance-optimization">⚡ Phần 3: Performance Optimization</h2>
+<h3 id="31-connection-pooling">3.1 Connection Pooling</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// ❌ Junior: Không config connection pool</span>
 <span class="nx">db</span><span class="p">,</span><span class="w"> </span><span class="nx">_</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">gorm</span><span class="p">.</span><span class="nx">Open</span><span class="p">(</span><span class="nx">postgres</span><span class="p">.</span><span class="nx">Open</span><span class="p">(</span><span class="nx">dsn</span><span class="p">),</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">gorm</span><span class="p">.</span><span class="nx">Config</span><span class="p">{})</span>
 
@@ -748,6 +822,11 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="nx">sqlDB</span><span class="p">.</span><span class="nx">SetConnMaxIdleTime</span><span class="p">(</span><span class="mi">10</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nx">time</span><span class="p">.</span><span class="nx">Minute</span><span class="p">)</span><span class="w"> </span><span class="c1">// Max idle time</span>
 </pre></div>
 </div>
+<p><strong>Tại sao cần config?</strong>
+- <code>MaxIdleConns</code>: Giữ connections sẵn sàng → giảm latency
+- <code>MaxOpenConns</code>: Giới hạn connections → tránh overload database
+- <code>ConnMaxLifetime</code>: Recycle connections → tránh stale connections</p>
+<h3 id="32-redis-pipeline">3.2 Redis Pipeline</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// ❌ Junior: Nhiều requests riêng lẻ</span>
 <span class="nx">redis</span><span class="p">.</span><span class="nx">Set</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;key1&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;value1&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">time</span><span class="p">.</span><span class="nx">Hour</span><span class="p">)</span>
 <span class="nx">redis</span><span class="p">.</span><span class="nx">Set</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;key2&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;value2&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">time</span><span class="p">.</span><span class="nx">Hour</span><span class="p">)</span>
@@ -763,6 +842,7 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="c1">// 1 round trip → nhanh</span>
 </pre></div>
 </div>
+<h3 id="33-goroutines-cho-background-tasks">3.3 Goroutines cho Background Tasks</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// ❌ Junior: Block response</span>
 <span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">app</span><span class="w"> </span><span class="o">*</span><span class="nx">App</span><span class="p">)</span><span class="w"> </span><span class="nx">LoginHandler</span><span class="p">()</span><span class="w"> </span><span class="nx">fiber</span><span class="p">.</span><span class="nx">Handler</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">c</span><span class="w"> </span><span class="o">*</span><span class="nx">fiber</span><span class="p">.</span><span class="nx">Ctx</span><span class="p">)</span><span class="w"> </span><span class="kt">error</span><span class="w"> </span><span class="p">{</span>
@@ -807,6 +887,7 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="34-caching-strategy">3.4 Caching Strategy</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// ✅ Senior: Cache-aside pattern</span>
 <span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">s</span><span class="w"> </span><span class="o">*</span><span class="nx">UserService</span><span class="p">)</span><span class="w"> </span><span class="nx">FindByID</span><span class="p">(</span><span class="nx">ctx</span><span class="w"> </span><span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span><span class="w"> </span><span class="nx">id</span><span class="w"> </span><span class="kt">uint</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="nx">User</span><span class="p">,</span><span class="w"> </span><span class="kt">error</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="c1">// 1. Try cache</span>
@@ -848,6 +929,9 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="p">}</span>
 </pre></div>
 </div>
+<hr />
+<h2 id="phan-4-security-best-practices">🔒 Phần 4: Security Best Practices</h2>
+<h3 id="41-input-validation">4.1 Input Validation</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// ❌ Junior: Không validate input</span>
 <span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">app</span><span class="w"> </span><span class="o">*</span><span class="nx">App</span><span class="p">)</span><span class="w"> </span><span class="nx">CreateUserHandler</span><span class="p">()</span><span class="w"> </span><span class="nx">fiber</span><span class="p">.</span><span class="nx">Handler</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">c</span><span class="w"> </span><span class="o">*</span><span class="nx">fiber</span><span class="p">.</span><span class="nx">Ctx</span><span class="p">)</span><span class="w"> </span><span class="kt">error</span><span class="w"> </span><span class="p">{</span>
@@ -890,6 +974,7 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="42-sql-injection-prevention">4.2 SQL Injection Prevention</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// ❌ Junior: String concatenation (SQL injection!)</span>
 <span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">s</span><span class="w"> </span><span class="o">*</span><span class="nx">UserService</span><span class="p">)</span><span class="w"> </span><span class="nx">FindByUsername</span><span class="p">(</span><span class="nx">ctx</span><span class="w"> </span><span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span><span class="w"> </span><span class="nx">username</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="nx">User</span><span class="p">,</span><span class="w"> </span><span class="kt">error</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nx">query</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Sprintf</span><span class="p">(</span><span class="s">&quot;SELECT * FROM users WHERE username = &#39;%s&#39;&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">username</span><span class="p">)</span>
@@ -906,6 +991,7 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="43-rate-limiting">4.3 Rate Limiting</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// ✅ Senior: Rate limiting per endpoint</span>
 <span class="kd">func</span><span class="w"> </span><span class="nx">RateLimiter</span><span class="p">(</span><span class="nx">max</span><span class="w"> </span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="nx">window</span><span class="w"> </span><span class="nx">time</span><span class="p">.</span><span class="nx">Duration</span><span class="p">)</span><span class="w"> </span><span class="nx">fiber</span><span class="p">.</span><span class="nx">Handler</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">c</span><span class="w"> </span><span class="o">*</span><span class="nx">fiber</span><span class="p">.</span><span class="nx">Ctx</span><span class="p">)</span><span class="w"> </span><span class="kt">error</span><span class="w"> </span><span class="p">{</span>
@@ -933,6 +1019,7 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="44-security-headers">4.4 Security Headers</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// ✅ Senior: Security headers middleware</span>
 <span class="kd">func</span><span class="w"> </span><span class="nx">SecurityHeaders</span><span class="p">()</span><span class="w"> </span><span class="nx">fiber</span><span class="p">.</span><span class="nx">Handler</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">c</span><span class="w"> </span><span class="o">*</span><span class="nx">fiber</span><span class="p">.</span><span class="nx">Ctx</span><span class="p">)</span><span class="w"> </span><span class="kt">error</span><span class="w"> </span><span class="p">{</span>
@@ -949,6 +1036,9 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="p">}</span>
 </pre></div>
 </div>
+<hr />
+<h2 id="phan-5-observability">📊 Phần 5: Observability</h2>
+<h3 id="51-structured-logging">5.1 Structured Logging</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// ❌ Junior: Print debugging</span>
 <span class="nx">fmt</span><span class="p">.</span><span class="nx">Println</span><span class="p">(</span><span class="s">&quot;User logged in:&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">user</span><span class="p">.</span><span class="nx">ID</span><span class="p">)</span>
 <span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;Error: %v\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">)</span>
@@ -991,6 +1081,7 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="52-metrics-collection">5.2 Metrics Collection</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// ✅ Senior: Metrics middleware</span>
 <span class="kd">func</span><span class="w"> </span><span class="nx">MetricsMiddleware</span><span class="p">(</span><span class="nx">metrics</span><span class="w"> </span><span class="o">*</span><span class="nx">Metrics</span><span class="p">)</span><span class="w"> </span><span class="nx">fiber</span><span class="p">.</span><span class="nx">Handler</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">c</span><span class="w"> </span><span class="o">*</span><span class="nx">fiber</span><span class="p">.</span><span class="nx">Ctx</span><span class="p">)</span><span class="w"> </span><span class="kt">error</span><span class="w"> </span><span class="p">{</span>
@@ -1027,6 +1118,7 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="53-distributed-tracing">5.3 Distributed Tracing</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// ✅ Senior: APM integration</span>
 <span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">app</span><span class="w"> </span><span class="o">*</span><span class="nx">App</span><span class="p">)</span><span class="w"> </span><span class="nx">LoginHandler</span><span class="p">()</span><span class="w"> </span><span class="nx">fiber</span><span class="p">.</span><span class="nx">Handler</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">c</span><span class="w"> </span><span class="o">*</span><span class="nx">fiber</span><span class="p">.</span><span class="nx">Ctx</span><span class="p">)</span><span class="w"> </span><span class="kt">error</span><span class="w"> </span><span class="p">{</span>
@@ -1053,6 +1145,9 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="p">}</span>
 </pre></div>
 </div>
+<hr />
+<h2 id="phan-6-testing-strategies">🧪 Phần 6: Testing Strategies</h2>
+<h3 id="61-unit-testing">6.1 Unit Testing</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// ✅ Senior: Unit test với mocks</span>
 <span class="kd">type</span><span class="w"> </span><span class="nx">MockUserRepository</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nx">FindByUsernameFn</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">ctx</span><span class="w"> </span><span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span><span class="w"> </span><span class="nx">username</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="nx">User</span><span class="p">,</span><span class="w"> </span><span class="kt">error</span><span class="p">)</span>
@@ -1120,6 +1215,7 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="62-integration-testing">6.2 Integration Testing</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// ✅ Senior: Integration test với test database</span>
 <span class="kd">func</span><span class="w"> </span><span class="nx">TestUserRepository_FindByUsername</span><span class="p">(</span><span class="nx">t</span><span class="w"> </span><span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="c1">// Setup test database</span>
@@ -1140,6 +1236,7 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="63-api-testing">6.3 API Testing</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// ✅ Senior: API test với Fiber test utils</span>
 <span class="kd">func</span><span class="w"> </span><span class="nx">TestLoginEndpoint</span><span class="p">(</span><span class="nx">t</span><span class="w"> </span><span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="c1">// Setup app</span>
@@ -1191,6 +1288,9 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="p">}</span>
 </pre></div>
 </div>
+<hr />
+<h2 id="phan-7-real-world-patterns-tu-vtvcab-identity-api">🎯 Phần 7: Real-World Patterns từ vtvcab-identity-api</h2>
+<h3 id="71-jwt-token-flow">7.1 JWT Token Flow</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Production-ready JWT implementation</span>
 <span class="kd">type</span><span class="w"> </span><span class="nx">TokenService</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nx">redis</span><span class="w">        </span><span class="o">*</span><span class="nx">redis</span><span class="p">.</span><span class="nx">Client</span>
@@ -1293,6 +1393,7 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="p">}</span>
 </pre></div>
 </div>
+<h3 id="72-device-session-management">7.2 Device Session Management</h3>
 <div class="codeblock"><div class="codehead"><span class="lang-chip">go</span><button class="copybtn" type="button" aria-label="Copy code">Copy</button></div><div class="codehilite"><pre><span></span><span class="c1">// Production-ready session management</span>
 <span class="kd">type</span><span class="w"> </span><span class="nx">SessionService</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="nx">mongo</span><span class="w">  </span><span class="o">*</span><span class="nx">mongo</span><span class="p">.</span><span class="nx">Database</span>
@@ -1343,100 +1444,49 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 <span class="p">}</span>
 </pre></div>
 </div>
-<h1 id="senior-nodejs-dev-senior-go-dev-production-ready-patterns">🎖️ Senior NodeJS Dev → Senior Go Dev: Production-Ready Patterns</h1>
-<div class="callout callout-note"><div class="callout-body"><p><strong>Mục tiêu:</strong> Giúp bạn code Go như một Senior Dev, không phải Junior mới học
-<strong>Dành cho:</strong> NodeJS dev 4+ năm kinh nghiệm muốn code Go production-ready ngay</p></div></div>
-
-<hr />
-<h2 id="phan-1-senior-mindset-cach-suy-nghi-khac-nhau">🧠 Phần 1: Senior Mindset - Cách suy nghĩ khác nhau</h2>
-<h3 id="11-junior-vs-senior-trong-nodejs">1.1 Junior vs Senior trong NodeJS</h3>
-<h3 id="12-junior-vs-senior-trong-go">1.2 Junior vs Senior trong Go</h3>
-<p><strong>Khác biệt chính:</strong>
-1. <strong>Error handling</strong> - Junior bỏ qua, Senior handle từng loại lỗi
-2. <strong>Logging</strong> - Junior không log, Senior log structured
-3. <strong>Validation</strong> - Junior tin tưởng input, Senior validate mọi thứ
-4. <strong>Security</strong> - Junior không nghĩ đến, Senior nghĩ đến đầu tiên
-5. <strong>Observability</strong> - Junior không monitor, Senior instrument mọi thứ</p>
-<hr />
-<h2 id="phan-2-production-ready-architecture">🏗️ Phần 2: Production-Ready Architecture</h2>
-<h3 id="21-dependency-injection-pattern">2.1 Dependency Injection Pattern</h3>
-<h3 id="22-service-layer-pattern">2.2 Service Layer Pattern</h3>
-<h3 id="23-repository-pattern">2.3 Repository Pattern</h3>
-<h3 id="24-error-handling-patterns">2.4 Error Handling Patterns</h3>
-<h3 id="25-middleware-patterns">2.5 Middleware Patterns</h3>
-<hr />
-<h2 id="phan-3-performance-optimization">⚡ Phần 3: Performance Optimization</h2>
-<h3 id="31-connection-pooling">3.1 Connection Pooling</h3>
-<p><strong>Tại sao cần config?</strong>
-- <code>MaxIdleConns</code>: Giữ connections sẵn sàng → giảm latency
-- <code>MaxOpenConns</code>: Giới hạn connections → tránh overload database
-- <code>ConnMaxLifetime</code>: Recycle connections → tránh stale connections</p>
-<h3 id="32-redis-pipeline">3.2 Redis Pipeline</h3>
-<h3 id="33-goroutines-cho-background-tasks">3.3 Goroutines cho Background Tasks</h3>
-<h3 id="34-caching-strategy">3.4 Caching Strategy</h3>
-<hr />
-<h2 id="phan-4-security-best-practices">🔒 Phần 4: Security Best Practices</h2>
-<h3 id="41-input-validation">4.1 Input Validation</h3>
-<h3 id="42-sql-injection-prevention">4.2 SQL Injection Prevention</h3>
-<h3 id="43-rate-limiting">4.3 Rate Limiting</h3>
-<h3 id="44-security-headers">4.4 Security Headers</h3>
-<hr />
-<h2 id="phan-5-observability">📊 Phần 5: Observability</h2>
-<h3 id="51-structured-logging">5.1 Structured Logging</h3>
-<h3 id="52-metrics-collection">5.2 Metrics Collection</h3>
-<h3 id="53-distributed-tracing">5.3 Distributed Tracing</h3>
-<hr />
-<h2 id="phan-6-testing-strategies">🧪 Phần 6: Testing Strategies</h2>
-<h3 id="61-unit-testing">6.1 Unit Testing</h3>
-<h3 id="62-integration-testing">6.2 Integration Testing</h3>
-<h3 id="63-api-testing">6.3 API Testing</h3>
-<hr />
-<h2 id="phan-7-real-world-patterns-tu-vtvcab-identity-api">🎯 Phần 7: Real-World Patterns từ vtvcab-identity-api</h2>
-<h3 id="71-jwt-token-flow">7.1 JWT Token Flow</h3>
-<h3 id="72-device-session-management">7.2 Device Session Management</h3>
 <hr />
 <h2 id="tong-ket-senior-go-dev-checklist">📚 Tổng kết: Senior Go Dev Checklist</h2>
 <h3 id="code-quality">Code Quality</h3>
 <ul>
-<li class="task"><input type="checkbox" disabled> Error handling nhất quán (không bỏ qua errors)</li>
-<li class="task"><input type="checkbox" disabled> Structured logging (không fmt.Println)</li>
-<li class="task"><input type="checkbox" disabled> Input validation (không tin tưởng client)</li>
-<li class="task"><input type="checkbox" disabled> Type safety (không dùng interface{} nếu có thể)</li>
+<li class="task"><input type="checkbox"> Error handling nhất quán (không bỏ qua errors)</li>
+<li class="task"><input type="checkbox"> Structured logging (không fmt.Println)</li>
+<li class="task"><input type="checkbox"> Input validation (không tin tưởng client)</li>
+<li class="task"><input type="checkbox"> Type safety (không dùng interface{} nếu có thể)</li>
 </ul>
 <h3 id="architecture">Architecture</h3>
 <ul>
-<li class="task"><input type="checkbox" disabled> Dependency injection (không dùng globals)</li>
-<li class="task"><input type="checkbox" disabled> Service layer (business logic không nằm trong controller)</li>
-<li class="task"><input type="checkbox" disabled> Repository pattern (data access tách riêng)</li>
-<li class="task"><input type="checkbox" disabled> Middleware composition (cross-cutting concerns)</li>
+<li class="task"><input type="checkbox"> Dependency injection (không dùng globals)</li>
+<li class="task"><input type="checkbox"> Service layer (business logic không nằm trong controller)</li>
+<li class="task"><input type="checkbox"> Repository pattern (data access tách riêng)</li>
+<li class="task"><input type="checkbox"> Middleware composition (cross-cutting concerns)</li>
 </ul>
 <h3 id="performance">Performance</h3>
 <ul>
-<li class="task"><input type="checkbox" disabled> Connection pooling (DB, Redis)</li>
-<li class="task"><input type="checkbox" disabled> Caching strategy (cache-aside)</li>
-<li class="task"><input type="checkbox" disabled> Async processing (goroutines cho background tasks)</li>
-<li class="task"><input type="checkbox" disabled> Resource limits (body size, rate limiting)</li>
+<li class="task"><input type="checkbox"> Connection pooling (DB, Redis)</li>
+<li class="task"><input type="checkbox"> Caching strategy (cache-aside)</li>
+<li class="task"><input type="checkbox"> Async processing (goroutines cho background tasks)</li>
+<li class="task"><input type="checkbox"> Resource limits (body size, rate limiting)</li>
 </ul>
 <h3 id="security">Security</h3>
 <ul>
-<li class="task"><input type="checkbox" disabled> Input validation &amp; sanitization</li>
-<li class="task"><input type="checkbox" disabled> SQL injection prevention (parameterized queries)</li>
-<li class="task"><input type="checkbox" disabled> Rate limiting</li>
-<li class="task"><input type="checkbox" disabled> Security headers</li>
+<li class="task"><input type="checkbox"> Input validation &amp; sanitization</li>
+<li class="task"><input type="checkbox"> SQL injection prevention (parameterized queries)</li>
+<li class="task"><input type="checkbox"> Rate limiting</li>
+<li class="task"><input type="checkbox"> Security headers</li>
 </ul>
 <h3 id="observability">Observability</h3>
 <ul>
-<li class="task"><input type="checkbox" disabled> Structured logging với context</li>
-<li class="task"><input type="checkbox" disabled> Metrics collection</li>
-<li class="task"><input type="checkbox" disabled> Distributed tracing (APM)</li>
-<li class="task"><input type="checkbox" disabled> Error tracking (Sentry)</li>
+<li class="task"><input type="checkbox"> Structured logging với context</li>
+<li class="task"><input type="checkbox"> Metrics collection</li>
+<li class="task"><input type="checkbox"> Distributed tracing (APM)</li>
+<li class="task"><input type="checkbox"> Error tracking (Sentry)</li>
 </ul>
 <h3 id="testing">Testing</h3>
 <ul>
-<li class="task"><input type="checkbox" disabled> Unit tests với mocks</li>
-<li class="task"><input type="checkbox" disabled> Integration tests với test DB</li>
-<li class="task"><input type="checkbox" disabled> API tests</li>
-<li class="task"><input type="checkbox" disabled> Test coverage &gt; 70%</li>
+<li class="task"><input type="checkbox"> Unit tests với mocks</li>
+<li class="task"><input type="checkbox"> Integration tests với test DB</li>
+<li class="task"><input type="checkbox"> API tests</li>
+<li class="task"><input type="checkbox"> Test coverage &gt; 70%</li>
 </ul>
 <hr />
 <h2 id="cross-references">🔗 Cross-references</h2>
@@ -1451,10 +1501,74 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
 </article>
 <nav class="pager">
 <a href="06-Fiber-Framework-Complete-Guide.html"><span class="dir">← Bài trước</span>🖼️ Fiber v2 Framework - Hiểu Sâu từ Gốc đến Ngọn</a>
-<a class="next" href="README.html"><span class="dir">Bài sau →</span>📚 docs-node-go - Học Go cho NodeJS Developer</a>
+
 </nav>
 <footer>Generated from Markdown · <a href="../index.html">Về trang chủ docs</a></footer>
 </main>
+
+<button class="progress-fab" id="progress-fab" type="button">📊 Tiến độ <span class="fab-count">0/0</span></button>
+<div class="progress-modal" id="progress-modal" hidden>
+  <div class="progress-dialog" role="dialog" aria-label="Theo dõi tiến độ">
+    <div class="progress-head">
+      <h2>📊 Theo dõi tiến độ <span class="progress-count">0%</span></h2>
+      <button class="progress-close" id="progress-close" type="button" aria-label="Đóng">✕</button>
+    </div>
+    <div class="progress-bar"><i></i></div>
+    <div class="progress-body">
+<div class="callout callout-note"><div class="callout-body"><p>Đây là bảng theo dõi <strong>duy nhất</strong> cho cả bộ tài liệu. Tick vào từng mốc — tiến độ được lưu trên trình duyệt và đồng bộ ở mọi trang qua nút nổi <strong>📊 Tiến độ</strong> ở góc phải dưới. Checklist chi tiết từng ngày vẫn nằm trong bài <code>07 · Fast Track Roadmap</code>.</p></div></div>
+
+<h3>Giai đoạn 1 · Nền tảng (Ngày 1)</h3>
+<ul>
+<li class="task"><input type="checkbox"> Hiểu mental model Go vs Node.js — file <code>01</code></li>
+<li class="task"><input type="checkbox"> Nắm syntax: <code>var</code>, <code>:=</code>, <code>const</code>, slice, map, <code>for</code>, <code>if</code>, <code>switch</code> — file <code>02</code></li>
+<li class="task"><input type="checkbox"> Viết được <code>struct</code> + method + pointer cơ bản</li>
+<li class="task"><input type="checkbox"> Chạy được <code>go run</code>, <code>go fmt</code> và tạo module mới</li>
+</ul>
+<h3>Giai đoạn 2 · Struct, Interface, Error (Ngày 2)</h3>
+<ul>
+<li class="task"><input type="checkbox"> Thiết kế struct, embedding và constructor</li>
+<li class="task"><input type="checkbox"> Hiểu interface + polymorphism trong Go</li>
+<li class="task"><input type="checkbox"> Xử lý lỗi với <code>errors.Is</code>, <code>errors.As</code> và custom error — file <code>03</code></li>
+</ul>
+<h3>Giai đoạn 3 · HTTP API (Ngày 3–4)</h3>
+<ul>
+<li class="task"><input type="checkbox"> Dựng được <code>/health</code> + CRUD bằng <code>net/http</code> hoặc Fiber — file <code>05</code></li>
+<li class="task"><input type="checkbox"> Viết middleware logging + error handling</li>
+<li class="task"><input type="checkbox"> Test API bằng curl/Postman</li>
+<li class="task"><input type="checkbox"> Viết unit test table-driven + <code>httptest</code> — file <code>06</code></li>
+</ul>
+<h3>Giai đoạn 4 · Concurrency (Ngày 5)</h3>
+<ul>
+<li class="task"><input type="checkbox"> Dùng goroutine + <code>WaitGroup</code> — file <code>04</code></li>
+<li class="task"><input type="checkbox"> Dùng channel + <code>select</code></li>
+<li class="task"><input type="checkbox"> Dùng <code>context.WithTimeout</code> để cancel</li>
+<li class="task"><input type="checkbox"> Chạy <code>go run -race .</code> không báo lỗi</li>
+</ul>
+<h3>Giai đoạn 5 · Project Layout &amp; Capstone (Ngày 6–7)</h3>
+<ul>
+<li class="task"><input type="checkbox"> Tách <code>cmd/</code>, <code>internal/</code>, viết repository interface</li>
+<li class="task"><input type="checkbox"> Wire dependency trong <code>main.go</code> + graceful shutdown</li>
+<li class="task"><input type="checkbox"> Hoàn thành 1 mini project kèm test, <code>go vet ./...</code>, <code>go build ./...</code></li>
+</ul>
+<h3>🚦 Mốc sẵn sàng: Phân tích &amp; code project</h3>
+<div class="callout callout-note"><div class="callout-body"><p><strong>Đọc/phân tích project thật:</strong> xong Giai đoạn 1 → 3 (khoảng Ngày 3).
+<strong>Sửa code trong project thật:</strong> xong thêm Giai đoạn 4 (khoảng Ngày 5).
+<strong>Tự code một project hoàn chỉnh:</strong> xong Giai đoạn 5 (khoảng Ngày 6–7).</p></div></div>
+
+<ul>
+<li class="task"><input type="checkbox"> Xong Giai đoạn 1 → 3: đọc hiểu và tự dựng được REST API CRUD</li>
+<li class="task"><input type="checkbox"> Đọc hiểu một repo Go lạ trong khoảng 1 buổi, không cần dịch từng dòng</li>
+<li class="task"><input type="checkbox"> Tự viết CRUD + test table-driven mà không copy nguyên mẫu</li>
+<li class="task"><input type="checkbox"> Giải thích được khi nào dùng goroutine / channel / context</li>
+<li class="task"><input type="checkbox"> Chạy thành thạo <code>go test</code>, <code>go vet</code>, <code>go build</code> và đọc được lỗi</li>
+<li class="task"><input type="checkbox"> Đã phân tích ít nhất 1 project mẫu — vtvcab-identity-api (series Node.js → Go, bài <code>01</code>)</li>
+</ul>
+<hr />
+    </div>
+  </div>
+</div>
+
+
 <script>
 
 (function(){
@@ -1504,6 +1618,88 @@ footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top:
       navigator.clipboard.writeText(text).then(function(){ done(true); }, fallback);
     } else { fallback(); }
   });
+})();
+// ---- progress tracker: nút nổi + modal, đồng bộ mọi trang qua localStorage ----
+(function(){
+  function qsa(sel, root){ return [].slice.call((root||document).querySelectorAll(sel)); }
+  function load(key){ try{ return JSON.parse(localStorage.getItem(key)||'null'); }catch(e){ return null; } }
+  function save(key, arr){ try{ localStorage.setItem(key, JSON.stringify(arr)); }catch(e){} }
+
+  var KEY_MAIN = 'md2html:progress:docs';
+  var modal = document.getElementById('progress-modal');
+  var fab = document.getElementById('progress-fab');
+  var homeBoxes = qsa('.progress-track .task input');
+  var modalBoxes = modal ? qsa('.task input', modal) : [];
+  var N = Math.max(homeBoxes.length, modalBoxes.length);
+
+  function states(){
+    var saved = load(KEY_MAIN);
+    if (saved && saved.length === N) return saved;
+    var src = homeBoxes.length ? homeBoxes : modalBoxes;
+    return src.map(function(b){ return b.checked; });
+  }
+  function updateCounters(st){
+    var done = st.filter(Boolean).length;
+    if (fab) fab.querySelector('.fab-count').textContent = done + '/' + N;
+    if (modal){
+      modal.querySelector('.progress-bar i').style.width = (N ? done/N*100 : 0) + '%';
+      modal.querySelector('.progress-count').textContent = (N ? Math.round(done/N*100) : 0) + '%';
+    }
+  }
+  function paint(st){
+    for (var i=0;i<N;i++){
+      if (homeBoxes[i]) homeBoxes[i].checked = !!st[i];
+      if (modalBoxes[i]) modalBoxes[i].checked = !!st[i];
+    }
+    updateCounters(st);
+  }
+  if (N){
+    paint(states());
+    var bindMain = function(i){
+      return function(){
+        var st = states(); st[i] = this.checked;
+        save(KEY_MAIN, st); paint(st);
+      };
+    };
+    homeBoxes.forEach(function(b,i){ b.addEventListener('change', bindMain(i)); });
+    modalBoxes.forEach(function(b,i){ b.addEventListener('change', bindMain(i)); });
+  }
+
+  // task list thường của từng trang: lưu riêng theo URL
+  var otherBoxes = qsa('.task input').filter(function(b){
+    return !b.closest('.progress-track') && !(modal && modal.contains(b));
+  });
+  if (otherBoxes.length){
+    var key = 'md2html:page:' + location.pathname;
+    var saved = load(key);
+    if (saved && saved.length === otherBoxes.length){
+      otherBoxes.forEach(function(b,i){ b.checked = !!saved[i]; });
+    }
+    otherBoxes.forEach(function(b){
+      b.addEventListener('change', function(){
+        save(key, otherBoxes.map(function(x){ return x.checked; }));
+      });
+    });
+  }
+
+  if (fab && modal && N){
+    var openModal = function(){
+      paint(states());
+      modal.hidden = false;
+      document.body.style.overflow = 'hidden';
+    };
+    fab.addEventListener('click', openModal);
+    qsa('.progress-open').forEach(function(b){ b.addEventListener('click', openModal); });
+    var closeModal = function(){
+      modal.hidden = true;
+      document.body.style.overflow = '';
+    };
+    document.getElementById('progress-close').addEventListener('click', closeModal);
+    modal.addEventListener('click', function(e){ if (e.target === modal) closeModal(); });
+    document.addEventListener('keydown', function(e){
+      if (e.key === 'Escape' && !modal.hidden) closeModal();
+    });
+  } else if (fab){ fab.hidden = true; }
 })();
 
 </script>

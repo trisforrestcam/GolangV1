@@ -4,6 +4,58 @@
 
 ---
 
+## 📊 Tiến độ học tập
+
+> Đây là bảng theo dõi **duy nhất** cho cả bộ tài liệu. Tick vào từng mốc — tiến độ được lưu trên trình duyệt và đồng bộ ở mọi trang qua nút nổi **📊 Tiến độ** ở góc phải dưới. Checklist chi tiết từng ngày vẫn nằm trong bài `07 · Fast Track Roadmap`.
+
+### Giai đoạn 1 · Nền tảng (Ngày 1)
+
+- [ ] Hiểu mental model Go vs Node.js — file `01`
+- [ ] Nắm syntax: `var`, `:=`, `const`, slice, map, `for`, `if`, `switch` — file `02`
+- [ ] Viết được `struct` + method + pointer cơ bản
+- [ ] Chạy được `go run`, `go fmt` và tạo module mới
+
+### Giai đoạn 2 · Struct, Interface, Error (Ngày 2)
+
+- [ ] Thiết kế struct, embedding và constructor
+- [ ] Hiểu interface + polymorphism trong Go
+- [ ] Xử lý lỗi với `errors.Is`, `errors.As` và custom error — file `03`
+
+### Giai đoạn 3 · HTTP API (Ngày 3–4)
+
+- [ ] Dựng được `/health` + CRUD bằng `net/http` hoặc Fiber — file `05`
+- [ ] Viết middleware logging + error handling
+- [ ] Test API bằng curl/Postman
+- [ ] Viết unit test table-driven + `httptest` — file `06`
+
+### Giai đoạn 4 · Concurrency (Ngày 5)
+
+- [ ] Dùng goroutine + `WaitGroup` — file `04`
+- [ ] Dùng channel + `select`
+- [ ] Dùng `context.WithTimeout` để cancel
+- [ ] Chạy `go run -race .` không báo lỗi
+
+### Giai đoạn 5 · Project Layout & Capstone (Ngày 6–7)
+
+- [ ] Tách `cmd/`, `internal/`, viết repository interface
+- [ ] Wire dependency trong `main.go` + graceful shutdown
+- [ ] Hoàn thành 1 mini project kèm test, `go vet ./...`, `go build ./...`
+
+### 🚦 Mốc sẵn sàng: Phân tích & code project
+
+> **Đọc/phân tích project thật:** xong Giai đoạn 1 → 3 (khoảng Ngày 3).
+> **Sửa code trong project thật:** xong thêm Giai đoạn 4 (khoảng Ngày 5).
+> **Tự code một project hoàn chỉnh:** xong Giai đoạn 5 (khoảng Ngày 6–7).
+
+- [ ] Xong Giai đoạn 1 → 3: đọc hiểu và tự dựng được REST API CRUD
+- [ ] Đọc hiểu một repo Go lạ trong khoảng 1 buổi, không cần dịch từng dòng
+- [ ] Tự viết CRUD + test table-driven mà không copy nguyên mẫu
+- [ ] Giải thích được khi nào dùng goroutine / channel / context
+- [ ] Chạy thành thạo `go test`, `go vet`, `go build` và đọc được lỗi
+- [ ] Đã phân tích ít nhất 1 project mẫu — vtvcab-identity-api (series Node.js → Go, bài `01`)
+
+---
+
 ## 📚 Nội Dung
 
 | # | File | Mô tả | Lines |
@@ -35,6 +87,7 @@
 ## 🔥 Phần Quan Trọng Nhất
 
 **[[04-concurrency-context]]** - Đây là phần Go THỰC SỰ mạnh hơn Node.js:
+
 - Concurrency vs Parallelism (Node chỉ có concurrency, Go có cả hai)
 - Goroutine vs Promise/async-await
 - Channel vs EventEmitter
